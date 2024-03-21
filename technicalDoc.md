@@ -31,9 +31,18 @@ Le logiciel BancXY permet de:
 - Voir la tension de la cellule en direct.  
 - Changer la position de la cellule manuellement.  
   
-### Précisions  
+### Précisions pour la maintenance/modification  
 Le logiciel utilise des structures  évenements pour gérer les actions de l'utilisateur. Si on veut modifier le comportement d'un événement il faut éditer les événements géré par la conditions. Il peut y avoir plusieurs événements dans la même structure évènement.  
+
 Pour simplifier le transfert d'informations de VI à d'autre on utilise des clusters qu'on groupe et qu'on dégroupe.  
+
 Pour mettre à jour en temps réel la valeur max d'irradiance et le graphe d'irradiance on passe en paramètre les références de ces indicateurs pour que le sous VI puisse y accéder sans avoir à ouvrir une nouvelle fenêtre.  
+
 Pour la ressource VISA du controlleur ADAM 4011, il faut utiliser le `Wire mode` 3 (Wire2-Auto), cela ne peut pas être changé depuis le `Visa test panel`.  
 
+Le fichier de configuration `confCellules.ini` doit être placé dans le dossier `data`, à la racine du programme (le fichier BancXY.exe)  
+Le fichier de configuration `confCellules.ini` doit être écrit de la manière suivante:  
+```
+todo mettre le fichier de config 
+```
+Le projet BancXY contient les spécifications de constructions qui permettent de construire l'excecutable si des modifications on été faites au VIs.
