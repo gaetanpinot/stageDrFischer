@@ -58,3 +58,8 @@ Rédaction de la lettre à l'enseignant référent a l'IUT
 continuer le programme du banc XY sans banc XY  
 ### Jour 16
 Installation de LabVIEW (trouver les cds, codes d'activations, antivirus qui bloque les cds, réinstaller windows, installer labview)  
+### Jour 17 
+Problème de communication avec le boitier ADAM 4011  
+### Jour 18
+Résolution du problème de communication (paramètre wire mode caché)  
+Implémentation des changements fait pendant que le pc du Banc XY était HS  
