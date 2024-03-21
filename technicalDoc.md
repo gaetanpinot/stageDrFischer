@@ -64,7 +64,7 @@ Le fichier de configuration `confCellules.ini` doit être écrit de la manière 
 21035a=19800
 21035b=2791,8
 21035modele=64-20-20k
-#valeurs de conversion mV->W/m² de chaque sonde sous la forme
+#valeurs de conversion mV->W/m² de chaque cellules sous la forme
 #y=ax+b, a le produit, b la somme
 #et modele le numero de modele
 ```
