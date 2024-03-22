@@ -32,15 +32,15 @@ Le logiciel du Banc XY permet de :
 - Attendre que la tension et la temperature se stabilise (~20/21°C)  
 - Sur l'onglet `Informations de la mesure` renseigner les informations nécéssaires, ne pas oublier de changer le n° de la cellule pour que les bonnes valeurs d'irradiance soient enregistrées  
 - Sur l'onglet `Distance de mesure` renseigner les distances de mesure, le logiciel ajuste automatiquement les distances de mesure pour toujours passer par les coordonnées 0,0  
+- Appuyer sur le bouton `Calculer` et verifiez le nombre de points et les distances ajustées.
 
-#### ATTENTION  
+#### ATTENTION 
 __Si vous rentrez des dimensions trop grandes ou que le zero et fait trop proche du bord, le chariot va atteindre les bord et l'ESP302 arretera le moteur (normalement le programme affichera une erreur) et le reste de la mesure sera mauvaise__  
 Dans ce cas il faut arreter le programme, redemarrer le programme, repositionner la cellule au zero, ajuster les dimensions de mesures et la position du zero pour eviter que le chariot atteigne les bords.  
   
 ### Etape 5  
-- Quand tout est prêt, cliquer sur le bouton `Lancer la mesure`  
-- Choisir l'emplacement du fichier de mesure et cliquer sur `Enregistrer le fichier de mesure`  
-- La barre de progression et le graphe indique l'avancement de la mesure  
+- Quand tout est prêt, cliquer sur le bouton `Lancer la mesure`  dans l'onglet `Controles`
+- Choisir le nom et l'emplacement du fichier de mesure et cliquer sur `Enregistrer le fichier de mesure`  
+- La barre de progression et le graphe d'irradiance indique l'avancement de la mesure  
 - A la fin de la mesure vérifier le fichier de mesure pour s'assurer que les valeurs sont cohérentes  
   
-todo expliquer fichier xls
