@@ -2,11 +2,12 @@
   
 ## Système  
 Le système est composé de 5 éléments principaux:  
-- [Une cellule de mesure d'irradiance Medtherm](#sonde-de-mesure-dirradiance-medtherm)  
-- [Un boitier ADAM 4011](#boitier-adam-4011)  
-- [Un controleur Newport ESP 302](#controleur-newport-esp-302)  
+
+- [Une cellule de mesure d'irradiance Medtherm](#sonde-de-mesure-dirradiance-medtherm)
+- [Un boitier ADAM 4011](#boitier-adam-4011) 
+- [Un controleur Newport ESP 302](#controleur-newport-esp-302)
 - [Un multimètre Yokogawa WT 200](#multimetre-yokogawa-wt-200)
-- [Un ordinateur](#ordinateur) doté du [programme LabVIEW BancXY](#logiciel)  
+- [Un ordinateur](#ordinateur) doté du [programme LabVIEW BancXY](#logiciel)
   
 ### Sonde de mesure d'irradiance Medtherm  
 La cellule de mesure d'irradiance Medtherm série 64 est un capteur qui mesure l'irradiance en W/m² et sort une tension entre 0 et 10 mV. Elle est connécté au boitier ADAM 4011.  
@@ -15,7 +16,7 @@ La cellule de mesure d'irradiance Medtherm série 64 est un capteur qui mesure l
 Ce boitier mesure la tension de la cellule et est branché à un convertisseur NI USB-485.  
   
 ### Controleur Newport ESP 302  
-Ce controleur permet de controler la position du banc XY en actionnant des moteurs pas-à-pas qui font bouger la cellule de mesure sur deux axes horizontaux.  
+Ce controleur permet de controler la position du Banc XY en actionnant des moteurs pas-à-pas qui font bouger la cellule de mesure sur deux axes horizontaux.  
   
 ### Multimètre Yokogawa WT 200  
 Ce multimètre permet de mesurer la tension, l'intensité et la puissance de la lampe pendant la mesure. Il communique avec l'ordinateur par un port GPIB branché sur un convertisseur NI GPIB-USB-HS.  
@@ -23,15 +24,16 @@ Ce multimètre permet de mesurer la tension, l'intensité et la puissance de la 
 ### Ordinateur  
 L'ordinateur est doté du programme LabVIEW BancXY qui permet de communiquer avec l'ESP 302 et de lire les données de la cellule de mesure.  
   
-Ensemble, ces éléments forme le BancXY qui permet de mesurer l'irradiance d'une source lumineuse sur une surface donnée.  
+Ensemble, ces éléments forme le Banc XY qui permet de mesurer l'irradiance d'une source lumineuse sur une surface donnée.  
   
 ## Logiciel  
 Le logiciel BancXY permet de:  
-- Prendre une mesure d'irradiance sur des distances et avec des pas définies.  
-- Voir la tension de la cellule en direct.  
-- Changer la position de la cellule manuellement.  
+
+- Prendre une mesure d'irradiance sur des distances et avec des pas définies.
+- Voir la tension de la cellule en direct. 
+- Changer la position de la cellule manuellement. 
   
-### Précisions pour la maintenance/modification  
+### Précisions pour la maintenance/modification du logiciel  
 Chaque VI est censé avoir des commentaires qui décrivent son utilité et son fonctionnement.  
 
 Le logiciel utilise des structures  évenements pour gérer les actions de l'utilisateur. Si on veut modifier le comportement d'un événement il faut éditer les événements géré par la conditions. Il peut y avoir plusieurs événements dans la même structure évènement.  

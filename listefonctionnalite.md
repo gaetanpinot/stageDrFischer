@@ -1,8 +1,8 @@
 # Besoins/Fonctionnalitées/Contraintes Labview Banc XY
 
 ## Liste des besoins utilisateur
-Choisir entre mesure d'irradience en croix ou en cartographie [X]29/02  
-Choisir une dimension de mesure [X] 28/02  
+ - [x] Choisir entre mesure d'irradience en croix ou en cartographie [X]29/02  
+- [ ] Choisir une dimension de mesure [X] 28/02  
 Choisir un pas de mesure [X] 28/02  
 Bouton mettre a zero a cette position [X] 06/03  
 Bouton visualisation des informations de mesure calculé et ajusté (nombre de points, distance de mesure) [X] 29/02  
