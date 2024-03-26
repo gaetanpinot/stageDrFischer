@@ -12,7 +12,7 @@ Le système est composé de 5 éléments principaux:
 La cellule de mesure d'irradiance Medtherm série 64 est un capteur qui mesure l'irradiance en W/m² et sort une tension entre 0 et 10 mV. Elle est connécté au boitier ADAM 4011.  
   
 ### Boitier ADAM 4011  
-Ce boitier mesure la tension de la cellule et est branché au convertisseur NI USB-485.  
+Ce boitier mesure la tension de la cellule et est branché à un convertisseur NI USB-485.  
   
 ### Controleur Newport ESP 302  
 Ce controleur permet de controler la position du banc XY en actionnant des moteurs pas-à-pas qui font bouger la cellule de mesure sur deux axes horizontaux.  
