@@ -10,7 +10,7 @@ Le système est composé de 5 éléments principaux:
 - [Un ordinateur](#ordinateur) doté du [programme LabVIEW BancXY](#logiciel)
   
 ### Sonde de mesure d'irradiance Medtherm  
-La cellule de mesure d'irradiance Medtherm série 64 est un capteur qui mesure l'irradiance en W/m² et sort une tension entre 0 et 10 mV. Elle est connécté au boitier ADAM 4011.  
+La cellule de mesure d'irradiance Medtherm série 64 est un capteur qui mesure l'irradiance en W/m² et sort une tension entre 0 et 10 mV. Elle est connéctée au boitier ADAM 4011.  
   
 ### Boitier ADAM 4011  
 Ce boitier mesure la tension de la cellule et est branché à un convertisseur NI USB-485.  
@@ -74,4 +74,22 @@ Le fichier de configuration `confCellules.ini` doit être écrit de la manière 
 ```  
 Le projet BancXY contient les spécifications de constructions qui permettent de construire l'excecutable si des modifications on été faites au VIs.
 
-Les ressources VISA assigné à chaque instrument doivent être renseignées dans l'onglet `Constantes` du programme. Normalement les valeurs par défaut sont les bonnes (`COM 1` ou `ESP302` ou `ASRL1::INSTR` pour l'ESP302, `GPIB0::8::INSTR` ou `WT200` pour le WT200, `COM 4` ou `ASRL4::INSTR` pour l'ADAM4011), mais en cas de changement d'ordinateur ou de port, les noms pourrait changer.
+Les ressources VISA assignées à chaque instrument doivent être renseignées dans l'onglet `Constantes` du programme. Normalement les valeurs par défaut sont les bonnes (`COM 1` ou `ESP302` ou `ASRL1::INSTR` pour l'ESP302, `GPIB0::8::INSTR` ou `WT200` pour le WT200, `COM 4` ou `ASRL4::INSTR` pour l'ADAM4011), mais en cas de changement d'ordinateur ou de port, les noms pourrait changer.
+
+Si il faut rajouter une sonde dans le programme, il faut ouvrir la face avant du VI `mainBancXY` et ajouter un élément dans le menu déroulant `Cellule de mesure` et rajouter les valeurs de conversion dans le fichier `confCellules.ini`.   
+Exemple:  
+Je veux rajoute une sonde dont le numéro d'identifiant est 3033, le numero de serie 55-00-21 et la formule de conversion est  $33 \times x + 11$  
+
+- Je rajoute la valeur 3033 au choix de cellule dans le menu déroulant 
+- Je rajoute les lignes suivantes dans le fichier `confCellules.ini` 
+```
+3033a=33
+3033b=11
+3033modele=55-00-21
+```
+- Je verifie que les valeurs sont bien prises en compte en lançant une mesure en selectionnant la sonde 3033 dans le menu déroulant.
+- Je recompile le programme pour que les modifications soient prises en compte. 
+- Je remplace l'ancien éxécutable avec le nouveau, sans oublier les fichier de configuration
+
+
+
