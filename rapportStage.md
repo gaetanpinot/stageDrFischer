@@ -97,3 +97,14 @@ Resolution de "le programme lance la mesure avant qu'il ai fini de bouger"
 Lecture de documentation du lambda 9  
 Recherche sur le lambda 9  
 
+### Jour 22
+Finition de la rédaction de la documentation utilisateur et technique  
+Recherche de chose à tester pour le lambda 9  
+Finition de la documentation du programme du banc XY  
+
+### Jour 23
+Debut de l'experimentation sur le lambda 9  
+
+### Jour 24
+Utilisation du HP 4951C protocol analyzer pour comprendre la communication entre le lambda 9 et l'imprimante  
+

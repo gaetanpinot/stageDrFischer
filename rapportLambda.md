@@ -38,5 +38,8 @@ supress: none
 extrait d'une trame de communication: 
 ```
 IT,Z0,F15936,416,0,200,D0218,1280,A1,X2200,-100,5,S2100.0,D1,1,Y120.0,-14.000,4,Z0,D0128,1280,L1\r\r
-``
+```
+```
+A0,D1,1,M0,10\r
+```
 
