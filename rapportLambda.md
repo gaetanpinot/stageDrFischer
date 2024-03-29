@@ -43,3 +43,27 @@ IT,Z0,F15936,416,0,200,D0218,1280,A1,X2200,-100,5,S2100.0,D1,1,Y120.0,-14.000,4,
 A0,D1,1,M0,10\r
 ```
 
+### Programme Simulate DCE
+Programme qui simule l'imprimante sur le HP4951:
+
+```
+Simulate DCE
+
+Block 1
+Set Lead DSR On
+	and then
+Set Lead CD On
+	and then
+Set Lead CTS On
+	and then
+Send F,00\r
+
+Block 2
+When DTE \r
+	then goto Block 3
+
+Block 3
+Send 01\r
+	and then
+Goto Block 2
+```
