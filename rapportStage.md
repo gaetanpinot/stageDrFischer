@@ -112,3 +112,9 @@ Utilisation du HP 4951C protocol analyzer pour comprendre la communication entre
 Reussite de la simulation de l'imprimante avec le HP 4951C protocol analyzer  
 Le port DB25 est un port série  
 
+### Jour 26 
+Férié  
+
+### Jour 27 
+Réactivation de LabVIEW sur un pc puis installation du à coté du Lambda 9 pour éxperimentation  
+

@@ -15,9 +15,10 @@ Essayé de connecter l'ordinateur sur le port série du Lambda 9 et de suivre [c
 Trouvé un site [FtgSoftware](https://ftgsoftware.com/issues_lambda19.htm) qui donne quelques informations éparses sur un logiciel `Lambda SPX` avec des prérequis très précis et un convertisseur 2\*sub D25 vers sub D37 qu'il faut fabriquer soi meme.  
 Trouvé des appareils de capture de sortie imprimante:  
   
-[Retro Printer](https://www.retroprinter.com/) qui permet de capturer la sortie imprimante et de la sauvegarder sur un ordinateur. Vendu directement.  
-[Lpt Capture](https://github.com/bkw777/LPT_Capture) idem mais plus petit et pas vendu directement  
-[Fake parralel printer capture](https://tomverbeure.github.io/2023/01/24/Fake-Parallel-Printer-Capture-Tool-HW.html) similaire à LPT Capture.  
+~~[Retro Printer](https://www.retroprinter.com/) qui permet de capturer la sortie imprimante et de la sauvegarder sur un ordinateur. Vendu directement.~~  
+~~[Lpt Capture](https://github.com/bkw777/LPT_Capture) idem mais plus petit et pas vendu directement~~  
+~~[Fake parralel printer capture](https://tomverbeure.github.io/2023/01/24/Fake-Parallel-Printer-Capture-Tool-HW.html) similaire à LPT Capture.~~  
+(Ce n'est pas un port parallele que l'on essaie de capturer)  
   
 Malheureusement je ne sais pas si ces appareils fonctionneront avec le Lambda 9 car la communication avec l'imprimante est inconnue. Je pense qu'il est possible de capturer les données si l'ordinateur du Lambda 9 utilise les signaux standarts pour transmettre de l'information à l'imprimante.  
   
@@ -71,6 +72,6 @@ Goto Block 2
 ### Informations  
 La plage des mesures est sur 14 bits(16384)  
 Malgrès le db25, la communication se fait en série (en désactivant certains pin la communication fonctionne toujours) 
-  
+Inversement de certaines lignes quand on connecte l'ordinateur au Lambda 9
   
 
