@@ -118,3 +118,5 @@ Férié
 ### Jour 27 
 Réactivation de LabVIEW sur un pc puis installation du à coté du Lambda 9 pour éxperimentation  
 
+### Jour 28
+Cablage du lambda 9 vers le PC réussi  

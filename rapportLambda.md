@@ -73,5 +73,8 @@ Goto Block 2
 La plage des mesures est sur 14 bits(16384)  
 Malgrès le db25, la communication se fait en série (en désactivant certains pin la communication fonctionne toujours) 
 Inversement de certaines lignes quand on connecte l'ordinateur au Lambda 9
-  
+
+### Cablage 
+Cablage qui fonctionne pour brancher l'ordinateur au lambda 9:  
+PC -> Cable DB9 null Modem -> convertisseur DB9 vers DB25 -> raccordement des pins 4,5,6,8 (RTS,CTS,DSR,DCD) ensemble -> Cable DB25 -> Lambda 9  
 
