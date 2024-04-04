@@ -79,6 +79,17 @@ Cablage qui fonctionne pour brancher l'ordinateur au lambda 9:
 PC -> Cable DB9 null Modem -> convertisseur DB9 vers DB25 -> raccordement des pins 4,5,6,8 (RTS,CTS,DSR,DCD) ensemble -> Cable DB25 -> Lambda 9  
 
 ### Cablage définitif:
+DB9 femelle -> DB25 male
+
+|  DB9  |   DB25  |
+|-------|---------|
+|   2   |    2    |
+|   3   |    3    |
+|   5   |    7    |
+|   6   |    20   |
+| 1,4,8 | 4,5,6,8 |
+
+Il y a un pont entre les pins 4,5,6,8 du DB25 et les pins 1,4,8 du DB9
 
 ![[./images/cableLambda.svg]]
 

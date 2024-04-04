@@ -1,4 +1,6 @@
 *.pdf
+*.swo
+*.swp
 *.log
 *.aux
 test*
