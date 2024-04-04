@@ -18,7 +18,7 @@ Trouvé des appareils de capture de sortie imprimante:
 ~~[Retro Printer](https://www.retroprinter.com/) qui permet de capturer la sortie imprimante et de la sauvegarder sur un ordinateur. Vendu directement.~~  
 ~~[Lpt Capture](https://github.com/bkw777/LPT_Capture) idem mais plus petit et pas vendu directement~~  
 ~~[Fake parralel printer capture](https://tomverbeure.github.io/2023/01/24/Fake-Parallel-Printer-Capture-Tool-HW.html) similaire à LPT Capture.~~  
-(Ce n'est pas un port parallele que l'on essaie de capturer)  
+(Ce n'est pas un port parallele mais un port série que l'on essaie de capturer)  
   
 Malheureusement je ne sais pas si ces appareils fonctionneront avec le Lambda 9 car la communication avec l'imprimante est inconnue. Je pense qu'il est possible de capturer les données si l'ordinateur du Lambda 9 utilise les signaux standarts pour transmettre de l'information à l'imprimante.  
   
@@ -77,4 +77,9 @@ Inversement de certaines lignes quand on connecte l'ordinateur au Lambda 9
 ### Cablage 
 Cablage qui fonctionne pour brancher l'ordinateur au lambda 9:  
 PC -> Cable DB9 null Modem -> convertisseur DB9 vers DB25 -> raccordement des pins 4,5,6,8 (RTS,CTS,DSR,DCD) ensemble -> Cable DB25 -> Lambda 9  
+
+### Cablage définitif:
+
+![[./images/cableLambda.svg]]
+
 

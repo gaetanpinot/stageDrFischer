@@ -1,0 +1,27 @@
+# Fichier de cablage du cable PC-> Lambda 9 au format YAML
+# Doit être utilisé avec le programme WireViz https://github.com/wireviz/WireViz
+connectors:
+  PC:
+    type: D-Sub
+    subtype: female
+    pinlabels: [DCD, RD, TD, DTR, GND, DSR, RTS, CTS, RI]
+  Lambda:
+    type: D-Sub
+    subtype: male
+    pinlabels: [GND, TD, RD, RTS, CTS, DSR, GND, CD, void, void, void, void, void, void, RESET, void, void, void, void, DTR, void, void, void, void, void]
+
+cables:
+  Cable:
+    colors: [YE, GN, BN, BU, PK]
+connections:
+  -
+    - PC: [2,3,5,6,8]
+    - Cable: [1,2,3,4,5]
+    - Lambda: [2,3,7,20,4]
+  -
+    - PC: [1,4]
+    - Cable: [5,5]
+  -
+    - Cable: [5,5,5]
+    - Lambda: [5,6,8]
+
