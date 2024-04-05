@@ -93,4 +93,26 @@ Il y a un pont entre les pins 4,5,6,8 du DB25 et les pins 1,4,8 du DB9
 
 ![[./images/cableLambda.svg]]
 
+### Analyse des trames
+Quand on lance une mesure, le Lambda 9 envoie un en-tête de ce format:
+```
+Z0
+IT,Z0,F15936,416,0,200,D0128,1280,A1,X2100,-100,5,S2090.0,D1,1,Y110.0,-22.000,4,Z0,D0128,1280,L1
+```
 
+- La valeur qui suit le `S` est la longueur d'onde maximal mesurée en nm (2090.0)
+- La valeur qui suit le `Y` est l'echelle maximal en % (110.0)
+- La valeur d'échelle minimal est la valeur d'échelle maximal + la valeur qui la suit * 5 ($110.0 + (-22.000) * 5 = 0.0$)
+
+Après l'en-tête vienne les valeurs mesurées sur 14 bits (16384), exemple court:
+```
+14299
+14330
+14375
+14338
+14331
+14351
+14336
+14331
+```
+Le 0 correspond à la valeur d'échelle minimal et 15936 à la valeur d'échelle maximal, si la valeurs dépasse 100% il y a une marge d'erreur jusqu'a 16384.  

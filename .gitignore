@@ -1,4 +1,8 @@
 *.pdf
+*.tsv
+*.out
+*.html
+*.gv
 *.swo
 *.swp
 *.log

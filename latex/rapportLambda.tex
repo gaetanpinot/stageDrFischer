@@ -1,13 +1,18 @@
-\documentclass{article}
+\documentclass[a4paper, 12pt]{article}
 
-\usepackage{graphicx}
+\usepackage{graphicx,hyperref}
 \graphicspath{{../images/}}
-
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    }
 \begin{document}
 \begin{table}
 \begin{tabular}{|c|c|}
 \hline
-DB9   & DB25    \\ \hline
+DB9   & DB25    \\ \hline\hline
 2     & 2       \\ \hline
 3     & 3       \\ \hline
 5     & 7       \\ \hline
@@ -19,8 +24,9 @@ Il y a un pont entre les pins 4,5,6,8 du DB25 et les pins 1,4,8 du DB9
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1\textwidth]{cableLambda.png}
-	\caption{Shéma de cablage entre l'ordinateur et le Lambda 9}
+	\caption{Schéma de cablage entre l'ordinateur et le Lambda 9 \protect \footnotemark}
 	\label{fig:cableLambda}
 \end{figure}
+\footnotetext{Schéma généré grâce à WireViz : \url{https://github.com/wireviz/WireViz}}
 \end{document}
 

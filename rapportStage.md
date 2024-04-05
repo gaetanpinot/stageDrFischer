@@ -120,3 +120,11 @@ Réactivation de LabVIEW sur un pc puis installation du à coté du Lambda 9 pou
 
 ### Jour 28
 Cablage du lambda 9 vers le PC réussi  
+
+### Jour 29
+Soudure du cable sur mesure pour le lambda 9  
+Mise au propre du schéma de cablage  
+
+### Jour 30
+Prise de mesure pour analyse du format de sortie du lambda 9  
+Analyse du format de sortie du lambda 9  
