@@ -68,4 +68,4 @@ Si l'erreur provient de l'ESP302, le numéro de l'erreur devrait s'afficher avec
 Si l'erreur provient du programme, il y aura deux boutons `Continuer` et `Arrêter`, si vous cliquez sur `Continuer` le programme continuera mais il est possible que la mesure soit faussée car le programme prendra la valeur par défaut pour l'instruction qui a échouée. Si vous cliquez sur `Arrêter` le programme s'arrêtera.  
   
   
-
+Rédigé par Gaëtan Pinot 05/2024
