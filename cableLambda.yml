@@ -4,7 +4,7 @@ connectors:
   PC:
     type: D-Sub
     subtype: female
-    pinlabels: [DCD, RD, TD, DTR, GND, DSR, RTS, CTS, RI]
+    pinlabels: [CD, RD, TD, DTR, GND, DSR, RTS, CTS, RI]
   Lambda:
     type: D-Sub
     subtype: male

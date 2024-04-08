@@ -128,3 +128,7 @@ Mise au propre du schéma de cablage
 ### Jour 30
 Prise de mesure pour analyse du format de sortie du lambda 9  
 Analyse du format de sortie du lambda 9  
+
+### Jour 31
+Début de la rédaction de l'analyse du format de sortie du lambda 9  
+Début du programme d'analyse de mesure du lambda 9  

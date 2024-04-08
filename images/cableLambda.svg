@@ -22,7 +22,7 @@
 <polygon fill="none" stroke="black" points="97,-575.5 97,-598.5 136,-598.5 136,-575.5 97,-575.5"/>
 <text text-anchor="start" x="101" y="-583.3" font-family="arial" font-size="14.00">9&#45;pin</text>
 <polygon fill="none" stroke="black" points="0,-552.5 0,-575.5 80,-575.5 80,-552.5 0,-552.5"/>
-<text text-anchor="start" x="25" y="-560.3" font-family="arial" font-size="14.00">DCD</text>
+<text text-anchor="start" x="30" y="-560.3" font-family="arial" font-size="14.00">CD</text>
 <polygon fill="none" stroke="black" points="80,-552.5 80,-575.5 136,-575.5 136,-552.5 80,-552.5"/>
 <text text-anchor="start" x="104" y="-560.3" font-family="arial" font-size="14.00">1</text>
 <polygon fill="none" stroke="black" points="0,-529.5 0,-552.5 80,-552.5 80,-529.5 0,-529.5"/>
