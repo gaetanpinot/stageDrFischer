@@ -132,3 +132,8 @@ Analyse du format de sortie du lambda 9
 ### Jour 31
 Début de la rédaction de l'analyse du format de sortie du lambda 9  
 Début du programme d'analyse de mesure du lambda 9  
+
+### Jour 32
+Traitement de la liste des données
+Traitement du header
+
