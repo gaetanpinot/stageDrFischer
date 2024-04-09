@@ -123,7 +123,7 @@ Les valeurs sont séparés par des virgules et on la signification suivante :
 	\item[416] \emph{ValEchelleMin}, la valeur réel qui correspond à l'échelle minimal ici 416.
 	\item[0]
 	\item[200]
-	\item[D0128]
+	\item[D0128] \emph{FacteurVitesse}, facteur de vitesse de balayage en puissance de 2, ici 128.  \textbf{Attention pour la vitesse de balyage 0,9375, le Lambda 9 ne fait pas la différence avec la vitesse 1,875. Dans les deux cas la valeur de \emph{FacteurVitesse} sera $1$.}
 	\item[1280]
 	\item[A1]
 	\item[X2100]
@@ -139,13 +139,14 @@ Les valeurs sont séparés par des virgules et on la signification suivante :
 	\item[Z0]
 	\item[D0128]
 	\item[1280]
-	\item[L1]
+	\item[L1] \emph{StyleDeLigne}, style de la ligne de courbe de mesure à l'impression, peut être \{1,2,3,4\}, ici 1.
 
 \end{description}
 Ce qu'on peut en deduire:
 
 \begin{description}
-	\item[EchelleMin] Calculé avec la formule : $ \text{EchelleMax} + \text{Décalage} \times 5 = \text{EchelleMin}$. Ici $110.0 + ( -22.000 \times 5 ) = 0.0$. Correspond à la valeur \verb|ORD MIN| sur le Lambda 9.
+	\item[EchelleMin] Valeur minimal enregistré par le Lambda 9, ici 0. Calculé avec la formule : $ \text{EchelleMax} + \text{Décalage} \times 5 = \text{EchelleMin}$. Ici $110.0 + ( -22.000 \times 5 ) = 0.0$. Correspond à la valeur \verb|ORD MIN| sur le Lambda 9.
+	\item[VitesseDeBalayage] Vitesse de balayage en nm/min, ici 240. Calculé avec la formule : $FacteurVitesse \times 0,9375 \times 2 = VitesseDeBalayage$. Ici $128 \times 0,9375 \times 2 = 240$. Correspond à la valeur \verb|SCAN SPEED| sur le Lambda 9.
 
 \end{description}
 \begin{comment}
@@ -168,6 +169,7 @@ Après l'en-tête viennent les valeurs mesurées sur 14 bits non signés (16384)
 14336
 14331
 \end{lstlisting}
+Le Lambda 9 envoie 20 valeurs par seconde de mesures. %todo reformuler
 On utilise cette formule pour convertir dans le format choisi pour l'ordonnée:
 \[ \frac{Valeur - ValEchelleMin}{ValEchelleMax} \times (EchelleMax - EchelleMin) + EchelleMin = ValeurConvertie \]
 416 correspond à la valeur d'échelle minimal et 15936 à la valeur d'échelle maximal, si la valeurs sorte de cette plage, il y à une marge jusqu'a 0 et 16384.
