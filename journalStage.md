@@ -3,8 +3,8 @@
 ## Journal  
   
 ### Jour 1  
-Decouverte/visite de l'entreprise  
-Decouverte et aprentissage du logicel labview, exercices de programmation de base (conditionnel, boucle, tableau) et lecture du manuel utilisateur  
+Découverte/visite de l'entreprise  
+Découverte et apprentissage du logiciel labview, exercices de programmation de base (conditionnel, boucle, tableau) et lecture du manuel utilisateur  
   
 ### Jour 2  
 Lecture de la documentation du boitier ESP302 (mots de commandes, mode de fonctionnement, mode de communication)  
@@ -139,4 +139,4 @@ Traitement du header
 
 ### Jour 33
 V1 du programme Lambda Capture terminée
-
+Verification des autres modes de mesures à adapter  
