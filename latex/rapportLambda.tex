@@ -16,7 +16,7 @@
 	urlcolor=cyan,
 }
 
-\title{\Large\textbf{Supression d'imprimante et traitement des données sur le Lambda 9}}
+\title{\Large\textbf{Suppression d'imprimante et traitement des données sur le Lambda 9}}
 \author{Gaëtan PINOT}
 \date{Avril 2024}
 
@@ -29,9 +29,9 @@
 
 \pagenumbering{arabic}
 
-\section{Cablage}\label{cablage}
+\section{Câblage}\label{cablage}
 
-La station de traitement de données du Lambda 9 est normalement connéctée à une imprimante part un port DB25, le standard de communication entre les deux est RS232.
+La station de traitement de données du Lambda 9 est normalement connectée à une imprimante part un port DB25, le standard de communication entre les deux est RS232.
 Le standard RS232 permet d'utiliser un port série standard DE9\footnote{DE9 est le nom correct du port plus souvent appelé DB9 %\url{https://fr.wikipedia.org/wiki/D-sub}
 }.
 Pour pouvoir remplacer l'imprimante par un ordinateur il faut un cable de conversion entre le port DB25 et le port DB9 de l'ordinateur.
@@ -119,22 +119,65 @@ Les valeurs sont séparés par des virgules et on la signification suivante :
 	\item[Z0]
 	\item[IT]
 	\item[Z0]
-	\item[F15936] \emph{ValEchelleMax}, la valeur réel qui correspond à l'échelle maximal ici 15936.
-	\item[416] \emph{ValEchelleMin}, la valeur réel qui correspond à l'échelle minimal ici 416.
+	\item[F15936] \emph{ValEchelleMax}, la valeur réel qui correspond à l'échelle maximal, ici 15936.
+	\item[416] \emph{ValEchelleMin}, la valeur réel qui correspond à l'échelle minimal, ici 416.
 	\item[0]
 	\item[200]
-	\item[D0128] \emph{FacteurVitesse}, facteur de vitesse de balayage en puissance de 2, ici 128.  \textbf{Attention pour la vitesse de balyage 0,9375, le Lambda 9 ne fait pas la différence avec la vitesse 1,875. Dans les deux cas la valeur de \emph{FacteurVitesse} sera $1$.}
-	\item[1280]
+	\item[D0128] \emph{FacteurVitesse}, facteur de vitesse de balayage en puissance de 2, ici 128.
+		Change quand la vitesse de balayage (\verb|SCAN SPEED|) ou le format de l'abscisse (\verb|ABSCISSA FORMAT|) change.
+		\textbf{IMPORTANT} pour certaines valeurs de \verb|ABSCISSA FORMAT|, le facteur de vitesse ne change pas avec \verb|SCAN SPEED|, exemples en Table \ref{table:ValeursFacteurVitesse}.
+		Il est impossible de déduire avec certitude la vitesse de balyage pour certaines valeurs de \verb|ABSCISSA FORMAT|.
+
+\begin{table}[htb]
+		\begin{tabular}{|c|c|c|}
+		\hline
+\verb|SCAN SPEED| & \verb|ABSCISSA FORMAT| & FacteurVitesse \\ \hline
+0.9375                           & 10                                    & 1              \\ \hline
+1.875                            & 10                                    & 2              \\ \hline
+3.75                             & 10                                    & 4              \\ \hline
+7.5                              & 10                                    & 8              \\ \hline
+15                               & 10                                    & 16             \\ \hline
+30                               & 10                                    & 32             \\ \hline
+60                               & 10                                    & 64             \\ \hline
+120                              & 10                                    & 128            \\ \hline
+240                              & 10                                    & 256            \\ \hline
+480                              & 10                                    & 512            \\ \hline
+960                              & 10                                    & 1024           \\ \hline
+0.9375                           & 20                                    & 1              \\ \hline
+1.875                            & 20                                    & 1              \\ \hline
+3.75                             & 20                                    & 2              \\ \hline
+7.5                              & 20                                    & 4              \\ \hline
+15                               & 20                                    & 8              \\ \hline
+30                               & 20                                    & 16             \\ \hline
+60                               & 20                                    & 32             \\ \hline
+120                              & 20                                    & 64             \\ \hline
+240                              & 20                                    & 128            \\ \hline
+480                              & 20                                    & 256            \\ \hline
+960                              & 20                                    & 512            \\ \hline
+0.9375                           & 100                                   & 1              \\ \hline
+1.875                            & 100                                   & 1              \\ \hline
+3.75                             & 100                                   & 1              \\ \hline
+7.5                              & 100                                   & 1              \\ \hline
+15                               & 100                                   & 2              \\ \hline
+	\end{tabular}
+	\centering
+	\caption{Valeurs possibles de \emph{FacteurVitesse} pour différents paramètres de vitesse de balayage et de format d'abscisse }
+	\label{table:ValeursFacteurVitesse}
+
+\end{table}
+		
+
+	\item[1280] \emph{Inconnu}, valeur inconnue. Change quand le format de l'abscisse (\verb|ABSCISSA FORMAT|) change, ici 1280.
 	\item[A1]
 	\item[X2100]
-	\item[-100]
-	\item[5]
+	\item[-100] \emph{FacteurFormatAbscisse}, permet de calculer la valeur \verb|ABSCISSA FORMAT|, ici -100.
+	\item[5] \emph{DiviseurFormatAbscisse}, permet de calculer la valeur \verb|ABSCISSA FORMAT|, ici 5.
 	\item[S2090.0] \emph{Longueur d'onde max}, valeur de longueur d'onde maximal mesurée en nm, ici 2090.0.
 	\item[D1]
 	\item[1]
 	\item[Y110.0] \emph{EchelleMax}, valeur maximal enregistré par le Lambda 9, ici 110.0.
 		Correspond à la valeur \verb|ORD MAX| sur le Lambda 9.
-	\item[-22.000] \emph{Décalage}, valeur à multiplier par 5 et à ajouter à l'échelle maximal pour obtenir l'échelle minimal ici $-22.000$.
+	\item[-22.000] \emph{Décalage}, sert à calculer l'échelle minimal, ici $-22.000$.
 	\item[4]
 	\item[Z0]
 	\item[D0128]
@@ -148,17 +191,13 @@ Ce qu'on peut en deduire:
 	\item[EchelleMin] Valeur minimal enregistré par le Lambda 9, ici 0. Calculé avec la formule : $ \text{EchelleMax} + \text{Décalage} \times 5 = \text{EchelleMin}$. Ici $110.0 + ( -22.000 \times 5 ) = 0.0$. Correspond à la valeur \verb|ORD MIN| sur le Lambda 9.
 	\item[VitesseDeBalayage] Vitesse de balayage en nm/min, ici 240. Calculé avec la formule : $FacteurVitesse \times 0,9375 \times 2 = VitesseDeBalayage$. Ici $128 \times 0,9375 \times 2 = 240$. Correspond à la valeur \verb|SCAN SPEED| sur le Lambda 9.
 
-\end{description}
-\begin{comment}
-\begin{itemize}
-	\item La valeur qui suit le \verb|F| est la valeur d'échelle maximal sur 14 bits non signés: (15936)
-	\item La valeur qui suit le \verb|S| est la longueur d'onde maximal mesurée en nm: (2090.0)
-	\item La valeur qui suit le \verb|Y| est l'echelle maximal en \%: (110.0)
-	\item La valeur d'échelle minimal est la valeur d'échelle maximal + la valeur qui la suit * 5: ($110.0 + -22.000 \times 5 = 0.0$)
-\end{itemize}
-\end{comment}
+	\item[FormatAbscisse] Format de l'abscisse de l'imprimante en nm/cm. Calculé avec la formule : $ { - \frac{FacteurFormatAbscisse}{DiviseurFormatAbscisse} } = FormatAbscisse$. Ici $ - \frac{-100}{5} = 20$. Correspond à la valeur \verb|ABSCISSA FORMAT| sur le Lambda 9.
 
-Après l'en-tête viennent les valeurs mesurées sur 14 bits non signés (16384), exemple court:
+
+\end{description}
+
+Après l'en-tête viennent les valeurs mesurées sur 14 bits non signés $[0;16384]$. Exemple court:  
+
 \begin{lstlisting}
 14299
 14330

@@ -1,0 +1,89 @@
+==> mesuresLambda/mesure10.txt <==
+14177
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure11.txt <==
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+G2,2090.0
+A0,T,V-2
+
+==> mesuresLambda/mesure12.txt <==
+T,D1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+G2,2090.0
+A0,T,V-2
+
+==> mesuresLambda/mesure13.txt <==
+T,M0,50,V-2
+G2,2090.0
+A0,T,V-2
+
+==> mesuresLambda/mesure14.txt <==
+14068
+T,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure15.txt <==
+14060
+T,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure16.txt <==
+14536
+T,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure17.txt <==
+13973
+T,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure1.txt <==
+14357
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure2.txt <==
+13986
+T,D-1,1,Y110.0,-17.000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure3.txt <==
+13438
+T,D-1,1,Y110.0,-13.400,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure4.txt <==
+16383
+T,D-1,1,Y60.00,-3.4000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure5.txt <==
+14318
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure6.txt <==
+
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure7.txt <==
+14344
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure8.txt <==
+14310
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesure9.txt <==
+14168
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+
+==> mesuresLambda/mesurelambda.txt <==
+15152
+T,D-1,1,Y100.0,-20.000,4,A0,M0,50,V-2
+A0,T,V-2
