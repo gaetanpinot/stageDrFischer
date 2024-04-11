@@ -140,3 +140,6 @@ Traitement du header
 ### Jour 33
 V1 du programme Lambda Capture terminée
 Verification des autres modes de mesures à adapter  
+
+### Jour 34
+Mesures pour comprendre l'effet de certain paramètre sur les trames de données

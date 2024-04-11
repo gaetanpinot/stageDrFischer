@@ -1,5 +1,5 @@
 \documentclass[a4paper, 12pt]{article}
-\usepackage{graphicx,hyperref,float,comment,listings,amsmath}
+\usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,geometry,caption}
 \lstdefinestyle{mystyle}{
 	basicstyle=\small,
 	breaklines=true,
@@ -31,6 +31,7 @@
 
 \section{Câblage}\label{cablage}
 
+
 La station de traitement de données du Lambda 9 est normalement connectée à une imprimante part un port DB25, le standard de communication entre les deux est RS232.
 Le standard RS232 permet d'utiliser un port série standard DE9\footnote{DE9 est le nom correct du port plus souvent appelé DB9 %\url{https://fr.wikipedia.org/wiki/D-sub}
 }.
@@ -52,7 +53,7 @@ Pour pouvoir remplacer l'imprimante par un ordinateur il faut un cable de conver
 		DTR    & 20             \\ \hline
 	\end{tabular}
 	\centering
-	\caption{Schéma de cablage de la sortie imprimante du Lambda 9, directement tiré des dessins techniques}
+	\caption{Schéma de câblage de la sortie imprimante du Lambda 9, directement tiré des dessins techniques}
 	\label{table:pinoutLambda}
 \end{table}
 
@@ -65,7 +66,7 @@ Il faut un cable null-modem\footnote{Cable qui croisent certains signaux permett
 	\begin{figure}[htb]
 		\centering
 		\includegraphics[width=1\textwidth]{cableLambda.png}
-		\caption{Schéma de cablage entre l'ordinateur et le Lambda 9 \protect \footnotemark}
+		\caption{Schéma de câblage entre l'ordinateur et le Lambda 9 \protect \footnotemark}
 		\label{fig:cableLambda}
 	\end{figure}
 	\footnotetext{Schéma généré grâce à WireViz : \url{https://github.com/wireviz/WireViz}}
@@ -82,16 +83,17 @@ Il faut un cable null-modem\footnote{Cable qui croisent certains signaux permett
 			CD,DTR,CTS&1,4,8 & 4,5,6,8 &RTS,CTS,DSR,CD\\ \hline
 		\end{tabular}
 	\end{table}
-	Ceci (figure \ref{fig:cableLambda}) est le schéma du seul cablage que j'ai réussi à faire fonctionner.
+	Ceci (figure \ref{fig:cableLambda}) est le schéma du seul câblage que j'ai réussi à faire fonctionner.
 	Les signaux \verb|TD| et \verb|RD| sont croisés pour que les deux appareils puissent communiquer.
 	Les signaux \verb|CD| sur les deux appareils sont reliés à d'autre signaux car il devrait normalement être généré par le DCE (i.e.\ l'imprimante).
-	Les autrs signaux (\verb|RTS|, \verb|CTS|, \verb|DSR|, \verb|DTR|) sont reliés entre eux pour que les deux appareils soit prêt dès le branchement du cable, pour simplifier le programme de récéption des données. 
+	Les autos signaux (\verb|RTS|, \verb|CTS|, \verb|DSR|, \verb|DTR|) sont reliés entre eux pour que les deux appareils soit prêt dès le branchement du cable, pour simplifier le programme de réception des données. 
 \end{comment}
 %%%
 
 \newpage
 \section{Programme de réception des données}\label{programme}
 \subsection{Simuler l'imprimante}\label{simuler}
+
 
 On commence par connecter l'ordinateur au Lambda 9 avec le cable null-modem.
 Puis on met en place une connexion série entre l'ordinateur et le Lambda 9, ayant pour paramètres :
@@ -103,13 +105,16 @@ Puis on met en place une connexion série entre l'ordinateur et le Lambda 9, aya
 	\item Contrôle de flux matériel (RTS/CTS)
 \end{itemize}
 
+
 Une fois l'ordinateur connecté au Lambda 9, il faut simuler l'imprimante pour que le Lambda 9 puisse envoyer les données.
-Le Lambda 9 va envoyer des chaines de caractèrs ASCII se terminant par un retour chariot \texttt{<CR>}\footnote{Le retour chariot est aussi souvent écrit \texttt{\textbackslash r} dans le code}.
-Il faut y répondre par la chaine \verb|01\r| pour que le Lambda 9 continue d'envoyer les données.
+Le Lambda 9 va envoyer des chaines de caractère ASCII se terminant par un retour chariot \texttt{<CR>}\footnote{Le retour chariot est aussi souvent écrit \texttt{\textbackslash r} dans le code}.
+Il faut répondre par la chaine \verb|01\r| pour que le Lambda 9 continue d'envoyer les données.
 
 \subsection{Analyse des données}\label{analyse}
 
-Quand on lance une mesure, le Lambda 9 commence par envoyer un en-tête qui contient les informations sur la mesure. Voici un exemple d'en-tête :
+
+Quand on lance une mesure, le Lambda 9 commence par envoyer un en-tête qui contient les informations sur la mesure.
+Voici un exemple d'en-tête :
 \begin{lstlisting}
 Z0
 IT,Z0,F15936,416,0,200,D0128,1280,A1,X2100,-100,5,S2090.0,D1,1,Y110.0,-22.000,4,Z0,D0128,1280,L1
@@ -123,56 +128,17 @@ Les valeurs sont séparés par des virgules et on la signification suivante :
 	\item[416] \emph{ValEchelleMin}, la valeur réel qui correspond à l'échelle minimal, ici 416.
 	\item[0]
 	\item[200]
-	\item[D0128] \emph{FacteurVitesse}, facteur de vitesse de balayage en puissance de 2, ici 128.
+	\item[D0128]  \emph{FacteurVitesse}, facteur de vitesse de balayage , ici 128.
 		Change quand la vitesse de balayage (\verb|SCAN SPEED|) ou le format de l'abscisse (\verb|ABSCISSA FORMAT|) change.
-		\textbf{IMPORTANT} pour certaines valeurs de \verb|ABSCISSA FORMAT|, le facteur de vitesse ne change pas avec \verb|SCAN SPEED|, exemples en Table \ref{table:ValeursFacteurVitesse}.
-		Il est impossible de déduire avec certitude la vitesse de balyage pour certaines valeurs de \verb|ABSCISSA FORMAT|.
-
-\begin{table}[htb]
-		\begin{tabular}{|c|c|c|}
-		\hline
-\verb|SCAN SPEED| & \verb|ABSCISSA FORMAT| & FacteurVitesse \\ \hline
-0.9375                           & 10                                    & 1              \\ \hline
-1.875                            & 10                                    & 2              \\ \hline
-3.75                             & 10                                    & 4              \\ \hline
-7.5                              & 10                                    & 8              \\ \hline
-15                               & 10                                    & 16             \\ \hline
-30                               & 10                                    & 32             \\ \hline
-60                               & 10                                    & 64             \\ \hline
-120                              & 10                                    & 128            \\ \hline
-240                              & 10                                    & 256            \\ \hline
-480                              & 10                                    & 512            \\ \hline
-960                              & 10                                    & 1024           \\ \hline
-0.9375                           & 20                                    & 1              \\ \hline
-1.875                            & 20                                    & 1              \\ \hline
-3.75                             & 20                                    & 2              \\ \hline
-7.5                              & 20                                    & 4              \\ \hline
-15                               & 20                                    & 8              \\ \hline
-30                               & 20                                    & 16             \\ \hline
-60                               & 20                                    & 32             \\ \hline
-120                              & 20                                    & 64             \\ \hline
-240                              & 20                                    & 128            \\ \hline
-480                              & 20                                    & 256            \\ \hline
-960                              & 20                                    & 512            \\ \hline
-0.9375                           & 100                                   & 1              \\ \hline
-1.875                            & 100                                   & 1              \\ \hline
-3.75                             & 100                                   & 1              \\ \hline
-7.5                              & 100                                   & 1              \\ \hline
-15                               & 100                                   & 2              \\ \hline
-	\end{tabular}
-	\centering
-	\caption{Valeurs possibles de \emph{FacteurVitesse} pour différents paramètres de vitesse de balayage et de format d'abscisse }
-	\label{table:ValeursFacteurVitesse}
-
-\end{table}
-		
-
-	\item[1280] \emph{Inconnu}, valeur inconnue. Change quand le format de l'abscisse (\verb|ABSCISSA FORMAT|) change, ici 1280.
+		\textbf{IMPORTANT} pour certaines valeurs de \verb|ABSCISSA FORMAT|, le facteur de vitesse ne change pas avec \verb|SCAN SPEED|, exemples en Table \ref{tab:ValeursFacteurVitesse}.
+		Il est impossible de déduire avec certitude la vitesse de balayage pour certaines valeurs de \verb|ABSCISSA FORMAT|.
+	\item[1280] \emph{Inconnu}, valeur inconnue.
+		Change quand le format de l'abscisse (\verb|ABSCISSA FORMAT|) change, ici 1280.
 	\item[A1]
 	\item[X2100]
 	\item[-100] \emph{FacteurFormatAbscisse}, permet de calculer la valeur \verb|ABSCISSA FORMAT|, ici -100.
 	\item[5] \emph{DiviseurFormatAbscisse}, permet de calculer la valeur \verb|ABSCISSA FORMAT|, ici 5.
-	\item[S2090.0] \emph{Longueur d'onde max}, valeur de longueur d'onde maximal mesurée en nm, ici 2090.0.
+	\item[S2090.0] \emph{LongueurOndeMax}, valeur de longueur d'onde maximal mesurée en nm, ici 2090.0.
 	\item[D1]
 	\item[1]
 	\item[Y110.0] \emph{EchelleMax}, valeur maximal enregistré par le Lambda 9, ici 110.0.
@@ -185,18 +151,34 @@ Les valeurs sont séparés par des virgules et on la signification suivante :
 	\item[L1] \emph{StyleDeLigne}, style de la ligne de courbe de mesure à l'impression, peut être \{1,2,3,4\}, ici 1.
 
 \end{description}
-Ce qu'on peut en deduire:
+Ce qu'on peut en déduire :
 
 \begin{description}
-	\item[EchelleMin] Valeur minimal enregistré par le Lambda 9, ici 0. Calculé avec la formule : $ \text{EchelleMax} + \text{Décalage} \times 5 = \text{EchelleMin}$. Ici $110.0 + ( -22.000 \times 5 ) = 0.0$. Correspond à la valeur \verb|ORD MIN| sur le Lambda 9.
-	\item[VitesseDeBalayage] Vitesse de balayage en nm/min, ici 240. Calculé avec la formule : $FacteurVitesse \times 0,9375 \times 2 = VitesseDeBalayage$. Ici $128 \times 0,9375 \times 2 = 240$. Correspond à la valeur \verb|SCAN SPEED| sur le Lambda 9.
+	\item[EchelleMin] Valeur minimal enregistré par le Lambda 9, ici 0.
+		Calculé avec la formule : 
+		$$ \text{EchelleMax} + ( \text{Décalage} \times 5 ) = \text{EchelleMin}$$
+		Ici :
+		$$110.0 + ( -22.000 \times 5 ) = 0.0$$ 
+		Correspond à la valeur \verb|ORD MIN| sur le Lambda 9.
+	\item[VitesseDeBalayage] Vitesse de balayage en nm/min, ici 240. 
+		Calculé avec la formule : 
+		$$FacteurVitesse \times 0,9375 \times 2 = VitesseDeBalayage$$
+		Ici :
+		$$128 \times 0,9375 \times 2 = 240$$ 
+		Correspond à la valeur \verb|SCAN SPEED| sur le Lambda 9.
 
-	\item[FormatAbscisse] Format de l'abscisse de l'imprimante en nm/cm. Calculé avec la formule : $ { - \frac{FacteurFormatAbscisse}{DiviseurFormatAbscisse} } = FormatAbscisse$. Ici $ - \frac{-100}{5} = 20$. Correspond à la valeur \verb|ABSCISSA FORMAT| sur le Lambda 9.
+	\item[FormatAbscisse] Format de l'abscisse de l'imprimante en nm/cm. 
+		Calculé avec la formule : 
+		$$ { - \frac{FacteurFormatAbscisse}{DiviseurFormatAbscisse} } = FormatAbscisse $$ 
+		Ici :
+		$$ - \frac{-100}{5} = 20$$ 
+		Correspond à la valeur \verb|ABSCISSA FORMAT| sur le Lambda 9.
 
 
 \end{description}
 
-Après l'en-tête viennent les valeurs mesurées sur 14 bits non signés $[0;16384]$. Exemple court:  
+Après l'en-tête viennent les valeurs mesurées sur 14 bits non signés $[0;16384]$. 
+Exemple court:  
 
 \begin{lstlisting}
 14299
@@ -208,10 +190,114 @@ Après l'en-tête viennent les valeurs mesurées sur 14 bits non signés $[0;163
 14336
 14331
 \end{lstlisting}
-Le Lambda 9 envoie 20 valeurs par seconde de mesures. %todo reformuler
-On utilise cette formule pour convertir dans le format choisi pour l'ordonnée:
-\[ \frac{Valeur - ValEchelleMin}{ValEchelleMax} \times (EchelleMax - EchelleMin) + EchelleMin = ValeurConvertie \]
-416 correspond à la valeur d'échelle minimal et 15936 à la valeur d'échelle maximal, si la valeurs sorte de cette plage, il y à une marge jusqu'a 0 et 16384.
-Par exemple, la valeur 14299 correspond à 95.8\%, $\frac{14299-416}{15936} \times (110-0)+0 = 95.8$.
+
+On utilise le nombre de valeurs total \emph{NombreValeurs} pour determiner la valeur minimale de longueur d'onde de cette manière :
+$$ LongueurOndeMax - \left ( \frac{VitesseDeBalayage}{60} \times \frac{NombreValeurs}{20} \right ) = LongueurOndeMini$$
+Le Lambda 9 envoie 20 valeurs par seconde de mesure.\\
+On divise le nombre de valeurs par 20 pour obtenir le nombre de secondes de mesure.\\
+On multiplie ce nombre par la vitesse de balayage, divisé par 60 pour avoir des nm/sec, pour obtenir la différence de longueur d'onde entre la première et la dernière valeur.
+Ici :
+$$ 2090 - \left ( \frac{240}{60} \times \frac{300}{20} \right ) = 2030 $$ \\
+
+
+On utilise cette formule pour convertir dans le format choisi pour l'ordonnée :
+$$ \left ( \frac{Valeur - ValEchelleMin}{ValEchelleMax} \times (EchelleMax - EchelleMin) \right ) + EchelleMin = ValeurConvertie $$
+Ici, 416 correspond à la valeur d'échelle minimal et 15936 à la valeur d'échelle maximal, si la valeurs sorte de cette plage, il y à une marge jusqu'à 0 et 16384.
+Par exemple, la valeur 14299 correspond à 95.8\%: 
+$$ \left (\frac{14299-416}{15936} \times ( 110 - 0 ) \right ) + 0 = 95.8$$\\
+
+
+\newpage
+\section{Annexe}\label{annexe}
+
+		\begin{longtable}[c]{|c|c|c|c|}
+
+\hline
+\verb|SCAN SPEED| & \verb|ABSCISSA FORMAT| & \emph{FacteurVitesse} & \emph{Inconnu} \\ \hline
+\endhead
+%
+0.9375     & 0.2             & 5              & 128     \\ \hline
+1.875      & 0.2             & 10             & 128     \\ \hline
+3.75       & 0.2             & 20             & 128     \\ \hline
+7.5        & 0.2             & 40             & 128     \\ \hline
+15         & 0.2             & 80             & 128     \\ \hline
+30         & 0.2             & 160            & 128     \\ \hline
+0.9375     & 1               & 5              & 640     \\ \hline
+1.875      & 1               & 10             & 640     \\ \hline
+3.75       & 1               & 20             & 640     \\ \hline
+7.5        & 1               & 40             & 640     \\ \hline
+15         & 1               & 80             & 640     \\ \hline
+30         & 1               & 160            & 640     \\ \hline
+60         & 1               & 320            & 640     \\ \hline
+120        & 1               & 640            & 640     \\ \hline
+0.9375     & 2               & 5              & 1280    \\ \hline
+1.875      & 2               & 10             & 1280    \\ \hline
+3.75       & 2               & 20             & 1280    \\ \hline
+7.5        & 2               & 40             & 1280    \\ \hline
+15         & 2               & 80             & 1280    \\ \hline
+30         & 2               & 160            & 1280    \\ \hline
+60         & 2               & 320            & 1280    \\ \hline
+120        & 2               & 640            & 1280    \\ \hline
+240        & 2               & 1280           & 1280    \\ \hline
+0.9375     & 5               & 5              & 3200    \\ \hline
+1.875      & 5               & 10             & 3200    \\ \hline
+3.75       & 5               & 20             & 3200    \\ \hline
+7.5        & 5               & 40             & 3200    \\ \hline
+15         & 5               & 80             & 3200    \\ \hline
+30         & 5               & 160            & 3200    \\ \hline
+60         & 5               & 320            & 3200    \\ \hline
+120        & 5               & 640            & 3200    \\ \hline
+240        & 5               & 1280           & 3200    \\ \hline
+480        & 5               & 2560           & 3200    \\ \hline
+0.9375     & 10              & 1              & 1280    \\ \hline
+1.875      & 10              & 2              & 1280    \\ \hline
+3.75       & 10              & 4              & 1280    \\ \hline
+7.5        & 10              & 8              & 1280    \\ \hline
+15         & 10              & 16             & 1280    \\ \hline
+30         & 10              & 32             & 1280    \\ \hline
+60         & 10              & 64             & 1280    \\ \hline
+120        & 10              & 128            & 1280    \\ \hline
+240        & 10              & 256            & 1280    \\ \hline
+480        & 10              & 512            & 1280    \\ \hline
+960        & 10              & 1024           & 1280    \\ \hline
+0.9375     & 20              & 1              & 1280    \\ \hline
+1.875      & 20              & 1              & 1280    \\ \hline
+3.75       & 20              & 2              & 1280    \\ \hline
+7.5        & 20              & 4              & 1280    \\ \hline
+15         & 20              & 8              & 1280    \\ \hline
+30         & 20              & 16             & 1280    \\ \hline
+60         & 20              & 32             & 1280    \\ \hline
+120        & 20              & 64             & 1280    \\ \hline
+240        & 20              & 128            & 1280    \\ \hline
+480        & 20              & 256            & 1280    \\ \hline
+960        & 20              & 512            & 1280    \\ \hline
+0.9375     & 50              & 1              & 1600    \\ \hline
+1.875      & 50              & 1              & 1600    \\ \hline
+3.75       & 50              & 1              & 1600    \\ \hline
+7.5        & 50              & 2              & 1600    \\ \hline
+15         & 50              & 4              & 1600    \\ \hline
+30         & 50              & 8              & 1600    \\ \hline
+60         & 50              & 16             & 1600    \\ \hline
+120        & 50              & 32             & 1600    \\ \hline
+240        & 50              & 64             & 1600    \\ \hline
+480        & 50              & 128            & 1600    \\ \hline
+960        & 50              & 256            & 1600    \\ \hline
+0.9        & 100             & 1              & 1600    \\ \hline
+1.8        & 100             & 1              & 1600    \\ \hline
+3.75       & 100             & 1              & 1600    \\ \hline
+7.5        & 100             & 1              & 1600    \\ \hline
+15         & 100             & 2              & 1600    \\ \hline
+30         & 100             & 4              & 1600    \\ \hline
+60         & 100             & 8              & 1600    \\ \hline
+120        & 100             & 16             & 1600    \\ \hline
+240        & 100             & 32             & 1600    \\ \hline
+480        & 100             & 64             & 1600    \\ \hline
+960        & 100             & 128            & 1600    \\ \hline
+
+\caption{Valeurs de \emph{FacteurVitesse} et d'\emph{Inconnu} pour toutes les combinaisons possibles de vitesse de balayage et de format d'abscisse}
+
+\label{tab:ValeursFacteurVitesse}\\
+\end{longtable}
+
 
 \end{document}
