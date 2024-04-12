@@ -1,5 +1,5 @@
 \documentclass[a4paper, 12pt]{article}
-\usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,geometry,caption,ragged2e}
+\usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,geometry,caption,ragged2e,svg}
 \lstdefinestyle{mystyle}{
 	basicstyle=\small,
 	breaklines=true,
@@ -58,20 +58,13 @@ Pour pouvoir remplacer l'imprimante par un ordinateur il faut un cable de conver
 \end{table}
 
 Les deux appareils sont des DTE\footnote{Data Terminal Equipement}, les convertisseurs classiques ne fonctionnent pas car certains fils doivent être croisés et certains signaux ne peuvent être généré par aucun des deux appareils.
-Il faut un cable null-modem\footnote{Cable qui croisent certains fils permettant la communication entre DTE} DE9-DB25.
+Il faut un cable null-modem\footnote{Cable qui croisent certains fils permettant la communication entre DTE} standard DE9-DB25.
+Ou le faire soit meme selon le schéma de la Figure \ref{fig:cableLambda}.
 
 
 %%%
 \begin{comment}
-	\begin{figure}[htb]
-		\centering
-		\includegraphics[width=1\textwidth]{cableLambda.png}
-		\caption{Schéma de câblage entre l'ordinateur et le Lambda 9 \protect \footnotemark}
-		\label{fig:cableLambda}
-	\end{figure}
-	\footnotetext{Schéma généré grâce à WireViz : \url{https://github.com/wireviz/WireViz}}
-
-	\begin{table}[htb]
+		\begin{table}[htb]
 		\centering
 		\begin{tabular}{|c|c|c|c|}
 			\hline
@@ -321,6 +314,15 @@ On calcule les valeur suivantes:
 
 \label{tab:ValeursFacteurVitesse}\\
 \end{longtable}
+
+\begin{figure}[htb]
+		\centering
+		\includegraphics[width=1\textwidth]{cableLambda.png}
+		\caption{Exemple de câblage fonctionnel entre l'ordinateur et le Lambda 9} % \protect \footnotemark}
+		\label{fig:cableLambda}
+	\end{figure}
+	%\footnotetext{Schéma généré grâce à WireViz : \url{https://github.com/wireviz/WireViz}}
+
 
 
 \end{document}
