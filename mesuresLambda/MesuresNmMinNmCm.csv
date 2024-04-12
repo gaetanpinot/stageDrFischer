@@ -1,4 +1,4 @@
-Vitesse de balyage nm/min,Abscissa format nm/cm,FacteurVitesse,Inconnu,FacteurFormatAbscisse,FormatAbscisseInconnu
+Vitesse de balyage nm/min,Abscissa format nm/cm,FacteurVitesse,Inconnu,FacteurFormatAbscisse,DiviseurFormatAbscisse
 0.9375,0.2,5,128,-1,5
 1.875,0.2,10,128,-1,5
 3.75,0.2,20,128,-1,5

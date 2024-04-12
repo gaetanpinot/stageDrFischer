@@ -1,5 +1,5 @@
 \documentclass[a4paper, 12pt]{article}
-\usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,geometry,caption}
+\usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,geometry,caption,ragged2e}
 \lstdefinestyle{mystyle}{
 	basicstyle=\small,
 	breaklines=true,
@@ -32,7 +32,7 @@
 \section{Câblage}\label{cablage}
 
 
-La station de traitement de données du Lambda 9 est normalement connectée à une imprimante part un port DB25, le standard de communication entre les deux est RS232.
+La station de traitement de données du Lambda 9 est normalement connectée à une imprimante par un port DB25, le standard de communication entre les deux est RS232.
 Le standard RS232 permet d'utiliser un port série standard DE9\footnote{DE9 est le nom correct du port plus souvent appelé DB9 %\url{https://fr.wikipedia.org/wiki/D-sub}
 }.
 Pour pouvoir remplacer l'imprimante par un ordinateur il faut un cable de conversion entre le port DB25 et le port DB9 de l'ordinateur.
@@ -57,8 +57,8 @@ Pour pouvoir remplacer l'imprimante par un ordinateur il faut un cable de conver
 	\label{table:pinoutLambda}
 \end{table}
 
-Les deux appareils sont des DTE\footnote{Data Terminal Equipement}, les convertisseurs classiques ne fonctionnent donc pas, car certains cables doivent être croisés et certains signaux ne peuvent pas être généré par aucun des deux appareils.
-Il faut un cable null-modem\footnote{Cable qui croisent certains signaux permettant la communication entre DTE} DE9-DB25.
+Les deux appareils sont des DTE\footnote{Data Terminal Equipement}, les convertisseurs classiques ne fonctionnent pas car certains fils doivent être croisés et certains signaux ne peuvent être généré par aucun des deux appareils.
+Il faut un cable null-modem\footnote{Cable qui croisent certains fils permettant la communication entre DTE} DE9-DB25.
 
 
 %%%
@@ -91,51 +91,53 @@ Il faut un cable null-modem\footnote{Cable qui croisent certains signaux permett
 %%%
 
 \newpage
-\section{Programme de réception des données}\label{programme}
-\subsection{Simuler l'imprimante}\label{simuler}
+\section{Simuler l'imprimante pour recevoir des données}\label{simuler}
 
 
 On commence par connecter l'ordinateur au Lambda 9 avec le cable null-modem.
 Puis on met en place une connexion série entre l'ordinateur et le Lambda 9, ayant pour paramètres :
-\begin{itemize}
-	\item 9600 bauds
-	\item 8 bits de données
-	\item 1 bit de stop
-	\item pas de parité
-	\item Contrôle de flux matériel (RTS/CTS)
-\end{itemize}
+\begin{description}
+	\item[Bauds] 9600 
+	\item[Bits de données] 8 
+	\item[Bit de stop] 1 
+	\item[Parité] Aucune
+	\item[Contrôle de flux] Matériel (RTS/CTS)
+\end{description}
 
 
 Une fois l'ordinateur connecté au Lambda 9, il faut simuler l'imprimante pour que le Lambda 9 puisse envoyer les données.
-Le Lambda 9 va envoyer des chaines de caractère ASCII se terminant par un retour chariot \texttt{<CR>}\footnote{Le retour chariot est aussi souvent écrit \texttt{\textbackslash r} dans le code}.
+Le Lambda 9 va envoyer des chaines de caractère ASCII se terminant par un retour chariot\footnote{Différentes représentations du retour chariot: \texttt{<CR>},  \texttt{\textbackslash r}, \^{}M, dec:13, hex:0D}.
 Il faut répondre par la chaine \verb|01\r| pour que le Lambda 9 continue d'envoyer les données.
 
-\subsection{Analyse des données}\label{analyse}
+\newpage
+\section{Analyse des données}\label{analyse}
 
+\subsection{En-tête}\label{en-tete}
 
-Quand on lance une mesure, le Lambda 9 commence par envoyer un en-tête qui contient les informations sur la mesure.
+Quand on lance une mesure de scan, le Lambda 9 commence par envoyer un en-tête qui contient les informations sur la mesure.\\
+Les valeurs de paramètres du menu de scan du Lambda 9 sont notés \verb|VALEUR PARAM LMBD|, les valeurs notés \emph{Valeur} sont des valeurs données dans l'en-tête ou calculées.
+Leur nom est explicite.\\
 Voici un exemple d'en-tête :
 \begin{lstlisting}
 Z0
 IT,Z0,F15936,416,0,200,D0128,1280,A1,X2100,-100,5,S2090.0,D1,1,Y110.0,-22.000,4,Z0,D0128,1280,L1
 \end{lstlisting}
-Les valeurs sont séparés par des virgules et on la signification suivante :
+Les valeurs sont séparés par des virgules et on la signification suivante\footnote{Les valeurs qui ne sont pas expliquées sont des valeurs qui ne change pas peu importe les paramètres de mesure}:
 \begin{description}
 	\item[Z0]
 	\item[IT]
 	\item[Z0]
-	\item[F15936] \emph{ValEchelleMax}, la valeur réel qui correspond à l'échelle maximal, ici 15936.
-	\item[416] \emph{ValEchelleMin}, la valeur réel qui correspond à l'échelle minimal, ici 416.
+	\item[F15936] \emph{ValEchelleMax}, la valeur réel qui correspond à l'échelle maximal des données envoyées, ici 15936.
+	\item[416] \emph{ValEchelleMin}, la valeur réel qui correspond à l'échelle minimal des données envoyées, ici 416.
 	\item[0]
 	\item[200]
 	\item[D0128]  \emph{FacteurVitesse}, facteur de vitesse de balayage , ici 128.
 		Change quand la vitesse de balayage (\verb|SCAN SPEED|) ou le format de l'abscisse (\verb|ABSCISSA FORMAT|) change.
-		\textbf{IMPORTANT} pour certaines valeurs de \verb|ABSCISSA FORMAT|, le facteur de vitesse ne change pas avec \verb|SCAN SPEED|, exemples en Table \ref{tab:ValeursFacteurVitesse}.
+		\textbf{IMPORTANT}, pour certaines valeurs de \verb|ABSCISSA FORMAT|, le facteur de vitesse ne change pas avec \verb|SCAN SPEED|, exemples en Table \ref{tab:ValeursFacteurVitesse}.
 		Il est impossible de déduire avec certitude la vitesse de balayage pour certaines valeurs de \verb|ABSCISSA FORMAT|.
-	\item[1280] \emph{Inconnu}, valeur inconnue.
-		Change quand le format de l'abscisse (\verb|ABSCISSA FORMAT|) change, ici 1280.
+	\item[1280] \emph{InconnuAbscisse}, valeur inconnue qui change quand \verb|ABSCISSA FORMAT| change, voir Table \ref{tab:ValeursFacteurVitesse}, ici 1280. 
 	\item[A1]
-	\item[X2100]
+	\item[X2100] \emph{InconnuLongueurOnde}, valeur inconnu qui correspond à \emph{LongueurOndeMax} arrondie au multiple de 100 supérieur, ici 2100.
 	\item[-100] \emph{FacteurFormatAbscisse}, permet de calculer la valeur \verb|ABSCISSA FORMAT|, ici -100.
 	\item[5] \emph{DiviseurFormatAbscisse}, permet de calculer la valeur \verb|ABSCISSA FORMAT|, ici 5.
 	\item[S2090.0] \emph{LongueurOndeMax}, valeur de longueur d'onde maximal mesurée en nm, ici 2090.0.
@@ -146,12 +148,15 @@ Les valeurs sont séparés par des virgules et on la signification suivante :
 	\item[-22.000] \emph{Décalage}, sert à calculer l'échelle minimal, ici $-22.000$.
 	\item[4]
 	\item[Z0]
-	\item[D0128]
-	\item[1280]
+	\item[D0128] Duplicata de \emph{FacteurVitesse}.
+	\item[1280] Duplicata de \emph{InconnuAbscisse}.
 	\item[L1] \emph{StyleDeLigne}, style de la ligne de courbe de mesure à l'impression, peut être \{1,2,3,4\}, ici 1.
+		Correspond à la valeur \verb|DASH| sur le Lambda 9.\\
 
 \end{description}
-Ce qu'on peut en déduire :
+
+
+Valeurs que l'on calcule à partir des valeurs de l'en-tête:
 
 \begin{description}
 	\item[EchelleMin] Valeur minimal enregistré par le Lambda 9, ici 0.
@@ -160,12 +165,6 @@ Ce qu'on peut en déduire :
 		Ici :
 		$$110.0 + ( -22.000 \times 5 ) = 0.0$$ 
 		Correspond à la valeur \verb|ORD MIN| sur le Lambda 9.
-	\item[VitesseDeBalayage] Vitesse de balayage en nm/min, ici 240. 
-		Calculé avec la formule : 
-		$$FacteurVitesse \times 0,9375 \times 2 = VitesseDeBalayage$$
-		Ici :
-		$$128 \times 0,9375 \times 2 = 240$$ 
-		Correspond à la valeur \verb|SCAN SPEED| sur le Lambda 9.
 
 	\item[FormatAbscisse] Format de l'abscisse de l'imprimante en nm/cm. 
 		Calculé avec la formule : 
@@ -174,11 +173,25 @@ Ce qu'on peut en déduire :
 		$$ - \frac{-100}{5} = 20$$ 
 		Correspond à la valeur \verb|ABSCISSA FORMAT| sur le Lambda 9.
 
+	\item[VitesseDeBalayage] Vitesse de balayage en nm/min, ici 240. 
+		\textbf{IMPORTANT}, le calcule change en fonction de \emph{FormatAbscisse}, voir Table \ref{tab:ValeursFacteurVitesse}.
+		Calculé avec la formule : 
+		$$FacteurVitesse \times 0,9375 \times 2 = VitesseDeBalayage$$
+		Pour $ FormatAbscisse = 20 $.
+		\\
+		Ici :
+		$$128 \times 0,9375 \times 2 = 240$$ 
+		Correspond à la valeur \verb|SCAN SPEED| sur le Lambda 9.
+
+
 
 \end{description}
 
+
+\subsection{Valeurs mesurées}\label{valeurs}
+
 Après l'en-tête viennent les valeurs mesurées sur 14 bits non signés $[0;16384]$. 
-Exemple court:  
+Exemple court\footnote{Il n'y a que 8 valeurs ici, mais il y en a 300 en réalité}:  
 
 \begin{lstlisting}
 14299
@@ -191,21 +204,31 @@ Exemple court:
 14331
 \end{lstlisting}
 
-On utilise le nombre de valeurs total \emph{NombreValeurs} pour determiner la valeur minimale de longueur d'onde de cette manière :
-$$ LongueurOndeMax - \left ( \frac{VitesseDeBalayage}{60} \times \frac{NombreValeurs}{20} \right ) = LongueurOndeMini$$
-Le Lambda 9 envoie 20 valeurs par seconde de mesure.\\
-On divise le nombre de valeurs par 20 pour obtenir le nombre de secondes de mesure.\\
-On multiplie ce nombre par la vitesse de balayage, divisé par 60 pour avoir des nm/sec, pour obtenir la différence de longueur d'onde entre la première et la dernière valeur.
-Ici :
-$$ 2090 - \left ( \frac{240}{60} \times \frac{300}{20} \right ) = 2030 $$ \\
+On calcule les valeur suivantes: 
+
+\begin{description}
+	\item[LongueurOndeMini] On utilise le nombre de valeurs total, \emph{NombreValeurs}, pour determiner la valeur minimale de longueur d'onde de cette manière :
+		\begin{multline*}
+			 LongueurOndeMax - \left ( \frac{VitesseDeBalayage}{60} \times \frac{NombreValeurs}{20} \right ) 
+			\\ = LongueurOndeMini 
+\end{multline*}
+		Le Lambda 9 envoie 20 valeurs par seconde de mesure.\\
+		On divise le nombre de valeurs par 20 pour obtenir le nombre de secondes de mesure.\\
+		On multiplie ce nombre par la vitesse de balayage, divisé par 60 pour avoir des nm/sec, pour obtenir la différence de longueur d'onde entre la première et la dernière valeur.
+		Ici :
+		$$ 2090 - \left ( \frac{240}{60} \times \frac{300}{20} \right ) = 2030 $$ \\
 
 
-On utilise cette formule pour convertir dans le format choisi pour l'ordonnée :
-$$ \left ( \frac{Valeur - ValEchelleMin}{ValEchelleMax} \times (EchelleMax - EchelleMin) \right ) + EchelleMin = ValeurConvertie $$
-Ici, 416 correspond à la valeur d'échelle minimal et 15936 à la valeur d'échelle maximal, si la valeurs sorte de cette plage, il y à une marge jusqu'à 0 et 16384.
-Par exemple, la valeur 14299 correspond à 95.8\%: 
-$$ \left (\frac{14299-416}{15936} \times ( 110 - 0 ) \right ) + 0 = 95.8$$\\
+	\item[ValeurConvertie] On utilise cette formule pour convertir dans le format choisi pour l'ordonnée :
+		\begin{multline*}
+		 \left ( \frac{Valeur - ValEchelleMin}{ValEchelleMax} \times (EchelleMax - EchelleMin) \right ) 
+			\\ + EchelleMin = ValeurConvertie 
+			\end{multline*}
+		Ici, 416 correspond à la valeur d'échelle minimal et 15936 à la valeur d'échelle maximal, si la valeurs sorte de cette plage, il y à une marge jusqu'à 0 et 16384.
+		Par exemple, la valeur 14299 correspond à 95.8\%: 
+		$$ \left (\frac{14299-416}{15936} \times ( 110 - 0 ) \right ) + 0 = 95.8$$\\
 
+\end{description}
 
 \newpage
 \section{Annexe}\label{annexe}
@@ -213,7 +236,7 @@ $$ \left (\frac{14299-416}{15936} \times ( 110 - 0 ) \right ) + 0 = 95.8$$\\
 		\begin{longtable}[c]{|c|c|c|c|}
 
 \hline
-\verb|SCAN SPEED| & \verb|ABSCISSA FORMAT| & \emph{FacteurVitesse} & \emph{Inconnu} \\ \hline
+\verb|SCAN SPEED| & \verb|ABSCISSA FORMAT| & \emph{FacteurVitesse} & \emph{InconnuAbscisse} \\ \hline
 \endhead
 %
 0.9375     & 0.2             & 5              & 128     \\ \hline
@@ -294,7 +317,7 @@ $$ \left (\frac{14299-416}{15936} \times ( 110 - 0 ) \right ) + 0 = 95.8$$\\
 480        & 100             & 64             & 1600    \\ \hline
 960        & 100             & 128            & 1600    \\ \hline
 
-\caption{Valeurs de \emph{FacteurVitesse} et d'\emph{Inconnu} pour toutes les combinaisons possibles de vitesse de balayage et de format d'abscisse}
+\caption{Valeurs de \emph{FacteurVitesse} et d'\emph{InconnuAbscisse} pour toutes les combinaisons possibles de vitesse de balayage et de format d'abscisse}
 
 \label{tab:ValeursFacteurVitesse}\\
 \end{longtable}
