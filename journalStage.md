@@ -143,3 +143,8 @@ Verification des autres modes de mesures à adapter
 
 ### Jour 34
 Mesures pour comprendre l'effet de certain paramètre sur les trames de données
+
+### Jour 35
+Fin de rédaction du rapport sur le lambda contenant toutes les informations nécessaire à la capture et à l'analyse des données de la sortie imprimante du lambda 9
+Fin de la documentation du programme Lambda Capture V1
+Rapport de stage
