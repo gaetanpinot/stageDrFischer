@@ -223,6 +223,16 @@ On calcule les valeur suivantes:
 
 \end{description}
 
+\subsection{Fin de mesure}\label{fin}
+La fin de la mesure est signalée par la chaine de caractère:
+\begin{lstlisting}
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+\end{lstlisting}
+
+Toutes ce qui est contenue dans cette chaine est inutile pour le traitement des données car c'est des valeurs déjà connues ou des instructions destinées à l'imprimante.\\
+La chaine \verb|A0,T,V-2| est constante peut importe les paramètres de mesure.
+
 \newpage
 \section{Annexe}\label{annexe}
 
