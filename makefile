@@ -9,3 +9,6 @@ pdfLambda:
 pdfUserDocLambda:
 	pandoc DocUtilisateurLambdaCapture.md -o pdf/DocUtilisateurLambdaCapture.pdf -V geometry:margin=1in -V linestretch=1.25;
 	xreader pdf/DocUtilisateurLambdaCapture.pdf;
+pdfRapportStage:
+	pandoc RapportDeStage.md -o pdf/RapportDeStage.pdf -V geometry:margin=1in -V linestretch=1.25;
+	xreader pdf/RapportDeStage.pdf;

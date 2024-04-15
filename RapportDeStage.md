@@ -31,8 +31,13 @@ L'ancien programme LabVIEW, qui date de 2008, possède plusieurs fonctionnalité
 J'ai trouver plus cohérent de repartir de zéro.  
 Le choix de LabVIEW découle du fait que c'est le seul language de programmation que quelqu'un dans l'usine maîtrise, et de ce fais peut maintenir et modifier les programmes.  
 Ne connaissant pas LabVIEW, j'ai passé les premiers jours à apprendre les bases de ce language (conditions, boucles, structures de données, fonctions etc...).  
-C'est un language graphique, qui fonctionne par l'intermédiaire de blocs. Chaque bloc effectue une opération, et les blocs transmettent les données entre eux avec des fils.  
-[[photo d'un programme LabVIEW]]  
+C'est un language graphique, qui fonctionne par l'intermédiaire de blocs (VIs). Chaque VI effectue une opération, et les VIs transmettent les données entre eux avec des fils.  
+[[photo de diagramme]]  
+[[photo de face avant]]
+
+Les programmes LabVIEW sont constitué d'un diagramme qui représente la partie programmation, et une face avant, qui représente l'interaction avec l'utilisateur, ou les VIs appelants.
+Les entrés d'informations comme `x` et `y` sont appelées commandes, et les sortie comme `x*y` sont appelées indicateurs.
+
   
 Une fois des connaissances de base acquises, je cherche comment communiquer avec le nouveau contrôleur.  
 C'est un NewPort ESP302, il se branche en série sur l'ordinateur et communique avec le protocole RS232.  
@@ -136,4 +141,35 @@ Je finis par regrouper certaines fonctionnalités ensemble en fonction de leur t
 Le premier onglet sert à choisir les dimensions, les pas de déplacement et le type de mesure (cartographie ou croix) ainsi qu'a visualiser les coordonnées de mesure et le nombre de points.
 Le deuxième onglet sert à entrer les informations de la mesure qui n'influe pas sur le déroulement de la mesure, sauf le temps de pause pour mesure (temps pendant laquelle la cellule reste immobile et la tension est mesurée en continue pour avoir la valeur maximale).
 Le troisième onglet est l'onglet des contrôles, il permet de voir la tension de la cellule en direct, de déplacer la cellule et de lancer la mesure.
+[[ Image de l'interface graphique]]
+
+Je rajoute des boutons pour déplacer la cellule, et pour mettre le zéro à l'endroit ou la cellule est actuellement.
+Cela permet de pouvoir bouger la cellule sans avoir à utiliser l'interface peu pratique du contrôleur.
+
+Je rajoute des limites sur les données entrées par l'utilisateur qui influe sur la mesure, pour éviter les divisions par 0, les nombres négatifs pour des valeurs qui doivent être positives etc... Cela ne se fait pas dans le code mais dans les propriétés des commandes sur la face avant.
+
+Je commence aussi à mettre des commentaires dans le code qui jusqu'à présent ne servait que de test pour les différentes fonctionnalités.
+
+Le programme est maintenant dans une première version utilisable.  Charles, organise alors une démonstration du programme en faisant une mesure sur une lampe avec tout les gens concernés par le Banc XY.
+Après la mesure, les gens présents ont fait des retours sur le programme, et j'ai noté les points à améliorer:
+- Pouvoir déplacer la cellule et afficher la tension en même temps
+- Formatter les données de mesures d'irradiance en croix différemment dans le tableur
+- Afficher le graphe d'irradiance en temps réel
+- Réduire la taille du diagramme des VIs
+
+Tout ces points sont intrinsèquement liés à la conception du programme.
+
+LabVIEW est un language graphique très loin des language plus classique comme Java, Python ou PHP avec lequel je suis familier.
+J'ai eu du mal à appliquer les principes de conception et de programmation que j'ai appris, car ce n'est pas de la programmation impérative et textuelle.
+Pour faire passer une information d'un endroit à un autre, on ne le met pas dans une variable qu'on référence à un autre endroit, on tire un fil entre les deux endroits. 
+Cela rend le programme très illisible car on doit remonter la source du fil pour savoir d'où vient l'information.
+Si le VI dépasse la taille de l'écran il faut alors se déplacer sur le diagramme ce qui rend le debug age assez compliqué.
+Comme les données commence toute dans des commandes, et que ces commandes sont situés sur une seul face avant, elle sont toutes présente dans le diagramme.
+La présence d'autant d'informations rend le diagramme illisible car on doit tirer un fil de chaque commande jusqu'à chaque VI qui va la traiter.
+Le diagramme ressemble à ça
+[[ image diagramme V1 illisible]]
+
+Il faut donc trouver un autre moyen de faire transiter les données.
+Il faut aussi trouver un autre moyen de gérer les actions des boutons.
+Pour l'instant les évènements sont gérés par des si dans une boucle tant que qui boucle par intervalle de temps. Si il y a un bouton pressé et qu'il lance le code, alors tout les autres boutons sont bloqués.
 
