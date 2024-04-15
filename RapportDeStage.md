@@ -71,7 +71,7 @@ La structure de l'instruction devient donc `1PA-50;1WS;2PA-40;2WS;TS?\r` ou :
 - `TS?` demande le status du contrôleur, le résultat n'est pas significatif car je m'en sert juste comme indicateur de fin de commande  
 Le voici le déroulement de l'instruction:  
 1. L'ordinateur écrit `1PA-50;1WS;2PA-40;2WS;TS?\r` sur le port série  
-2. L'ordinateur attend de recevoir une réponse du contrôleur sur le port série  
+9. L'ordinateur attend de recevoir une réponse du contrôleur sur le port série  
 3. Le contrôleur reçoit la commande et commence le déplacement l'axe 1 au coordonnées -50mm  
 4. Le contrôleur attend que l'axe 1 ne bouge plus  
 5. Le contrôleur déplace l'axe 2 au coordonnées -40mm  
