@@ -76,7 +76,7 @@ La structure de l'instruction devient donc `1PA-50;1WS;2PA-40;2WS;TS?\r` ou :
 - `TS?` demande le status du contrôleur, le résultat n'est pas significatif car je m'en sert juste comme indicateur de fin de commande  
 Le voici le déroulement de l'instruction:  
 1. L'ordinateur écrit `1PA-50;1WS;2PA-40;2WS;TS?\r` sur le port série  
-9. L'ordinateur attend de recevoir une réponse du contrôleur sur le port série  
+2. L'ordinateur attend de recevoir une réponse du contrôleur sur le port série  
 3. Le contrôleur reçoit la commande et commence le déplacement l'axe 1 au coordonnées -50mm  
 4. Le contrôleur attend que l'axe 1 ne bouge plus  
 5. Le contrôleur déplace l'axe 2 au coordonnées -40mm  
@@ -171,5 +171,39 @@ Le diagramme ressemble à ça
 
 Il faut donc trouver un autre moyen de faire transiter les données.
 Il faut aussi trouver un autre moyen de gérer les actions des boutons.
-Pour l'instant les évènements sont gérés par des si dans une boucle tant que qui boucle par intervalle de temps. Si il y a un bouton pressé et qu'il lance le code, alors tout les autres boutons sont bloqués.
+Pour l'instant les actions sont gérés par des si dans une boucle tant que qui boucle par intervalle de temps. Si il y a un bouton pressé et qu'il exécute du code, alors tout les autres boutons sont bloqués.
+
+La première solution qui m'est venue en tête pour gérez les actions c'est les "Event listeners", il existe quelque chose de similaire dans LabVIEW, les structures d'évènements.
+Elles permettent de définir l'exécution de code en fonction d'évènements configurés.
+Cela permet d'avoir plusieurs boutons clickable en même temps, ce qui résout le problème d'afficher la tension et de pouvoir bouger en meme temps.
+
+Le deuxième problème est le nombre de fil et leur longueur qui rende le tout illisible.
+Pour diminuer le nombre de fils allant de VI à VI je decide d'utiliser des clusters, ce sont des structures de données comme des objets mais on n'y stocke pas de fonctions ou de méthode.
+Cela permet de réduire le nombre de fil se baladant d'un vi à l'autre mais pas à l'intérieur meme d'un vi, en effet si on veut traiter les données, il faut inévitablement tirer fil qui va du dégroupement du cluster jusqu'au VI traitant les données.
+Cela sert donc simplement à réduire la taille des VI, pas vraiment leur complexité.  
+[[Exemple après cluster]]  
+
+Mais le fait de ne plus avoir à trop se déplacer pour voir d'où vienne les informations est déjà une grosse amélioration par rapport au VI qui faisait 5 écrans de large.
+
+Ces avancées, combinées au fait de diviser le programme en encore plus de sous-VIs font que la lisibilité à grandement augmenté
+
+Une fois ces changements effectuées, la modification du programme est devenu plus simple, ce qui m'a permit de rapidement modifier le formatage des données des mesures en croix dans le tableur, et d'ajouter un graphe d'irradiance en direct lors de la mesure, qui permet de verifier visuellement que la mesure se déroule comme prévue (voir si il y à une chute inattendue d'irradiance lors de la mesure).
+
+A ce moment j'ai considéré les problèmes comme réglés, on a donc fait un autre test qui à révélé qu'il fallait aussi intégrer la courbe du multimètre en directe pour surveiller les potentiels chutes de tension faussant la mesure.
+
+Et après ça seulement un seul bug à été rapporté, il s'agissait du VI qui attendait d'avoir le status du contrôleur pour passer à la suite qui ne fonctionnait pas toujours.
+Les étapes de déroulement était:
+- On envoie une instruction au programme
+- Quand on détecte que le buffer de sortie n'est pas vide on s'arrête
+
+Le problème était que le programme s'arrêtait juste après avoir envoyé l'instruction.
+Le plus bizarre étant que le problème ne subvenait plus si on mettait un temps d'attente entre la détection du buffer non vide et l'arrêt.
+Alors que normalement une fois que le buffer non vide est détecté le programme devrait s'arrêter immédiatement, la seul différence et 35ms d'attente après avoir détecté que le buffer n'est pas vide.
+
+Après ce bug corrigé, le programme était considéré comme fini, et j'ai commencé à rédiger la documentation utilisateur pour étaler clairement le déroulement des étapes et quoi faire en cas de problème.
+J'ai aussi commencé à écrire la documentation technique qui décrit le système.
+J'ai finalement terminé d'écrire les commentaires du programme.
+
+### Conversion des fichiers du goniomètre
+
 
