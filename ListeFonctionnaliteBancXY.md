@@ -38,4 +38,4 @@
 - [X] Il doit y avoir un passage par 0, donc il faut que distance/2 soit multiple du pas correspondant  01/03  
 - [X] Les coordonnées min et max doivent être comprise entre les limites de deplacement du controleur (xxSL? et xxSR?)  28/02  
 - [X] Generer liste d'instruction, et afficher liste de coordonnées avant de lancer la mesure  01/03  
-- [X] Handling des erreurs du boitier ESP302   
+- [X] Handling des erreurs du boitier ESP302 07/03    
