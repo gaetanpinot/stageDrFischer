@@ -17,7 +17,8 @@ Les deux axes sont contrôlés par des moteurs pas à pas, qui sont branchés à
 Le contrôleur est branché à un ordinateur, sur lequel un programme LabVIEW interne à l'entreprise, envoie les commandes de déplacement.  
 Il y à plusieurs cellules de mesures, pour différentes plages d'irradiance.  
   
-![Photo du banc XY](./images/bancXY1.jpg)
+![Photo du banc XY](./images/bancXY1.jpg)  
+
 En 2022 le contrôleur du Banc cesse de fonctionner.  
 Il est remplacé par un nouveau contrôleur qui n'est plus compatible avec l'ancien programme LabVIEW.  
 L'opérateur devais alors entrer manuellement les coordonnées dans le contrôleur, et lire les valeurs de l'irradiance sur l'ordinateur pour chaque point du quadrillage.  
@@ -34,8 +35,12 @@ J'ai trouver plus cohérent de repartir de zéro.
 Le choix de LabVIEW découle du fait que c'est le seul language de programmation que quelqu'un dans l'usine maîtrise, et de ce fais peut maintenir et modifier les programmes.  
 Ne connaissant pas LabVIEW, j'ai passé les premiers jours à apprendre les bases de ce language (conditions, boucles, structures de données, fonctions etc...).  
 C'est un language graphique, qui fonctionne par l'intermédiaire de blocs (VIs). Chaque VI effectue une opération, et les VIs transmettent les données entre eux avec des fils.  
-[[photo de diagramme]]  
-[[photo de face avant]]
+
+![Photo de diagramme](./images/diagrammeExempleLV.png)  
+
+![Photo de face avant](./images/faceAvantExempleLV.png)  
+
+
 
 Les programmes LabVIEW sont constitué d'un diagramme qui représente la partie programmation, et une face avant, qui représente l'interaction avec l'utilisateur, ou les VIs appelants.
 Les entrés d'informations comme `x` et `y` sont appelées commandes, et les sortie comme `x*y` sont appelées indicateurs.
@@ -93,7 +98,38 @@ Encore une fois les fonctions de LabVIEW sont très pratiques, car il existe dé
   
 J'ai maintenant tout les éléments techniques nécessaires pour commencer le programme entier.  
 Je fais donc une liste de toutes les fonctionnalités à implémenter et contraintes à respecter:  
-[[Liste de fonctionnalités]]  
+
+- [ ] Choisir une dimension de mesure  28/02
+- [ ] Choisir un pas de mesure  28/02
+- [ ] Il faut que la distance soit un nombre pair pour pouvoir le diviser pour avoir des coordonnées de depart entière  28/02
+- [ ] Les coordonnées min et max doivent être comprise entre les limites de déplacement du contrôleur (xxSL? et xxSR?)  28/02
+- [ ] Choisir entre mesure d'irradiance en croix ou en cartographie 29/02
+- [ ] Bouton visualisation des informations de mesure calculé et ajusté (nombre de points, distance de mesure)  29/02
+- [ ] Il faut que distance soit multiple du pas correspondant obtenir un nombre de point de mesure entier  01/03
+- [ ] Il doit y avoir un passage par 0, donc il faut que distance/2 soit multiple du pas correspondant  01/03
+- [ ] Générer liste d'instruction, et afficher liste de coordonnées avant de lancer la mesure  01/03
+- [ ] Barre de progression  04/03
+- [ ] Opérateur  05/03
+- [ ] Nom de la source mesuré (nom de la lampe)  05/03
+- [ ] Ref de la source mesuré (ref de la lampe)  05/03
+- [ ] Tension fournie moyenne  05/03
+- [ ] Intensité fournie moyenne  05/03
+- [ ] N° SQ (indiqué en haut de la feuille de demande de mesure)  05/03
+- [ ] Designation de la cellule de mesure  05/03
+- [ ] Temperature de la cellule de mesure  05/03
+- [ ] Distance lampe cellule  05/03 
+- [ ] Temps de pause pour mesure  5/03
+- [ ] Tension alim ±(commentaires sur ancienne mesures)  05/03
+- [ ] Puissance (commentaires sur ancienne mesures)  05/03
+- [ ] Intensité (commentaires sur ancienne mesures)  05/03
+- [ ] Bouton voir tension cellule de mesure en direct  05/03
+- [ ] Bouton aller au zero  05/03
+- [ ] Bouton mettre a zero a cette position  06/03
+- [ ] Boutons déplacer le chariot de 5mm  06/03
+- [ ] Date de mesure  06/03
+- [ ] Tableau d'irradiance calculé en fonction de la designation de la cellule de mesure  06/03
+- [ ] Handling des erreurs du boitier ESP302 07/03 
+
   
 Je commence par intégrer la possibilité de choisir les dimensions de la mesure ainsi que le pas de déplacement.  
 C'est a dire qu'on peut choisir la distance sur laquelle la mesure sera effectuée sur les deux axes, ainsi que la distances entre chaque points de mesure.  
@@ -122,7 +158,8 @@ J'ai résolu ce problème en enregistrant pour chaque instruction de mesure au m
  J'ai les données d'irradiance, il ne me reste plus qu'à ajouter les informations relatives à la mesure, comme le nom de l'opérateur, la date de la mesure, le numéro de mesure spécial (todo décrire mesure spécial) infos sur la lampe etc...
 Je fait donc un menu pour entrer ces informations, et je trouve un moyen de les formater pour les stocker dans le fichier tableur, ce qui n'est pas facile car LabVIEW n'a pas de fonction intégré pour écrire des informations textuel dans un fichier tableur, je formate donc les informations avec des spécificateurs de format, un peu comme en C avec la fonction `printf`.
 Cela apporte l'avantage d'être facile à concevoir, mais l'inconvénient de ne pas produire un diagramme très lisible.
-[[Photo du diagramme contenant les spécificateurs de format]]
+
+![Photo du diagramme contenant les spécificateurs de format](./images/specifieurFormat.png)  
   
 Le seul élément manquant avant d'avoir une première version fonctionnelle est de pouvoir choisir la sonde de mesure utilisé pour que la conversion de la tension en irradiance soit correcte. 
 
@@ -143,7 +180,8 @@ Je finis par regrouper certaines fonctionnalités ensemble en fonction de leur t
 Le premier onglet sert à choisir les dimensions, les pas de déplacement et le type de mesure (cartographie ou croix) ainsi qu'a visualiser les coordonnées de mesure et le nombre de points.
 Le deuxième onglet sert à entrer les informations de la mesure qui n'influe pas sur le déroulement de la mesure, sauf le temps de pause pour mesure (temps pendant laquelle la cellule reste immobile et la tension est mesurée en continue pour avoir la valeur maximale).
 Le troisième onglet est l'onglet des contrôles, il permet de voir la tension de la cellule en direct, de déplacer la cellule et de lancer la mesure.
-[[ Image de l'interface graphique]]
+
+![Image de l'interface graphique](./images/interfaceGraphique.png)  
 
 Je rajoute des boutons pour déplacer la cellule, et pour mettre le zéro à l'endroit ou la cellule est actuellement.
 Cela permet de pouvoir bouger la cellule sans avoir à utiliser l'interface peu pratique du contrôleur.
@@ -169,7 +207,10 @@ Si le VI dépasse la taille de l'écran il faut alors se déplacer sur le diagra
 Comme les données commence toute dans des commandes, et que ces commandes sont situés sur une seul face avant, elle sont toutes présente dans le diagramme.
 La présence d'autant d'informations rend le diagramme illisible car on doit tirer un fil de chaque commande jusqu'à chaque VI qui va la traiter.
 Le diagramme ressemble à ça
-[[ image diagramme V1 illisible]]
+
+
+![Image diagramme V1 illisible](./images/diagrammeV1.png)  
+
 
 Il faut donc trouver un autre moyen de faire transiter les données.
 Il faut aussi trouver un autre moyen de gérer les actions des boutons.
@@ -183,7 +224,8 @@ Le deuxième problème est le nombre de fil et leur longueur qui rende le tout i
 Pour diminuer le nombre de fils allant de VI à VI je decide d'utiliser des clusters, ce sont des structures de données comme des objets mais on n'y stocke pas de fonctions ou de méthode.
 Cela permet de réduire le nombre de fil se baladant d'un vi à l'autre mais pas à l'intérieur meme d'un vi, en effet si on veut traiter les données, il faut inévitablement tirer fil qui va du dégroupement du cluster jusqu'au VI traitant les données.
 Cela sert donc simplement à réduire la taille des VI, pas vraiment leur complexité.  
-[[Exemple après cluster]]  
+
+![Exemple après cluster](./images/diagrammeApresCluster.png)  
 
 Mais le fait de ne plus avoir à trop se déplacer pour voir d'où vienne les informations est déjà une grosse amélioration par rapport au VI qui faisait 5 écrans de large.
 
@@ -202,10 +244,147 @@ Le problème était que le programme s'arrêtait juste après avoir envoyé l'in
 Le plus bizarre étant que le problème ne subvenait plus si on mettait un temps d'attente entre la détection du buffer non vide et l'arrêt.
 Alors que normalement une fois que le buffer non vide est détecté le programme devrait s'arrêter immédiatement, la seul différence et 35ms d'attente après avoir détecté que le buffer n'est pas vide.
 
-Après ce bug corrigé, le programme était considéré comme fini, et j'ai commencé à rédiger la documentation utilisateur pour étaler clairement le déroulement des étapes et quoi faire en cas de problème.
-J'ai aussi commencé à écrire la documentation technique qui décrit le système.
+Après ce bug corrigé, le programme était considéré comme fini, et je rédige la documentation utilisateur pour étaler clairement le déroulement des étapes et quoi faire en cas de problème.
+J'écris la documentation technique qui décrit le système et ces particularités.
 J'ai finalement terminé d'écrire les commentaires du programme.
 
-### Conversion des fichiers du goniomètre
+A ce moment là, le Banc XY est fonctionnel.
+
+### Conversion des fichiers du goniomètre  ###  
+
+#### Problème ####    
+
+Le goniomètre, est un appareil qui permet de mesurer l'éclairement (Lux) d'un luminaire, à différents angles horizontaux et verticaux, pour avoir une "map" d'éclairement.  
+Cela permet ensuite de visualiser la zone d'éclairement du luminaire dans un logiciel spécialisé, Dialux.  
+Le problème est que pour l'instant le logiciel contrôlant le goniomètre sort un fichier tableur très simple avec les valeurs pour chaque coordonnées d'angles, et ce fichier n'est pas compatible avec Dialux.  
+Dialux prend un fichier `.ies` respectant la norme `ANSI/IESNA LM-63-02`.  
+Pour l'instant la conversion est faite manuellement, ce qui prend beaucoup de temps et est très minutieux.  
+
+Ma tâche est de faire un programme qui convertisse le fichier tableur en fichier `.ies` respectant la norme `ANSI/IESNA LM-63-02`.  
 
 
+#### Mon travail  ####   
+
+Je commence par lire la norme `ANSI/IESNA LM-63-02` pour comprendre ce que je dois faire.
+Le document est long mais très détaillé, ce qui me facilitera la tâche car il ne laisse aucune place au doute.  
+Je note les points importants pour la conversion:
+
+- L'en-tête du fichier doit contenir des informations sur le luminaire, la date de la mesure, le fabriquant etc...
+- Ensuite il y a des valeurs séparé par des virgules qui corresponde au nombre d'angles verticaux et horizontaux, informations diverse sur la mesure et le goniomètre etc...
+- Enfin il y a les valeurs d'éclairement d'angle verticaux pour un angle horizontal par ligne
+- Toutes les combinaisons d'angles de départ et d'arrivée ne sont pas possible
+
+La manière dont est formaté les angles dans le fichier `.ies` est assez différente du fichier d'origine, selon les angles de départ et d'arrivé choisi sur la mesure il faut manipuler le tableau différemment.  
+Les valeurs d'angles de départ et d'arrivées autorisé par la norme pour les angles verticaux et horizontaux sont les suivantes:
+
+- 0;90
+- -90;90
+
+Cela laisse 6 combinaisons d'angles de départ et d'arrivés possibles, ainsi que les opérations qu'il faut faire sur le tableau pour qu'il respecte la norme: 
+
+- 0;90 On ne fait rien
+- 0;-90 On converti les valeurs d'angles en valeur absolue
+- 90;0 On renverse le tableau, angles et valeurs comprises
+- 90;-90 On renverse le tableau, angles et valeurs comprises
+- -90;0 On renverse le tableau, angles et valeurs comprises et on converti les valeurs d'angles en valeur absolue
+- -90;90 On ne fait rien
+
+Avec ça j'ai tout les elements nécessaire pour commencer le programme.  
+Le programme est aussi fait avec LabVIEW, toujours pour la même raison, c'est le seul language de programmation que quelqu'un dans l'usine maîtrise.  
+Le programme et en soit assez simple une fois qu'on à compris comment manipuler les angles et les valeurs.
+Le reste est du formatage d'entrée d'utilisateur en informations conforme à la norme. 
+Tout au long du développement j'utilise un fichier de mesure avant et après conversion pour vérifier que le programme fonctionne bien.
+Une fois terminé j'envoie le fichier converti avec mon programme à quelqu'un qui peut verifier sa validité avec le logiciel Dialux.  
+Ce travail plutôt cours ne m'a pris que 3 jours.
+
+### Lambda 9 ###
+
+#### Problème ####
+
+Le Lambda 9, de Perkin-Elmer, est un spectrophotomètre qui permet de mesurer des valeurs de transmission, réflexion et absorption de différents matériaux dans le domaine de l'UV, visible et IR.  
+C'est une machine datant des années 80, elle imprime la courbe de donnée par une imprimante thermique spécifique au Lambda 9.
+La pointe chauffante de l'imprimante est cassé, et il est impossible de trouver une pièce de rechange.
+La solution temporaire est d'attacher un stylo bic à la place de la pointe chauffante.  
+De plus pour avoir les résultats en format tableur exploitable, il faut scanner la feuille imprimée, délimiter les axes, les valeurs et un programme analyse l'image et en extrait les données.
+Cela prend beaucoup de temps et peut introduire des imprécisions.  
+
+#### Mon travail ####
+
+Il est dans l'idée de remplacer l'imprimante thermique par un ordinateur, doté d'un programme qui émulerait l'imprimante et enregistrerait les données dans un fichier tableur.  
+Pour ce faire Florian, l'initiateur du projet, a acheter un convertisseur parallèle/USB pour connecter l'ordinateur au Lambda 9.
+Cependant il c'est vite avérée que ce n'était pas si simple que ça.  
+Les port parallèles ne sont pas fait pour émuler une imprimante.
+Quand je me rend compte de cela je commence à chercher des solutions pour émuler une imprimante avec un port parallèle.
+Je trouve rapidement quelque produits qui permettent de faire ça, mais du à l'age du Lambda 9 ainsi que le fait que l'imprimante soit spécifique au Lambda 9, je doute fortement de la compatibilité de ces produits avec le Lambda 9.  
+C'est à ce moment que Olivier me donne un "HP 4951C Protocol Analyzer".
+C'est un appareil qui permet d'intercepter les données qui passent entre deux appareils, et de les afficher.
+
+![HP 4951C Protocol Analyzer](./images/ProtocolAnalyzer.jpg)  
+
+![Lambda 9 et Protocol Analyzer](./images/Lambda9ProtocolAnalyzer.jpg)  
+
+
+Malgré le fait que l'imprimante soit connectée au Lambda 9 avec un cable DB25, le même port utilisé habituellement pour les imprimantes, ce n'était pas un protocol de transmission de données en parallèle qui était utilisé mais le protocole série RS232.
+Je m'en suis rendu compte après avoir fait fonctionné le protocol analyzer et avoir vu que c'était bien marqué RS232 sur le boitier.  
+Une fois le protocol analyzer branché sur la connexion Lambda 9 -> imprimante avec un cable Y, il à pu faire une détection automatique des paramètres de communications, et afficher les données qui passaient entre les deux appareils.
+
+Pour l'instant on voit les données, mais elles sont sur le protocol analyzer et l'imprimante doit toujours être branchée pour les voir.
+Dans le manuel du protocol analyzer il est marqué qu'on peut simuler un DCE ou un DTE.
+Cela correspond exactement à ce qu'on veut faire, simuler une imprimante.
+J'ai d'abord réussi à simuler le Lambda 9 avec l'imprimante, et je réussissait à la faire imprimer des données.  
+J'ai mis plus de temps à comprendre comment simuler l'imprimante avec le Lambda 9, car je n'avais pas compris que le Lambda 9 attendait une répons à la fin de chaque chaine de caractères.
+En ayant observée la communication entre le Lambda 9 et l'imprimante, je configure donc le protocol analyzer pour simuler l'imprimante avec ce programme:
+
+```  
+Simulate DCE  
+
+// on allume les signaux DSR CD et CTS pour dire que l'imprimante est prête
+Block 1  
+Set Lead DSR On  
+	and then  
+Set Lead CD On  
+	and then  
+Set Lead CTS On  
+	and then  
+Send F,00\r  // instruction qu'envoi l'imprimante 
+  
+Block 2  
+When DTE \r  // quand le Lambda 9 envoi un retour chariot
+	then goto Block 3  // on va à l'étape suivante
+  
+Block 3  
+Send 01\r  // on envoie l'instruction qui dit que ça c'est bien passé
+	and then  
+Goto Block 2  // on revient à l'étape précédente pour attendre un retour chariot
+```  
+
+Ce programme simule l'imprimante qui au démarrage envoie la chaine `F,00\r`, et qui répond `01\r` quand le Lambda 9 lui envoie un retour chariot.  
+Le programme fonctionne, quand on débranche l'imprimante, le Lambda 9 envoie les données au protocol analyzer.
+
+J'ai réussi à confirmer que l'émulation de l'imprimante et la capture des données était possible.
+Maintenant il faut le faire sur un ordinateur pour récupéré les données.  
+
+Pour ça j'ai installé un ordinateur et j'ai commencé à essayer de le faire communiquer avec le Lambda 9.
+Malgré un programme qui réplique exactement ce que fait le protocol analyzer, je n'arrive pas à faire fonctionner la communication.  
+Après avoir lu les dessins techniques du port imprimante présent dans le manuel du Lambda 9 je me questionne sur l'adaptateur DB25 -> DB9 que j'utilise pour connecter l'ordinateur au Lambda 9. 
+En regardant le câblage de l'adaptateur je me rend compte que les fils de données ne sont pas croisés, le Lambda 9 envoie les données sur le même câble ou l'ordinateur les envoies, idem avec les données reçues.
+Il fallait utiliser un cable null modem pour connecter l'ordinateur au Lambda 9.
+La raison est que ce sont deux DTE qui communiquent ensemble, il faut croiser les fils de données pour que les données de l'un aillent dans les données de l'autre.  
+J'ai trouvé le câblage fonctionnel à terme de nombreuses experimentations avec des adaptateurs, des cables et des câblages différents, encore une fois grâce au protocol analyzer qui permet de choisir le câblage des fils.  
+
+![Câblage null modem fonctionnel sur le protocol analyzer](./images/ProtocolAnalyzerNullModem.jpg)
+
+Ce câblage est constitué d'un cable null modem classique qui croise les fils de données, et de 3 jumpers qui permettent d'alimenter les signaux DSR, CD et CTS du Lambda 9.
+Sans ces signaux le Lambda 9 ne détecte pas la présence d'une imprimante et ne communique pas.
+
+
+
+C'est des chaines de caractères ASCII qui disent à l'imprimante quoi imprimer et comment.
+Ces chaines ne corresponde pas à un language d'imprimante standard, c'est spécifique au Lambda 9.
+
+
+
+
+Le lien avec l'informatique n'est pas assez clair
+connaissances informatiques qui m'ont permit de débloquer la situation
+en plus qu'une personne en mesure physique
