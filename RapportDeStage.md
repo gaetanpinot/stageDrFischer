@@ -1,5 +1,7 @@
 ## Sujet de stage  
+
 Programmation d'un logiciel de mesure d'irradiance(Flux Lumineux par unité de surface $W/m^2$) suite à une mise à jour matérielle.  
+
 ## Présentation de l'entreprise  
 DR.FISCHER Europe est une société de développement et de fabrication de luminaire basée à Pont-à-Mousson. C'est une usine de DR.FISCHER GROUP qui produit des lampes Infrarouges, UV, Halogènes, LED et dans certains cas le système du luminaire complet incluant les réflecteurs.  
 Le département Qualité dans lequel j'ai effectué mon stage a, entre autres, pour but de s'assurer de la qualité des lampes produites.  
@@ -15,7 +17,7 @@ Les deux axes sont contrôlés par des moteurs pas à pas, qui sont branchés à
 Le contrôleur est branché à un ordinateur, sur lequel un programme LabVIEW interne à l'entreprise, envoie les commandes de déplacement.  
 Il y à plusieurs cellules de mesures, pour différentes plages d'irradiance.  
   
-[[Photo du banc XY]]  
+![Photo du banc XY](./images/bancXY1.jpg)
 En 2022 le contrôleur du Banc cesse de fonctionner.  
 Il est remplacé par un nouveau contrôleur qui n'est plus compatible avec l'ancien programme LabVIEW.  
 L'opérateur devais alors entrer manuellement les coordonnées dans le contrôleur, et lire les valeurs de l'irradiance sur l'ordinateur pour chaque point du quadrillage.  
