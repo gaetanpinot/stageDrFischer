@@ -9,11 +9,11 @@ Dans ce cadre ils sont amenées à utiliser des appareils de mesure pour vérifi
   
 ## Objectif du stage  
   
-Dans le cadre de sa mission, le département Qualité fait des prélèvements de lampes en production et les teste sur différents aspects, notamment l'irradiance de ces lampes.  
+Dans le cadre de sa mission, le département Qualité fait des prélèvements de lampes en production et les teste sur différents aspects, notamment l'irradiance de ces lampes.
 Ce qui est effectuée par le Banc de mesure XY.  
-Ce Banc mesure l'irradiance de la lampe sur un quadrillage de points.  
-Il fait ça en déplaçant une cellule de mesure sur un axe X et un axe Y.  
-Les deux axes sont contrôlés par des moteurs pas à pas, qui sont branchés à un contrôleur.  
+Ce Banc mesure l'irradiance de la lampe sur un quadrillage, ou une croix de points.
+Il fait ça en déplaçant une cellule de mesure sur un axe X et un axe Y.
+Les deux axes sont contrôlés par des moteurs pas à pas, qui sont branchés à un contrôleur.
 Le contrôleur est branché à un ordinateur, sur lequel un programme LabVIEW interne à l'entreprise, envoie les commandes de déplacement.  
 Il y à plusieurs cellules de mesures, pour différentes plages d'irradiance.  
   
@@ -22,7 +22,7 @@ Il y à plusieurs cellules de mesures, pour différentes plages d'irradiance.
 En 2022 le contrôleur du Banc cesse de fonctionner.  
 Il est remplacé par un nouveau contrôleur qui n'est plus compatible avec l'ancien programme LabVIEW.  
 L'opérateur devais alors entrer manuellement les coordonnées dans le contrôleur, et lire les valeurs de l'irradiance sur l'ordinateur pour chaque point du quadrillage.  
-Cela prend beaucoup de temps.  
+Cela prend beaucoup de temps, ce qui pousse les demandes à être minimisée.  
 Mon but est de faire à nouveau fonctionner le Banc de mesure XY.  
   
   
@@ -64,7 +64,7 @@ Entre temps Alain, la personne chargée de faire des mesures avec le Banc actuel
 J'en ai profité pour poser des questions sur le fonctionnement du banc, et sur les besoins pour le nouveau programme.  
 Il m'a montré les résultats de mesure de l'ancien programme, pour que je puisse les reproduire dans le nouveau.  
   
-Par la suite je commence à noter les choses basique que doivent faire mon programme:  
+Par la suite je commence à noter les choses basique que doivent faire mon programme et que je ne sais pas encore faire:  
 - Se déplacer en quadrillage ou en croix  
 - Mesurer une tension de la cellule de mesure et la convertir en irradiance  
 - Stocker les valeurs dans un fichier tableur  
@@ -155,7 +155,7 @@ Pour enregistrer les valeurs dans un tableau excel, il faut d'abord savoir ou le
 Avec le déplacement en zig zag et le déplacement en croix, je devrais avoir deux méthode de calcul de coordonnées à chaque fois que j'enregistre une valeur.  
 J'ai résolu ce problème en enregistrant pour chaque instruction de mesure au moment de sa création les coordonnées d'enregistrement dans le tableau. A ce moment là du programme je sais exactement ou sera la cellule, il est donc logique de définir ou la stocker dans le tableau à ce moment là.  
   
- J'ai les données d'irradiance, il ne me reste plus qu'à ajouter les informations relatives à la mesure, comme le nom de l'opérateur, la date de la mesure, le numéro de mesure spécial (todo décrire mesure spécial) infos sur la lampe etc...
+ J'ai les données d'irradiance, il ne me reste plus qu'à ajouter les informations relatives à la mesure, comme le nom de l'opérateur, la date de la mesure, le numéro de mesure spécial, infos sur la lampe etc...
 Je fait donc un menu pour entrer ces informations, et je trouve un moyen de les formater pour les stocker dans le fichier tableur, ce qui n'est pas facile car LabVIEW n'a pas de fonction intégré pour écrire des informations textuel dans un fichier tableur, je formate donc les informations avec des spécificateurs de format, un peu comme en C avec la fonction `printf`.
 Cela apporte l'avantage d'être facile à concevoir, mais l'inconvénient de ne pas produire un diagramme très lisible.
 
@@ -416,7 +416,15 @@ Après une demo avec les utilisateurs finaux, et le développement de modificati
 
 Au début de la 3ème semaine, après avoir fait la demo du Banc XY, l'ordinateur du Banc XY est tombé en panne.
 Il s'arrêtait de fonctionner au bout de quelque instants après avoir démarré.
-J'ai passer toute la matinée 
+J'ai essayé de nombreuses solutions pour le réparer, comme changer les composants, les cables, etc.
+J'ai fini par diagnostiquer une carte mère morte.
+Malheureusement à cause de la licence de LabVIEW qui est liée à la carte mère, il était impossible de changer la carte mère en gardant la même licence.
+C'est tombé la semaine ou aucun des deux responsables informatique n'était là, il était impossible de changer l'ordinateur ou de rectifier la licence LabVIEW.  
+J'ai donc passé la semaine à travailler sur le programme du Banc XY sur un autre ordinateur, mais sans pouvoir le tester avec le Banc XY.  
+La réinstallation de LabVIEW sur un ordinateur plus récent la semaine d'après n'a pas été de tout repos non plus.
+Il à fallu réinstaller Windows pour outrepasser l'antivirus qui bloquait le lecteur CD.  
+
+
 
 
 

@@ -158,5 +158,8 @@ Rapport de stage
 Visite enseignant réferant
 
 ### Jour 38
+Rapport de stage
+Implémentation des demandes de modifications du programme Lambda Capture
+Trie des dossiers contenant les fichiers sources et la doc
 
 
