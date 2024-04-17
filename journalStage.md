@@ -148,3 +148,15 @@ Mesures pour comprendre l'effet de certain paramètre sur les trames de données
 Fin de rédaction du rapport sur le lambda contenant toutes les informations nécessaire à la capture et à l'analyse des données de la sortie imprimante du lambda 9
 Fin de la documentation du programme Lambda Capture V1
 Rapport de stage
+
+### Jour 36
+Rapport de stage
+
+### Jour 37
+Demo Lambda Capture
+Rapport de stage
+Visite enseignant réferant
+
+### Jour 38
+
+

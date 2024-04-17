@@ -102,7 +102,7 @@ Je fais donc une liste de toutes les fonctionnalités à implémenter et contrai
 - [ ] Choisir une dimension de mesure  28/02
 - [ ] Choisir un pas de mesure  28/02
 - [ ] Il faut que la distance soit un nombre pair pour pouvoir le diviser pour avoir des coordonnées de depart entière  28/02
-- [ ] Les coordonnées min et max doivent être comprise entre les limites de déplacement du contrôleur (xxSL? et xxSR?)  28/02
+- [ ] Les coordonnées min et max doivent être comprise entre les limites de déplacement du contrôleur (xxSL? Et xxSR?)  28/02
 - [ ] Choisir entre mesure d'irradiance en croix ou en cartographie 29/02
 - [ ] Bouton visualisation des informations de mesure calculé et ajusté (nombre de points, distance de mesure)  29/02
 - [ ] Il faut que distance soit multiple du pas correspondant obtenir un nombre de point de mesure entier  01/03
@@ -370,17 +370,54 @@ Après avoir lu les dessins techniques du port imprimante présent dans le manue
 En regardant le câblage de l'adaptateur je me rend compte que les fils de données ne sont pas croisés, le Lambda 9 envoie les données sur le même câble ou l'ordinateur les envoies, idem avec les données reçues.
 Il fallait utiliser un cable null modem pour connecter l'ordinateur au Lambda 9.
 La raison est que ce sont deux DTE qui communiquent ensemble, il faut croiser les fils de données pour que les données de l'un aillent dans les données de l'autre.  
-J'ai trouvé le câblage fonctionnel à terme de nombreuses experimentations avec des adaptateurs, des cables et des câblages différents, encore une fois grâce au protocol analyzer qui permet de choisir le câblage des fils.  
+J'ai trouvé le câblage fonctionnel à terme de nombreuses experimentations avec des adaptateurs, des cables et des câblages différents, encore une fois grâce au protocol analyzer qui permet d'utiliser des jumpers pour créer son propre câblage.  
 
 ![Câblage null modem fonctionnel sur le protocol analyzer](./images/ProtocolAnalyzerNullModem.jpg)
 
 Ce câblage est constitué d'un cable null modem classique qui croise les fils de données, et de 3 jumpers qui permettent d'alimenter les signaux DSR, CD et CTS du Lambda 9.
-Sans ces signaux le Lambda 9 ne détecte pas la présence d'une imprimante et ne communique pas.
+Sans ces signaux le Lambda 9 ne détecte pas la présence d'une imprimante et ne communique pas.  
+
+Ce câblage est fonctionnel mais il est constitué de plusieurs convertisseurs et des parties qui ne sont pas sensée rester la sur le long terme.
+Je soude un cable ayant le meme câblage pour pouvoir remplacer le système temporaire.  
+
+![Schéma de câblage](./images/cableLambda.png)  
+
+![Connecteur soudée](./images/connecteurSoude.jpg)  
 
 
+J'ai maintenant un ordinateur qui reçoit les données du Lambda 9.
+Avant de commencer à écrire un programme convertit les données en tableur, je doit analyser les données reçues pour comprendre comment elles sont formatées.  
 
 C'est des chaines de caractères ASCII qui disent à l'imprimante quoi imprimer et comment.
-Ces chaines ne corresponde pas à un language d'imprimante standard, c'est spécifique au Lambda 9.
+Ces chaines ne corresponde pas à un language d'imprimante standard, c'est spécifique au Lambda 9.  
+En voici un court extrait:  
+
+```
+Z0
+IT,Z0,F15936,416,0,200,D0128,1280,A1,X2100,-100,5,S2090.0,D1,1,Y110.0,-22.000,4,Z0,D0128,1280,L1
+14370
+14357
+T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
+A0,T,V-2
+```
+
+Mon but est de pouvoir déduire tout les éléments essentiel de la mesure, comme la longueur d'onde maximum et minimum, l'échelle maximum et minimum, la vitesse de scan et bien sur les valeurs mesurées.  
+Je procède méthodiquement en faisant de nombreuses mesures en ne changeant qu'un seul paramètre sur le Lambda 9 à chaque fois pour voir qu'est ce qui change dans les informations transmises à l'imprimante.
+Après plus de 100 mesures, je parvient à déduire les informations nécessaires des données transmises. Et je rédige un document détaillant quelles paramètres du Lambda 9 change quel valeurs dans les données transmises et quel est la formule pour le convertir. Exemple:  
+(Exemple de page du rapport Lambda avec les formules de conversion)  
+
+Après ça je créer un programme LabVIEW qui parse les données, fait les conversion nécessaires et les formate en tableur.
+A ce moment je commence à bien comprendre LabVIEW, j'ai déjà fait le programme du BancXY et celui du Goniomètre.
+Le développement est assez rapide et sans surprise.
+
+Après une demo avec les utilisateurs finaux, et le développement de modification demandé, le projet est terminé.  
+
+### Panne ordinateur ###
+
+Au début de la 3ème semaine, après avoir fait la demo du Banc XY, l'ordinateur du Banc XY est tombé en panne.
+Il s'arrêtait de fonctionner au bout de quelque instants après avoir démarré.
+J'ai passer toute la matinée 
+
 
 
 
@@ -388,3 +425,4 @@ Ces chaines ne corresponde pas à un language d'imprimante standard, c'est spéc
 Le lien avec l'informatique n'est pas assez clair
 connaissances informatiques qui m'ont permit de débloquer la situation
 en plus qu'une personne en mesure physique
+

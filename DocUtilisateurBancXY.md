@@ -52,7 +52,7 @@ __Si vous rentrez des dimensions trop grandes ou que le zero et fait trop proche
 Le fichier de mesure est enregistré au format `.xls`, quand on l'ouvre avec Excel ou LibreOffice Calc, il est demandé de choisir la manière de l'ouvrir, choisissez mode de séparateur `Tabulation`. Vous pouvez l'enregistrer sous le format Excel classique pour ne plus avoir à choisir le mode de séparateur à chaque ouverture. 
   
 ### En cas d'erreur  
-Verifier :  
+Vérifiez :  
   
 - Que l'armoire électrique d'instrumentation est allumée 
 - Que l'ESP302 et le WT200 soit allumés 

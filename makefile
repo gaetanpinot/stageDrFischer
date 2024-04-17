@@ -1,6 +1,9 @@
 cablage:
 	wireviz cableLambda.yml -o images/cableLambda
 	inkscape images/cableLambda.svg -w 2000 -o images/cableLambda.png
+pdfTechDocXY:
+	pandoc DocTechniqueBancXY.md -o pdf/DocTechniqueBancXY.pdf -V geometry:margin=1in -V linestretch=1.25;
+	xreader pdf/DocTechniqueBancXY.pdf;
 pdfUserDocXY:
 	pandoc DocUtilisateurBancXY.md -o pdf/DocUtilisateurBancXY.pdf -V geometry:margin=1in -V linestretch=1.25;
 	xreader pdf/DocUtilisateurBancXY.pdf;
