@@ -1,13 +1,46 @@
-## Sujet de stage  
+\documentclass[a4paper, 12pt]{article}
+\usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,geometry,caption,ragged2e,svg,listingsutf8,subcaption}
+\lstdefinestyle{mystyle}{
+	basicstyle=\small,
+	breaklines=true,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=5pt,
+}
+\lstset{style=mystyle}
+\graphicspath{{images/}}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+}
+
+\title{\Large\textbf{Rapport de stage}}
+\author{Gaëtan PINOT}
+\date{Avril 2024}
+
+\begin{document}
+\pagenumbering{gobble}
+%Page de titre
+\maketitle
+
+\newpage
+
+\pagenumbering{arabic}
+
+\section{Sujet de stage}
 
 Programmation d'un logiciel de mesure d'irradiance(Flux Lumineux par unité de surface $W/m^2$) suite à une mise à jour matérielle.  
 
-## Présentation de l'entreprise  
+\section{Présentation de l'entreprise}
+
 DR.FISCHER Europe est une société de développement et de fabrication de luminaire basée à Pont-à-Mousson. C'est une usine de DR.FISCHER GROUP qui produit des lampes Infrarouges, UV, Halogènes, LED et dans certains cas le système du luminaire complet incluant les réflecteurs.  
 Le département Qualité dans lequel j'ai effectué mon stage a, entre autres, pour but de s'assurer de la qualité des lampes produites.  
 Dans ce cadre ils sont amenées à utiliser des appareils de mesure pour vérifier la conformité des lampes produites.  
   
-## Objectif du stage  
+\section{Objectif du stage}
+
   
 Dans le cadre de sa mission, le département Qualité fait des prélèvements de lampes en production et les teste sur différents aspects, notamment l'irradiance de ces lampes.
 Ce qui est effectuée par le Banc de mesure XY.  
@@ -17,7 +50,12 @@ Les deux axes sont contrôlés par des moteurs pas à pas, qui sont branchés à
 Le contrôleur est branché à un ordinateur, sur lequel un programme LabVIEW interne à l'entreprise, envoie les commandes de déplacement.  
 Il y à plusieurs cellules de mesures, pour différentes plages d'irradiance.  
   
-![Photo du banc XY](./images/bancXY1.jpg)  
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{bancXY1}
+	\caption{Photo du banc XY}
+	\label{fig:bancXY1}
+\end{figure}
 
 En 2022 le contrôleur du Banc cesse de fonctionner.  
 Il est remplacé par un nouveau contrôleur qui n'est plus compatible avec l'ancien programme LabVIEW.  
@@ -26,9 +64,9 @@ Cela prend beaucoup de temps, ce qui pousse les demandes à être minimisée.
 Mon but est de faire à nouveau fonctionner le Banc de mesure XY.  
   
   
-## Travail effectué  
+\section{Travail effectué}
   
-### Banc XY  
+\subsection{ Banc XY } 
   
 L'ancien programme LabVIEW, qui date de 2008, possède plusieurs fonctionnalités qui ne sont plus nécessaire.  
 J'ai trouver plus cohérent de repartir de zéro.  
@@ -36,23 +74,38 @@ Le choix de LabVIEW découle du fait que c'est le seul language de programmation
 Ne connaissant pas LabVIEW, j'ai passé les premiers jours à apprendre les bases de ce language (conditions, boucles, structures de données, fonctions etc...).  
 C'est un language graphique, qui fonctionne par l'intermédiaire de blocs (VIs). Chaque VI effectue une opération, et les VIs transmettent les données entre eux avec des fils.  
 
-![Photo de diagramme](./images/diagrammeExempleLV.png)  
+\begin{figure}[h]
+	\begin{subfigure}{0.5\textwidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{diagrammeExempleLV}
+		\caption{Diagramme}
+		\label{fig:exempleDiagramme}
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{faceAvantExempleLV}
+		\caption{Face avant}
+		\label{fig:exempleFaceAvant}
+	\end{subfigure}
 
-![Photo de face avant](./images/faceAvantExempleLV.png)  
+	\caption{Exemple de programme LabVIEW}
+	\label{fig:exempleLabVIEW}
+\end{figure}
 
 
 
 Les programmes LabVIEW sont constitué d'un diagramme qui représente la partie programmation, et une face avant, qui représente l'interaction avec l'utilisateur, ou les VIs appelants.
-Les entrés d'informations comme `x` et `y` sont appelées commandes, et les sortie comme `x*y` sont appelées indicateurs.
+Voir figure~\ref{fig:exempleLabVIEW}, page~\pageref{fig:exempleLabVIEW}.\\
+Les entrés d'informations comme \verb|x| et \verb|y| sont appelées commandes, et les sortie comme \verb|x*y| sont appelées indicateurs.
 
   
 Une fois des connaissances de base acquises, je cherche comment communiquer avec le nouveau contrôleur.  
 C'est un NewPort ESP302, il se branche en série sur l'ordinateur et communique avec le protocole RS232.  
-Il reçoit des mots de commandes tels que `1PA100` pour déplacer l'axe 1 de 100mm.  
+Il reçoit des mots de commandes tels que \verb|1PA100| pour déplacer l'axe 1 de 100mm.  
 En premier lieu je réussi à envoyer des commandes depuis NI MAX, un utilitaire de LabVIEW.  
 Il permet d'établir une communication sans avoir quelque chose à programmer, c'est donc pratique pour verifier que des paramètres fonctionne réellement.  
 Ensuite j'essaie de faire la même chose depuis un programme LabVIEW.  
-Après m'être rendu compte que les constantes de chaines de caractères en LabVIEW ne supporte pas par défaut les caractères échappées (`\r`), j'ai réussi à envoyer des commandes au contrôleur.  
+Après m'être rendu compte que les constantes de chaines de caractères en LabVIEW ne supporte pas par défaut les caractères échappées (\texttt{\textbackslash r}), j'ai réussi à envoyer des commandes au contrôleur.  
   
 Entre temps Alain, la personne chargée de faire des mesures avec le Banc actuellement, ma montré une mesure d'irradiance, actuellement Alain:  
 1. Affiche la tension de la cellule de mesure en temps réel sur l'ordinateur  
@@ -76,13 +129,13 @@ A ce moment je me rend compte que si je veux faire une mesure précise, je doit 
 Je commence à essayer de trouver une solution pour savoir quand les moteurs sont arrêtés.  
 Le contrôleur ne renvoie pas de message pour dire qu'il a fini de bouger.  
 Je me rabat sur la deuxième meilleur chose, je demande au contrôleur de m'envoyer son status après que le dernier axe ait fini de bouger.  
-La structure de l'instruction devient donc `1PA-50;1WS;2PA-40;2WS;TS?\r` ou :  
-- `PA` est une instruction de déplacement de coordonnées absolues de l'axe dont le nombre est situé avant  
-- `-50` et `-40` sont les coordonnées ou l'axe doit se déplacer  
-- `WS` demande d'attendre que l'axe dont le nombre est situé avant ait fini de bouger avant de passer à la commande suivante  
-- `TS?` demande le status du contrôleur, le résultat n'est pas significatif car je m'en sert juste comme indicateur de fin de commande  
+La structure de l'instruction devient donc \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| ou :  
+- \verb|PA| est une instruction de déplacement de coordonnées absolues de l'axe dont le nombre est situé avant  
+- \verb|-50| et \verb|-40| sont les coordonnées ou l'axe doit se déplacer  
+- \verb|WS| demande d'attendre que l'axe dont le nombre est situé avant ait fini de bouger avant de passer à la commande suivante  
+- \verb|TS?| demande le status du contrôleur, le résultat n'est pas significatif car je m'en sert juste comme indicateur de fin de commande  
 Le voici le déroulement de l'instruction:  
-1. L'ordinateur écrit `1PA-50;1WS;2PA-40;2WS;TS?\r` sur le port série  
+1. L'ordinateur écrit \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| sur le port série  
 2. L'ordinateur attend de recevoir une réponse du contrôleur sur le port série  
 3. Le contrôleur reçoit la commande et commence le déplacement l'axe 1 au coordonnées -50mm  
 4. Le contrôleur attend que l'axe 1 ne bouge plus  
@@ -91,7 +144,7 @@ Le voici le déroulement de l'instruction:
 7. Le contrôleur renvoie son status  
 8. L'ordinateur reçoit le status et continue le programme  
   
-Récupérer la tension de la cellule est simple, car il suffit d'envoyer une instruction `#01\r` sur un port série pour recevoir la tension.  
+Récupérer la tension de la cellule est simple, car il suffit d'envoyer une instruction \verb|#01\r| sur un port série pour recevoir la tension.  
   
 Il ne reste plus qu'à stocker des valeurs dans un fichier tableur.  
 Encore une fois les fonctions de LabVIEW sont très pratiques, car il existe déjà une fonction qui permet de convertir un tableau en 2 dimensions en un fichier tableur.  
@@ -156,10 +209,16 @@ Avec le déplacement en zig zag et le déplacement en croix, je devrais avoir de
 J'ai résolu ce problème en enregistrant pour chaque instruction de mesure au moment de sa création les coordonnées d'enregistrement dans le tableau. A ce moment là du programme je sais exactement ou sera la cellule, il est donc logique de définir ou la stocker dans le tableau à ce moment là.  
   
  J'ai les données d'irradiance, il ne me reste plus qu'à ajouter les informations relatives à la mesure, comme le nom de l'opérateur, la date de la mesure, le numéro de mesure spécial, infos sur la lampe etc...
-Je fait donc un menu pour entrer ces informations, et je trouve un moyen de les formater pour les stocker dans le fichier tableur, ce qui n'est pas facile car LabVIEW n'a pas de fonction intégré pour écrire des informations textuel dans un fichier tableur, je formate donc les informations avec des spécificateurs de format, un peu comme en C avec la fonction `printf`.
+Je fait donc un menu pour entrer ces informations, et je trouve un moyen de les formater pour les stocker dans le fichier tableur, ce qui n'est pas facile car LabVIEW n'a pas de fonction intégré pour écrire des informations textuel dans un fichier tableur, je formate donc les informations avec des spécificateurs de format, un peu comme en C avec la fonction \verb|printf|.
 Cela apporte l'avantage d'être facile à concevoir, mais l'inconvénient de ne pas produire un diagramme très lisible.
+Voir figure~\ref{fig:specifieurFormat} page~\pageref{fig:specifieurFormat}.
 
-![Photo du diagramme contenant les spécificateurs de format](./images/specifieurFormat.png)  
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{specifieurFormat}
+	\caption{Diagramme contenant les spécificateurs de format}
+	\label{fig:specifieurFormat}
+\end{figure}
   
 Le seul élément manquant avant d'avoir une première version fonctionnelle est de pouvoir choisir la sonde de mesure utilisé pour que la conversion de la tension en irradiance soit correcte. 
 
@@ -175,13 +234,18 @@ Avec les fonctionnalités de bases implémentées, je dresse une liste des chose
 - Commentaires dans le code
 
 Je fait des croquis de l'interface graphique et je regarde quelque sites web et logiciels pour m'inspirer.
-Je finis par regrouper certaines fonctionnalités ensemble en fonction de leur types, et je les places dans des onglets pour les délimités.
+Je finis par regrouper certaines fonctionnalités ensemble en fonction de leur types, et je les places dans des onglets pour les délimiter.
 
 Le premier onglet sert à choisir les dimensions, les pas de déplacement et le type de mesure (cartographie ou croix) ainsi qu'a visualiser les coordonnées de mesure et le nombre de points.
 Le deuxième onglet sert à entrer les informations de la mesure qui n'influe pas sur le déroulement de la mesure, sauf le temps de pause pour mesure (temps pendant laquelle la cellule reste immobile et la tension est mesurée en continue pour avoir la valeur maximale).
-Le troisième onglet est l'onglet des contrôles, il permet de voir la tension de la cellule en direct, de déplacer la cellule et de lancer la mesure.
+Le troisième onglet est l'onglet des contrôles, voir figure~\ref{fig:interfaceGraphique} page~\pageref{fig:interfaceGraphique}, il permet de voir la tension de la cellule en direct, de déplacer la cellule et de lancer la mesure.
 
-![Image de l'interface graphique](./images/interfaceGraphique.png)  
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{interfaceGraphique}
+	\caption{Image de l'interface graphique}
+	\label{fig:interfaceGraphique}
+\end{figure}
 
 Je rajoute des boutons pour déplacer la cellule, et pour mettre le zéro à l'endroit ou la cellule est actuellement.
 Cela permet de pouvoir bouger la cellule sans avoir à utiliser l'interface peu pratique du contrôleur.
@@ -205,11 +269,14 @@ Pour faire passer une information d'un endroit à un autre, on ne le met pas dan
 Cela rend le programme très illisible car on doit remonter la source du fil pour savoir d'où vient l'information.
 Si le VI dépasse la taille de l'écran il faut alors se déplacer sur le diagramme ce qui rend le debug age assez compliqué.
 Comme les données commence toute dans des commandes, et que ces commandes sont situés sur une seul face avant, elle sont toutes présente dans le diagramme.
-La présence d'autant d'informations rend le diagramme illisible car on doit tirer un fil de chaque commande jusqu'à chaque VI qui va la traiter.
-Le diagramme ressemble à ça
+La présence d'autant d'informations rend le diagramme illisible, voir figure~\ref{fig:diagrammeV1} page~\pageref{fig:diagrammeV1}, car on doit tirer un fil de chaque commande jusqu'à chaque VI qui va la traiter.
 
-
-![Image diagramme V1 illisible](./images/diagrammeV1.png)  
+\begin{figure}[p]
+	\centering
+	\makebox[\textwidth]{\includegraphics[width=0.97\paperwidth]{diagrammeV1}}
+	\caption{Image diagramme V1 illisible}
+	\label{fig:diagrammeV1}
+\end{figure}
 
 
 Il faut donc trouver un autre moyen de faire transiter les données.
@@ -224,8 +291,14 @@ Le deuxième problème est le nombre de fil et leur longueur qui rende le tout i
 Pour diminuer le nombre de fils allant de VI à VI je decide d'utiliser des clusters, ce sont des structures de données comme des objets mais on n'y stocke pas de fonctions ou de méthode.
 Cela permet de réduire le nombre de fil se baladant d'un vi à l'autre mais pas à l'intérieur meme d'un vi, en effet si on veut traiter les données, il faut inévitablement tirer fil qui va du dégroupement du cluster jusqu'au VI traitant les données.
 Cela sert donc simplement à réduire la taille des VI, pas vraiment leur complexité.  
+Voir figure~\ref{fig:diagApresCluster} page~\pageref{fig:diagApresCluster}.
 
-![Exemple après cluster](./images/diagrammeApresCluster.png)  
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{diagrammeApresCluster}
+	\caption{Exemple du diagramme du même VI que celui de la figure~\ref{fig:diagrammeV1}, en utilisant des cluster et en augmentant le nombre de sous-VIs}
+	\label{fig:diagApresCluster}
+\end{figure}
 
 Mais le fait de ne plus avoir à trop se déplacer pour voir d'où vienne les informations est déjà une grosse amélioration par rapport au VI qui faisait 5 écrans de large.
 
@@ -250,22 +323,22 @@ J'ai finalement terminé d'écrire les commentaires du programme.
 
 A ce moment là, le Banc XY est fonctionnel.
 
-### Conversion des fichiers du goniomètre  ###  
+\subsection{Conversion des fichiers du goniomètre } 
 
-#### Problème ####    
+\subsubsection{Problème}
 
 Le goniomètre, est un appareil qui permet de mesurer l'éclairement (Lux) d'un luminaire, à différents angles horizontaux et verticaux, pour avoir une "map" d'éclairement.  
 Cela permet ensuite de visualiser la zone d'éclairement du luminaire dans un logiciel spécialisé, Dialux.  
 Le problème est que pour l'instant le logiciel contrôlant le goniomètre sort un fichier tableur très simple avec les valeurs pour chaque coordonnées d'angles, et ce fichier n'est pas compatible avec Dialux.  
-Dialux prend un fichier `.ies` respectant la norme `ANSI/IESNA LM-63-02`.  
+Dialux prend un fichier \verb|.ies| respectant la norme \verb|ANSI/IESNA LM-63-02|.  
 Pour l'instant la conversion est faite manuellement, ce qui prend beaucoup de temps et est très minutieux.  
 
-Ma tâche est de faire un programme qui convertisse le fichier tableur en fichier `.ies` respectant la norme `ANSI/IESNA LM-63-02`.  
+Ma tâche est de faire un programme qui convertisse le fichier tableur en fichier \verb|.ies| respectant la norme \verb|ANSI/IESNA LM-63-02|.  
 
 
-#### Mon travail  ####   
+\subsubsection{ Mon travail  }   
 
-Je commence par lire la norme `ANSI/IESNA LM-63-02` pour comprendre ce que je dois faire.
+Je commence par lire la norme \verb|ANSI/IESNA LM-63-02| pour comprendre ce que je dois faire.
 Le document est long mais très détaillé, ce qui me facilitera la tâche car il ne laisse aucune place au doute.  
 Je note les points importants pour la conversion:
 
@@ -274,7 +347,7 @@ Je note les points importants pour la conversion:
 - Enfin il y a les valeurs d'éclairement d'angle verticaux pour un angle horizontal par ligne
 - Toutes les combinaisons d'angles de départ et d'arrivée ne sont pas possible
 
-La manière dont est formaté les angles dans le fichier `.ies` est assez différente du fichier d'origine, selon les angles de départ et d'arrivé choisi sur la mesure il faut manipuler le tableau différemment.  
+La manière dont est formaté les angles dans le fichier \verb|.ies| est assez différente du fichier d'origine, selon les angles de départ et d'arrivé choisi sur la mesure il faut manipuler le tableau différemment.  
 Les valeurs d'angles de départ et d'arrivées autorisé par la norme pour les angles verticaux et horizontaux sont les suivantes:
 
 - 0;90
@@ -297,9 +370,9 @@ Tout au long du développement j'utilise un fichier de mesure avant et après co
 Une fois terminé j'envoie le fichier converti avec mon programme à quelqu'un qui peut verifier sa validité avec le logiciel Dialux.  
 Ce travail plutôt cours ne m'a pris que 3 jours.
 
-### Lambda 9 ###
+\subsection{ Lambda 9 }
 
-#### Problème ####
+\subsubsection{ Problème }
 
 Le Lambda 9, de Perkin-Elmer, est un spectrophotomètre qui permet de mesurer des valeurs de transmission, réflexion et absorption de différents matériaux dans le domaine de l'UV, visible et IR.  
 C'est une machine datant des années 80, elle imprime la courbe de donnée par une imprimante thermique spécifique au Lambda 9.
@@ -308,7 +381,7 @@ La solution temporaire est d'attacher un stylo bic à la place de la pointe chau
 De plus pour avoir les résultats en format tableur exploitable, il faut scanner la feuille imprimée, délimiter les axes, les valeurs et un programme analyse l'image et en extrait les données.
 Cela prend beaucoup de temps et peut introduire des imprécisions.  
 
-#### Mon travail ####
+\subsubsection{ Mon travail }
 
 Il est dans l'idée de remplacer l'imprimante thermique par un ordinateur, doté d'un programme qui émulerait l'imprimante et enregistrerait les données dans un fichier tableur.  
 Pour ce faire Florian, l'initiateur du projet, a acheter un convertisseur parallèle/USB pour connecter l'ordinateur au Lambda 9.
@@ -317,16 +390,27 @@ Les port parallèles ne sont pas fait pour émuler une imprimante.
 Quand je me rend compte de cela je commence à chercher des solutions pour émuler une imprimante avec un port parallèle.
 Je trouve rapidement quelque produits qui permettent de faire ça, mais du à l'age du Lambda 9 ainsi que le fait que l'imprimante soit spécifique au Lambda 9, je doute fortement de la compatibilité de ces produits avec le Lambda 9.  
 C'est à ce moment que Olivier me donne un "HP 4951C Protocol Analyzer".
+Voir figure~\ref{fig:protocolAnalyzer} page~\pageref{fig:protocolAnalyzer}.
 C'est un appareil qui permet d'intercepter les données qui passent entre deux appareils, et de les afficher.
 
-![HP 4951C Protocol Analyzer](./images/ProtocolAnalyzer.jpg)  
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{ProtocolAnalyzer}
+	\caption{HP 4951C Protocol Analyzer}
+	\label{fig:protocolAnalyzer}
+\end{figure}
 
-![Lambda 9 et Protocol Analyzer](./images/Lambda9ProtocolAnalyzer.jpg)  
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Lambda9ProtocolAnalyzer}
+	\caption{Lambda 9 et Protocol Analyzer}
+	\label{fig:lambda9HP}
+\end{figure}
 
 
 Malgré le fait que l'imprimante soit connectée au Lambda 9 avec un cable DB25, le même port utilisé habituellement pour les imprimantes, ce n'était pas un protocol de transmission de données en parallèle qui était utilisé mais le protocole série RS232.
 Je m'en suis rendu compte après avoir fait fonctionné le protocol analyzer et avoir vu que c'était bien marqué RS232 sur le boitier.  
-Une fois le protocol analyzer branché sur la connexion Lambda 9 -> imprimante avec un cable Y, il à pu faire une détection automatique des paramètres de communications, et afficher les données qui passaient entre les deux appareils.
+Une fois le protocol analyzer branché sur la connexion Lambda 9 -> imprimante avec un cable Y, voir figure~\ref{fig:lambda9HP} page~\pageref{fig:lambda9HP}, il à pu faire une détection automatique des paramètres de communications, et afficher les données qui passaient entre les deux appareils.
 
 Pour l'instant on voit les données, mais elles sont sur le protocol analyzer et l'imprimante doit toujours être branchée pour les voir.
 Dans le manuel du protocol analyzer il est marqué qu'on peut simuler un DCE ou un DTE.
@@ -335,7 +419,7 @@ J'ai d'abord réussi à simuler le Lambda 9 avec l'imprimante, et je réussissai
 J'ai mis plus de temps à comprendre comment simuler l'imprimante avec le Lambda 9, car je n'avais pas compris que le Lambda 9 attendait une répons à la fin de chaque chaine de caractères.
 En ayant observée la communication entre le Lambda 9 et l'imprimante, je configure donc le protocol analyzer pour simuler l'imprimante avec ce programme:
 
-```  
+\begin{lstlisting}  
 Simulate DCE  
 
 // on allume les signaux DSR CD et CTS pour dire que l'imprimante est prête
@@ -356,9 +440,9 @@ Block 3
 Send 01\r  // on envoie l'instruction qui dit que ça c'est bien passé
 	and then  
 Goto Block 2  // on revient à l'étape précédente pour attendre un retour chariot
-```  
+\end{lstlisting}  
 
-Ce programme simule l'imprimante qui au démarrage envoie la chaine `F,00\r`, et qui répond `01\r` quand le Lambda 9 lui envoie un retour chariot.  
+Ce programme simule l'imprimante qui au démarrage envoie la chaine \verb|F,00\r|, et qui répond \verb|01\r| quand le Lambda 9 lui envoie un retour chariot.  
 Le programme fonctionne, quand on débranche l'imprimante, le Lambda 9 envoie les données au protocol analyzer.
 
 J'ai réussi à confirmer que l'émulation de l'imprimante et la capture des données était possible.
@@ -371,18 +455,35 @@ En regardant le câblage de l'adaptateur je me rend compte que les fils de donn�
 Il fallait utiliser un cable null modem pour connecter l'ordinateur au Lambda 9.
 La raison est que ce sont deux DTE qui communiquent ensemble, il faut croiser les fils de données pour que les données de l'un aillent dans les données de l'autre.  
 J'ai trouvé le câblage fonctionnel à terme de nombreuses experimentations avec des adaptateurs, des cables et des câblages différents, encore une fois grâce au protocol analyzer qui permet d'utiliser des jumpers pour créer son propre câblage.  
+Voir figure~\ref{fig:cablageProtocolAnalyzer} page~\pageref{fig:cablageProtocolAnalyzer}.
 
-![Câblage null modem fonctionnel sur le protocol analyzer](./images/ProtocolAnalyzerNullModem.jpg)
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{ProtocolAnalyzerNullModem}
+	\caption{Câblage null modem fonctionnel sur le protocol analyzer}
+	\label{fig:cablageProtocolAnalyzer}
+\end{figure}
 
 Ce câblage est constitué d'un cable null modem classique qui croise les fils de données, et de 3 jumpers qui permettent d'alimenter les signaux DSR, CD et CTS du Lambda 9.
 Sans ces signaux le Lambda 9 ne détecte pas la présence d'une imprimante et ne communique pas.  
 
 Ce câblage est fonctionnel mais il est constitué de plusieurs convertisseurs et des parties qui ne sont pas sensée rester la sur le long terme.
-Je soude un cable ayant le meme câblage pour pouvoir remplacer le système temporaire.  
+Je soude un cable ayant le meme câblage pour pouvoir remplacer le système temporaire.
+Voir figure~\ref{fig:schemaCable} page~\pageref{fig:schemaCable} et figure~\ref{fig:connecteurSoudee} page~\pageref{fig:connecteurSoudee}.
 
-![Schéma de câblage](./images/cableLambda.png)  
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{cableLambda}
+	\caption{Schéma de câblage}
+	\label{fig:schemaCable}
+\end{figure}
 
-![Connecteur soudée](./images/connecteurSoude.jpg)  
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.9\textwidth]{connecteurSoude}
+	\caption{Connecteur soudée}
+	\label{fig:connecteurSoudee}
+\end{figure}
 
 
 J'ai maintenant un ordinateur qui reçoit les données du Lambda 9.
@@ -392,14 +493,14 @@ C'est des chaines de caractères ASCII qui disent à l'imprimante quoi imprimer 
 Ces chaines ne corresponde pas à un language d'imprimante standard, c'est spécifique au Lambda 9.  
 En voici un court extrait:  
 
-```
+\begin{lstlisting}
 Z0
 IT,Z0,F15936,416,0,200,D0128,1280,A1,X2100,-100,5,S2090.0,D1,1,Y110.0,-22.000,4,Z0,D0128,1280,L1
 14370
 14357
 T,D-1,1,Y110.0,-22.000,4,A0,M0,50,V-2
 A0,T,V-2
-```
+\end{lstlisting}
 
 Mon but est de pouvoir déduire tout les éléments essentiel de la mesure, comme la longueur d'onde maximum et minimum, l'échelle maximum et minimum, la vitesse de scan et bien sur les valeurs mesurées.  
 Je procède méthodiquement en faisant de nombreuses mesures en ne changeant qu'un seul paramètre sur le Lambda 9 à chaque fois pour voir qu'est ce qui change dans les informations transmises à l'imprimante.
@@ -412,7 +513,7 @@ Le développement est assez rapide et sans surprise.
 
 Après une demo avec les utilisateurs finaux, et le développement de modification demandé, le projet est terminé.  
 
-### Panne ordinateur ###
+\subsection{ Panne ordinateur }
 
 Au début de la 3ème semaine, après avoir fait la demo du Banc XY, l'ordinateur du Banc XY est tombé en panne.
 Il s'arrêtait de fonctionner au bout de quelque instants après avoir démarré.
@@ -438,3 +539,4 @@ Le lien avec l'informatique n'est pas assez clair
 connaissances informatiques qui m'ont permit de débloquer la situation
 en plus qu'une personne en mesure physique
 
+\end{document}
