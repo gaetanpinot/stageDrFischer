@@ -118,9 +118,11 @@ J'en ai profité pour poser des questions sur le fonctionnement du banc, et sur 
 Il m'a montré les résultats de mesure de l'ancien programme, pour que je puisse les reproduire dans le nouveau.  
   
 Par la suite je commence à noter les choses basique que doivent faire mon programme et que je ne sais pas encore faire:  
-- Se déplacer en quadrillage ou en croix  
-- Mesurer une tension de la cellule de mesure et la convertir en irradiance  
-- Stocker les valeurs dans un fichier tableur  
+\begin{itemize}
+	\item Se déplacer en quadrillage ou en croix  
+\item Mesurer une tension de la cellule de mesure et la convertir en irradiance  
+\item Stocker les valeurs dans un fichier tableur  
+\end{itemize}
   
 Je commence par faire un programme qui se déplace en zig zag sur un quadrillage de points, ou en croix.  
 Le programme sort une liste d'instructions pour le contrôleur en fonction du mode de déplacement choisi.  
@@ -130,10 +132,12 @@ Je commence à essayer de trouver une solution pour savoir quand les moteurs son
 Le contrôleur ne renvoie pas de message pour dire qu'il a fini de bouger.  
 Je me rabat sur la deuxième meilleur chose, je demande au contrôleur de m'envoyer son status après que le dernier axe ait fini de bouger.  
 La structure de l'instruction devient donc \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| ou :  
-- \verb|PA| est une instruction de déplacement de coordonnées absolues de l'axe dont le nombre est situé avant  
-- \verb|-50| et \verb|-40| sont les coordonnées ou l'axe doit se déplacer  
-- \verb|WS| demande d'attendre que l'axe dont le nombre est situé avant ait fini de bouger avant de passer à la commande suivante  
-- \verb|TS?| demande le status du contrôleur, le résultat n'est pas significatif car je m'en sert juste comme indicateur de fin de commande  
+\begin{itemize}
+	\item \verb|PA| est une instruction de déplacement de coordonnées absolues de l'axe dont le nombre est situé avant  
+	\item \verb|-50| et \verb|-40| sont les coordonnées ou l'axe doit se déplacer  
+	\item \verb|WS| demande d'attendre que l'axe dont le nombre est situé avant ait fini de bouger avant de passer à la commande suivante  
+	\item \verb|TS?| demande le status du contrôleur, le résultat n'est pas significatif car je m'en sert juste comme indicateur de fin de commande  
+\end{itemize}
 Le voici le déroulement de l'instruction:  
 1. L'ordinateur écrit \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| sur le port série  
 2. L'ordinateur attend de recevoir une réponse du contrôleur sur le port série  
@@ -152,37 +156,39 @@ Encore une fois les fonctions de LabVIEW sont très pratiques, car il existe dé
 J'ai maintenant tout les éléments techniques nécessaires pour commencer le programme entier.  
 Je fais donc une liste de toutes les fonctionnalités à implémenter et contraintes à respecter:  
 
-- [ ] Choisir une dimension de mesure  28/02
-- [ ] Choisir un pas de mesure  28/02
-- [ ] Il faut que la distance soit un nombre pair pour pouvoir le diviser pour avoir des coordonnées de depart entière  28/02
-- [ ] Les coordonnées min et max doivent être comprise entre les limites de déplacement du contrôleur (xxSL? Et xxSR?)  28/02
-- [ ] Choisir entre mesure d'irradiance en croix ou en cartographie 29/02
-- [ ] Bouton visualisation des informations de mesure calculé et ajusté (nombre de points, distance de mesure)  29/02
-- [ ] Il faut que distance soit multiple du pas correspondant obtenir un nombre de point de mesure entier  01/03
-- [ ] Il doit y avoir un passage par 0, donc il faut que distance/2 soit multiple du pas correspondant  01/03
-- [ ] Générer liste d'instruction, et afficher liste de coordonnées avant de lancer la mesure  01/03
-- [ ] Barre de progression  04/03
-- [ ] Opérateur  05/03
-- [ ] Nom de la source mesuré (nom de la lampe)  05/03
-- [ ] Ref de la source mesuré (ref de la lampe)  05/03
-- [ ] Tension fournie moyenne  05/03
-- [ ] Intensité fournie moyenne  05/03
-- [ ] N° SQ (indiqué en haut de la feuille de demande de mesure)  05/03
-- [ ] Designation de la cellule de mesure  05/03
-- [ ] Temperature de la cellule de mesure  05/03
-- [ ] Distance lampe cellule  05/03 
-- [ ] Temps de pause pour mesure  5/03
-- [ ] Tension alim ±(commentaires sur ancienne mesures)  05/03
-- [ ] Puissance (commentaires sur ancienne mesures)  05/03
-- [ ] Intensité (commentaires sur ancienne mesures)  05/03
-- [ ] Bouton voir tension cellule de mesure en direct  05/03
-- [ ] Bouton aller au zero  05/03
-- [ ] Bouton mettre a zero a cette position  06/03
-- [ ] Boutons déplacer le chariot de 5mm  06/03
-- [ ] Date de mesure  06/03
-- [ ] Tableau d'irradiance calculé en fonction de la designation de la cellule de mesure  06/03
-- [ ] Handling des erreurs du boitier ESP302 07/03 
-
+\begin{itemize}
+	\item [ ] Choisir une dimension de mesure
+	\item [ ] Choisir une dimension de mesure  28/02
+	\item [ ] Choisir un pas de mesure  28/02
+	\item [ ] Il faut que la distance soit un nombre pair pour pouvoir le diviser pour avoir des coordonnées de depart entière  28/02
+	\item [ ] Les coordonnées min et max doivent être comprise entre les limites de déplacement du contrôleur (xxSL? Et xxSR?)  28/02
+	\item [ ] Choisir entre mesure d'irradiance en croix ou en cartographie 29/02
+	\item [ ] Bouton visualisation des informations de mesure calculé et ajusté (nombre de points, distance de mesure)  29/02
+	\item [ ] Il faut que distance soit multiple du pas correspondant obtenir un nombre de point de mesure entier  01/03
+	\item [ ] Il doit y avoir un passage par 0, donc il faut que distance/2 soit multiple du pas correspondant  01/03
+	\item [ ] Générer liste d'instruction, et afficher liste de coordonnées avant de lancer la mesure  01/03
+	\item [ ] Barre de progression  04/03
+	\item [ ] Opérateur  05/03
+	\item [ ] Nom de la source mesuré (nom de la lampe)  05/03
+	\item [ ] Ref de la source mesuré (ref de la lampe)  05/03
+	\item [ ] Tension fournie moyenne  05/03
+	\item [ ] Intensité fournie moyenne  05/03
+	\item [ ] N° SQ (indiqué en haut de la feuille de demande de mesure)  05/03
+	\item [ ] Designation de la cellule de mesure  05/03
+	\item [ ] Temperature de la cellule de mesure  05/03
+	\item [ ] Distance lampe cellule  05/03 
+	\item [ ] Temps de pause pour mesure  5/03
+	\item [ ] Tension alim ±(commentaires sur ancienne mesures)  05/03
+	\item [ ] Puissance (commentaires sur ancienne mesures)  05/03
+	\item [ ] Intensité (commentaires sur ancienne mesures)  05/03
+	\item [ ] Bouton voir tension cellule de mesure en direct  05/03
+	\item [ ] Bouton aller au zero  05/03
+	\item [ ] Bouton mettre a zero a cette position  06/03
+	\item [ ] Boutons déplacer le chariot de 5mm  06/03
+	\item [ ] Date de mesure  06/03
+	\item [ ] Tableau d'irradiance calculé en fonction de la designation de la cellule de mesure  06/03
+	\item [ ] Handling des erreurs du boitier ESP302 07/03 
+	\end{itemize}
   
 Je commence par intégrer la possibilité de choisir les dimensions de la mesure ainsi que le pas de déplacement.  
 C'est a dire qu'on peut choisir la distance sur laquelle la mesure sera effectuée sur les deux axes, ainsi que la distances entre chaque points de mesure.  
@@ -190,8 +196,10 @@ Comme on mesure l'irradiance d'une lampe, il est important de passer par le poin
 Il faut donc que le programme vérifie que la combinaison de dimensions et de pas de déplacement permettent de passer par le 0.  
 Et d'ajuster si ce n'est pas le cas.  
 Il faut que:  
-- La distance soit un nombre pair, pour pouvoir la diviser par 2 et avoir des coordonnées négatives et positives entières  
-- La distance divisée par 2 doit être multiple du pas pour que l'un des points de mesure soit le 0  
+\begin{itemize}
+	\item La distance soit un nombre pair, pour pouvoir la diviser par 2 et avoir des coordonnées négatives et positives entières  
+	\item La distance divisée par 2 doit être multiple du pas pour que l'un des points de mesure soit le 0  
+\end{itemize}
 
 
 J'ajuste donc les distances au supérieur si ce n'est pas le cas. Ex:  
@@ -228,11 +236,12 @@ Pour ça j'ai choisi d'utiliser un fichier de configuration qui contenait les in
 On peut choisir les dimensions, les pas, le type de mesure, rentrer les informations de la mesure, lancer la mesure, et enregistrer les données dans un fichier tableur.
 
 Avec les fonctionnalités de bases implémentées, je dresse une liste des choses à améliorer et à rajouter:
-- Améliorer l'interface graphique
-- Flèches de déplacement de la cellule, de mise à zéro pour le centrage de la cellule par rapport à la lampe
-- Limite sur les données entrées par l'utilisateur
-- Commentaires dans le code
-
+\begin{itemize}
+\item Améliorer l'interface graphique
+\item Flèches de déplacement de la cellule, de mise à zéro pour le centrage de la cellule par rapport à la lampe
+\item Limite sur les données entrées par l'utilisateur
+\item Commentaires dans le code
+	\end{itemize}
 Je fait des croquis de l'interface graphique et je regarde quelque sites web et logiciels pour m'inspirer.
 Je finis par regrouper certaines fonctionnalités ensemble en fonction de leur types, et je les places dans des onglets pour les délimiter.
 
@@ -256,10 +265,12 @@ Je commence aussi à mettre des commentaires dans le code qui jusqu'à présent 
 
 Le programme est maintenant dans une première version utilisable.  Charles, organise alors une démonstration du programme en faisant une mesure sur une lampe avec tout les gens concernés par le Banc XY.
 Après la mesure, les gens présents ont fait des retours sur le programme, et j'ai noté les points à améliorer:
-- Pouvoir déplacer la cellule et afficher la tension en même temps
-- Formatter les données de mesures d'irradiance en croix différemment dans le tableur
-- Afficher le graphe d'irradiance en temps réel
-- Réduire la taille du diagramme des VIs
+\begin{itemize}
+	\item Pouvoir déplacer la cellule et afficher la tension en même temps
+	\item Formatter les données de mesures d'irradiance en croix différemment dans le tableur
+	\item Afficher le graphe d'irradiance en temps réel
+	\item Réduire la taille du diagramme des VIs
+\end{itemize}
 
 Tout ces points sont intrinsèquement liés à la conception du programme.
 
@@ -310,8 +321,10 @@ A ce moment j'ai considéré les problèmes comme réglés, on a donc fait un au
 
 Et après ça seulement un seul bug à été rapporté, il s'agissait du VI qui attendait d'avoir le status du contrôleur pour passer à la suite qui ne fonctionnait pas toujours.
 Les étapes de déroulement était:
-- On envoie une instruction au programme
-- Quand on détecte que le buffer de sortie n'est pas vide on s'arrête
+\begin{itemize}
+	\item On envoie une instruction au programme
+	\item Quand on détecte que le buffer de sortie n'est pas vide on s'arrête
+\end{itemize}
 
 Le problème était que le programme s'arrêtait juste après avoir envoyé l'instruction.
 Le plus bizarre étant que le problème ne subvenait plus si on mettait un temps d'attente entre la détection du buffer non vide et l'arrêt.
@@ -342,25 +355,31 @@ Je commence par lire la norme \verb|ANSI/IESNA LM-63-02| pour comprendre ce que 
 Le document est long mais très détaillé, ce qui me facilitera la tâche car il ne laisse aucune place au doute.  
 Je note les points importants pour la conversion:
 
-- L'en-tête du fichier doit contenir des informations sur le luminaire, la date de la mesure, le fabriquant etc...
-- Ensuite il y a des valeurs séparé par des virgules qui corresponde au nombre d'angles verticaux et horizontaux, informations diverse sur la mesure et le goniomètre etc...
-- Enfin il y a les valeurs d'éclairement d'angle verticaux pour un angle horizontal par ligne
-- Toutes les combinaisons d'angles de départ et d'arrivée ne sont pas possible
+\begin{itemize}
+	\item L'en-tête du fichier doit contenir des informations sur le luminaire, la date de la mesure, le fabriquant etc...
+	\item Ensuite il y a des valeurs séparé par des virgules qui corresponde au nombre d'angles verticaux et horizontaux, informations diverse sur la mesure et le goniomètre etc...
+	\item Enfin il y a les valeurs d'éclairement d'angle verticaux pour un angle horizontal par ligne
+	\item Toutes les combinaisons d'angles de départ et d'arrivée ne sont pas possible
+\end{itemize}
 
 La manière dont est formaté les angles dans le fichier \verb|.ies| est assez différente du fichier d'origine, selon les angles de départ et d'arrivé choisi sur la mesure il faut manipuler le tableau différemment.  
 Les valeurs d'angles de départ et d'arrivées autorisé par la norme pour les angles verticaux et horizontaux sont les suivantes:
 
-- 0;90
-- -90;90
+\begin{itemize}
+	\item 0;90
+	\item -90;90
+\end{itemize}
 
 Cela laisse 6 combinaisons d'angles de départ et d'arrivés possibles, ainsi que les opérations qu'il faut faire sur le tableau pour qu'il respecte la norme: 
 
-- 0;90 On ne fait rien
-- 0;-90 On converti les valeurs d'angles en valeur absolue
-- 90;0 On renverse le tableau, angles et valeurs comprises
-- 90;-90 On renverse le tableau, angles et valeurs comprises
-- -90;0 On renverse le tableau, angles et valeurs comprises et on converti les valeurs d'angles en valeur absolue
-- -90;90 On ne fait rien
+\begin{itemize}
+	\item 0;90 On ne fait rien
+	\item 0;-90 On converti les valeurs d'angles en valeur absolue
+	\item 90;0 On renverse le tableau, angles et valeurs comprises
+	\item 90;-90 On renverse le tableau, angles et valeurs comprises
+	\item -90;0 On renverse le tableau, angles et valeurs comprises et on converti les valeurs d'angles en valeur absolue
+	\item -90;90 On ne fait rien
+\end{itemize}
 
 Avec ça j'ai tout les elements nécessaire pour commencer le programme.  
 Le programme est aussi fait avec LabVIEW, toujours pour la même raison, c'est le seul language de programmation que quelqu'un dans l'usine maîtrise.  

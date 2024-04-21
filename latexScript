@@ -1,0 +1,79 @@
+#!/bin/sh
+
+# script that takes the name of a file as an argument and converts it to pdf with this command latexmk -xelatex latex/RapportDeStage.tex -outdir=pdf;xreader pdf/RapportDeStage.pdf
+
+# Usage: ./latexScript.sh file.tex
+
+# Check if the user has provided an argument
+if [ -z "$1" ]; then
+    echo "Please provide a file name"
+    exit 1
+fi
+
+# Check if the file provided exists
+if [ ! -f $1 ]; then
+    echo "File does not exist"
+    exit 1
+fi
+
+# Check if the file provided has the right extension
+if [ "${1##*.}" != "tex" ]; then
+    echo "Wrong file extension"
+    exit 1
+fi
+
+# Check if the file provided is in the right directory
+if [ ! -d "latex" ]; then
+    echo "Directory does not exist"
+    exit 1
+fi
+
+# Check if the pdf directory exists
+if [ ! -d "pdf" ]; then
+    mkdir pdf
+fi
+
+# Convert the tex file to pdf
+latexmk -xelatex $1 -outdir=pdf
+xreader pdf/${1%.tex}.pdf
+
+# End of latexScript.sh
+```
+
+To make it executable, run the following command in the terminal:
+
+```bash
+chmod +x latexScript.sh
+```
+
+Now you can run the script with:
+
+```bash
+./latexScript.sh file.tex
+```
+
+The script will check if the file exists, if it has the right extension, if the directories exist, and then convert the tex file to a pdf file using `latexmk -xelatex` and open the pdf file with `xreader`.
+
+## 3. Make a script to compile and run Java programs
+
+You can also create a script to compile and run Java programs. The script will take the name of the Java file as an argument and compile and run it if the compilation is successful.
+
+Here is an example of a Java script:
+
+```bash
+# Path: javaScript.sh
+#!/bin/sh
+
+# script that takes the name of a file as an argument and compiles and runs the Java program with this command: javac java/HelloWorld.java; java -cp java HelloWorld
+
+# Usage: ./javaScript.sh HelloWorld.java
+
+# Check if the user has provided an argument
+if [ -z "$1" ]; then
+    echo "Please provide a file name"
+    exit 1
+fi
+
+# Check if the file provided exists
+if [ ! -f $1 ]; then
+    echo "File does────────────────────────────────────────────────────────────────────────

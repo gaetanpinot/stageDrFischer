@@ -13,7 +13,7 @@ pdfUserDocLambda:
 	pandoc DocUtilisateurLambdaCapture.md -o pdf/DocUtilisateurLambdaCapture.pdf -V geometry:margin=1in -V linestretch=1.25;
 	xreader pdf/DocUtilisateurLambdaCapture.pdf;
 pdfRapportStage:
-	pdflatex -output-directory pdf ./latex/RapportDeStage.tex; xreader ./pdf/RapportDeStage.pdf
+	latexmk -xelatex latex/RapportDeStage.tex -outdir=pdf;xreader pdf/RapportDeStage.pdf
 pdfTechDocLambda:
 	pandoc DocTechniqueLambdaCapture.md -o pdf/DocTechniqueLambdaCapture.pdf -V geometry:margin=1in -V linestretch=1.25;
 	xreader pdf/DocTechniqueLambdaCapture.pdf;
