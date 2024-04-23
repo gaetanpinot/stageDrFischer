@@ -1,5 +1,10 @@
-\documentclass[a4paper, 12pt]{article}
-\usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,geometry,caption,ragged2e,svg,listingsutf8,subcaption}
+\documentclass[12pt]{article}
+\usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,caption,ragged2e,svg,subcaption,xspace}
+\usepackage[a4paper]{geometry}
+\usepackage[french]{babel}
+
+\usepackage{fontspec,xltxtra}
+
 \lstdefinestyle{mystyle}{
 	basicstyle=\small,
 	breaklines=true,
@@ -7,6 +12,8 @@
 	numberstyle=\tiny,
 	numbersep=5pt,
 }
+\usepackage{pifont}
+
 \lstset{style=mystyle}
 \graphicspath{{images/}}
 \hypersetup{
@@ -15,19 +22,102 @@
 	filecolor=magenta,      
 	urlcolor=cyan,
 }
+%\geometry{  left=20mm,width=165mm,  top=15mm,height=267mm,footskip=15mm}
+
+\usepackage{libertine}
+\newcommand{\fontsphil}{
+	\defaultfontfeatures{Mapping=tex-text}
+	\defaultfontfeatures{Ligatures=TeX}
+	%\setmainfont{LinLibertineO}
+	\setsansfont{Liberation Sans}
+	\setmonofont[Scale=.9]{Ubuntu Mono}
+	\newfontfamily{\authorfont}{Liberation Serif}
+	\newfontfamily{\spacefont}{Liberation Mono}
+
+
+}
+\fontsphil
 
 \title{\Large\textbf{Rapport de stage}}
 \author{Gaëtan PINOT}
 \date{Avril 2024}
 
 \begin{document}
-\pagenumbering{gobble}
-%Page de titre
-\maketitle
+\begin{comment}
+	Notes
 
-\newpage
+	Intro: Service ou j'ai travaillé, nom de l'entreprise, quelle travaille à effectuer.
+	Présentation de l'entreprise: Présentation rapide de l'histoire de l'entreprise, puis de ce qu'ils fabriquent
+	L'environnement de travaille: Composition de l'équipe du service, role du service, présentation du poste de travail, des horaires de travail,
+	Missions: Presentation détaillé du problème, ainsi que de la mission, pour chaque problème.
+
+
+	Le lien avec l'informatique n'est pas assez clair
+	connaissances informatiques qui m'ont permit de débloquer la situation
+	en plus qu'une personne en mesure physique
+\end{comment}
+\newgeometry{
+	left=20mm,width=165mm,
+	top=15mm,height=267mm,
+	footskip=15mm}
+
+
 
 \pagenumbering{arabic}
+%Page de titre
+\begin{center}
+	\includegraphics[width=12cm]{Logo_IUT-UL_dept_info.png}
+\end{center}
+
+\vspace{1cm}
+
+\noindent
+{\large
+IUT Nancy Charlemagne\\
+Université de Lorraine\\
+2 ter boulevard Charlemagne\\
+BP 55227\\
+54052 Nancy Cedex\\[5mm]
+Département Informatique
+}
+
+\vspace{5cm}
+
+\begin{center}
+	{\huge
+	\textbf{Développement d'un logiciel de prise de mesure de cartographie d'irradiance et modernisation de l'acquisition de données sur Lambda 9}
+	}
+\end{center}
+
+\vspace{5cm}
+
+{\Large
+\noindent
+Rapport de stage de BUT Informatique\\
+Entreprise : DR. FISCHER Europe S.A.S.
+}
+
+% \vspace{2cm}
+\vfill
+
+{\Large
+\noindent
+Gaëtan PINOT\\
+Maître de stage : Charles RAMMAERT\\
+Référent de stage à l'IUT : Pierre-André GUÉNÉGO\\
+Année universitaire 2023--2024
+}
+
+
+\thispagestyle{empty}
+\newpage
+
+\restoregeometry
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+
+%\pagenumbering{arabic}
 
 \section{Sujet de stage}
 
@@ -38,10 +128,10 @@ Programmation d'un logiciel de mesure d'irradiance(Flux Lumineux par unité de s
 DR.FISCHER Europe est une société de développement et de fabrication de luminaire basée à Pont-à-Mousson. C'est une usine de DR.FISCHER GROUP qui produit des lampes Infrarouges, UV, Halogènes, LED et dans certains cas le système du luminaire complet incluant les réflecteurs.  
 Le département Qualité dans lequel j'ai effectué mon stage a, entre autres, pour but de s'assurer de la qualité des lampes produites.  
 Dans ce cadre ils sont amenées à utiliser des appareils de mesure pour vérifier la conformité des lampes produites.  
-  
+
 \section{Objectif du stage}
 
-  
+
 Dans le cadre de sa mission, le département Qualité fait des prélèvements de lampes en production et les teste sur différents aspects, notamment l'irradiance de ces lampes.
 Ce qui est effectuée par le Banc de mesure XY.  
 Ce Banc mesure l'irradiance de la lampe sur un quadrillage, ou une croix de points.
@@ -49,7 +139,7 @@ Il fait ça en déplaçant une cellule de mesure sur un axe X et un axe Y.
 Les deux axes sont contrôlés par des moteurs pas à pas, qui sont branchés à un contrôleur.
 Le contrôleur est branché à un ordinateur, sur lequel un programme LabVIEW interne à l'entreprise, envoie les commandes de déplacement.  
 Il y à plusieurs cellules de mesures, pour différentes plages d'irradiance.  
-  
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\textwidth]{bancXY1}
@@ -62,12 +152,12 @@ Il est remplacé par un nouveau contrôleur qui n'est plus compatible avec l'anc
 L'opérateur devais alors entrer manuellement les coordonnées dans le contrôleur, et lire les valeurs de l'irradiance sur l'ordinateur pour chaque point du quadrillage.  
 Cela prend beaucoup de temps, ce qui pousse les demandes à être minimisée.  
 Mon but est de faire à nouveau fonctionner le Banc de mesure XY.  
-  
-  
+
+
 \section{Travail effectué}
-  
+
 \subsection{ Banc XY } 
-  
+
 L'ancien programme LabVIEW, qui date de 2008, possède plusieurs fonctionnalités qui ne sont plus nécessaire.  
 J'ai trouver plus cohérent de repartir de zéro.  
 Le choix de LabVIEW découle du fait que c'est le seul language de programmation que quelqu'un dans l'usine maîtrise, et de ce fais peut maintenir et modifier les programmes.  
@@ -98,7 +188,7 @@ Les programmes LabVIEW sont constitué d'un diagramme qui représente la partie 
 Voir figure~\ref{fig:exempleLabVIEW}, page~\pageref{fig:exempleLabVIEW}.\\
 Les entrés d'informations comme \verb|x| et \verb|y| sont appelées commandes, et les sortie comme \verb|x*y| sont appelées indicateurs.
 
-  
+
 Une fois des connaissances de base acquises, je cherche comment communiquer avec le nouveau contrôleur.  
 C'est un NewPort ESP302, il se branche en série sur l'ordinateur et communique avec le protocole RS232.  
 Il reçoit des mots de commandes tels que \verb|1PA100| pour déplacer l'axe 1 de 100mm.  
@@ -106,7 +196,7 @@ En premier lieu je réussi à envoyer des commandes depuis NI MAX, un utilitaire
 Il permet d'établir une communication sans avoir quelque chose à programmer, c'est donc pratique pour verifier que des paramètres fonctionne réellement.  
 Ensuite j'essaie de faire la même chose depuis un programme LabVIEW.  
 Après m'être rendu compte que les constantes de chaines de caractères en LabVIEW ne supporte pas par défaut les caractères échappées (\texttt{\textbackslash r}), j'ai réussi à envoyer des commandes au contrôleur.  
-  
+
 Entre temps Alain, la personne chargée de faire des mesures avec le Banc actuellement, ma montré une mesure d'irradiance, actuellement Alain:  
 1. Affiche la tension de la cellule de mesure en temps réel sur l'ordinateur  
 2. Centre la cellule de mesure sur le centre de la lampe  
@@ -116,17 +206,17 @@ Entre temps Alain, la personne chargée de faire des mesures avec le Banc actuel
 6. La note, et recommence pour chaque point du quadrillage ou de la croix.  
 J'en ai profité pour poser des questions sur le fonctionnement du banc, et sur les besoins pour le nouveau programme.  
 Il m'a montré les résultats de mesure de l'ancien programme, pour que je puisse les reproduire dans le nouveau.  
-  
+
 Par la suite je commence à noter les choses basique que doivent faire mon programme et que je ne sais pas encore faire:  
 \begin{itemize}
 	\item Se déplacer en quadrillage ou en croix  
-\item Mesurer une tension de la cellule de mesure et la convertir en irradiance  
-\item Stocker les valeurs dans un fichier tableur  
+	\item Mesurer une tension de la cellule de mesure et la convertir en irradiance  
+	\item Stocker les valeurs dans un fichier tableur  
 \end{itemize}
-  
+
 Je commence par faire un programme qui se déplace en zig zag sur un quadrillage de points, ou en croix.  
 Le programme sort une liste d'instructions pour le contrôleur en fonction du mode de déplacement choisi.  
-  
+
 A ce moment je me rend compte que si je veux faire une mesure précise, je doit attendre que les moteurs se soit arrêtés avant de mesurer la tension.  
 Je commence à essayer de trouver une solution pour savoir quand les moteurs sont arrêtés.  
 Le contrôleur ne renvoie pas de message pour dire qu'il a fini de bouger.  
@@ -147,12 +237,12 @@ Le voici le déroulement de l'instruction:
 6. Le contrôleur attend que l'axe 2 ne bouge plus  
 7. Le contrôleur renvoie son status  
 8. L'ordinateur reçoit le status et continue le programme  
-  
+
 Récupérer la tension de la cellule est simple, car il suffit d'envoyer une instruction \verb|#01\r| sur un port série pour recevoir la tension.  
-  
+
 Il ne reste plus qu'à stocker des valeurs dans un fichier tableur.  
 Encore une fois les fonctions de LabVIEW sont très pratiques, car il existe déjà une fonction qui permet de convertir un tableau en 2 dimensions en un fichier tableur.  
-  
+
 J'ai maintenant tout les éléments techniques nécessaires pour commencer le programme entier.  
 Je fais donc une liste de toutes les fonctionnalités à implémenter et contraintes à respecter:  
 
@@ -188,8 +278,8 @@ Je fais donc une liste de toutes les fonctionnalités à implémenter et contrai
 	\item [ ] Date de mesure  06/03
 	\item [ ] Tableau d'irradiance calculé en fonction de la designation de la cellule de mesure  06/03
 	\item [ ] Handling des erreurs du boitier ESP302 07/03 
-	\end{itemize}
-  
+\end{itemize}
+
 Je commence par intégrer la possibilité de choisir les dimensions de la mesure ainsi que le pas de déplacement.  
 C'est a dire qu'on peut choisir la distance sur laquelle la mesure sera effectuée sur les deux axes, ainsi que la distances entre chaque points de mesure.  
 Comme on mesure l'irradiance d'une lampe, il est important de passer par le point le plus lumineux de la lampe, souvent au centre de la lampe, au 0.  
@@ -205,18 +295,18 @@ Il faut que:
 J'ajuste donc les distances au supérieur si ce n'est pas le cas. Ex:  
 Distance = 65, pas = 10  
 On ajuste la distance à 80 car $80/2 = 40$ et 40 est multiple de 10.  
-  
+
 Une fois les dimensions ajustées, on les affiches à l'écran pour ,que l'utilisateur puisse vérifier que c'est bien ce qu'il veut.  
 J'ai aussi affiché les coordonnées de tout les points de mesures, ainsi que le nombre de points après ajustement.  
-  
+
 A ce point le programme prend des dimensions et des pas, offre le choix de faire une cartographie ou une croix, affiche les coordonnées des points de mesures, et ajuste les dimensions si besoin.  
 On peut lancer le déplacement, et la cellule bouge sur toute les coordonnées.  
-  
+
 Pour enregistrer les valeurs dans un tableau excel, il faut d'abord savoir ou les stocker dans le tableau.  
 Avec le déplacement en zig zag et le déplacement en croix, je devrais avoir deux méthode de calcul de coordonnées à chaque fois que j'enregistre une valeur.  
 J'ai résolu ce problème en enregistrant pour chaque instruction de mesure au moment de sa création les coordonnées d'enregistrement dans le tableau. A ce moment là du programme je sais exactement ou sera la cellule, il est donc logique de définir ou la stocker dans le tableau à ce moment là.  
-  
- J'ai les données d'irradiance, il ne me reste plus qu'à ajouter les informations relatives à la mesure, comme le nom de l'opérateur, la date de la mesure, le numéro de mesure spécial, infos sur la lampe etc...
+
+J'ai les données d'irradiance, il ne me reste plus qu'à ajouter les informations relatives à la mesure, comme le nom de l'opérateur, la date de la mesure, le numéro de mesure spécial, infos sur la lampe etc...
 Je fait donc un menu pour entrer ces informations, et je trouve un moyen de les formater pour les stocker dans le fichier tableur, ce qui n'est pas facile car LabVIEW n'a pas de fonction intégré pour écrire des informations textuel dans un fichier tableur, je formate donc les informations avec des spécificateurs de format, un peu comme en C avec la fonction \verb|printf|.
 Cela apporte l'avantage d'être facile à concevoir, mais l'inconvénient de ne pas produire un diagramme très lisible.
 Voir figure~\ref{fig:specifieurFormat} page~\pageref{fig:specifieurFormat}.
@@ -227,7 +317,7 @@ Voir figure~\ref{fig:specifieurFormat} page~\pageref{fig:specifieurFormat}.
 	\caption{Diagramme contenant les spécificateurs de format}
 	\label{fig:specifieurFormat}
 \end{figure}
-  
+
 Le seul élément manquant avant d'avoir une première version fonctionnelle est de pouvoir choisir la sonde de mesure utilisé pour que la conversion de la tension en irradiance soit correcte. 
 
 Pour ça j'ai choisi d'utiliser un fichier de configuration qui contenait les informations des valeurs de conversion pour chaque cellule. Associé à un menu déroulant pour choisir la cellule, le logiciel peut maintenant convertir les tensions en irradiance.  
@@ -237,11 +327,11 @@ On peut choisir les dimensions, les pas, le type de mesure, rentrer les informat
 
 Avec les fonctionnalités de bases implémentées, je dresse une liste des choses à améliorer et à rajouter:
 \begin{itemize}
-\item Améliorer l'interface graphique
-\item Flèches de déplacement de la cellule, de mise à zéro pour le centrage de la cellule par rapport à la lampe
-\item Limite sur les données entrées par l'utilisateur
-\item Commentaires dans le code
-	\end{itemize}
+	\item Améliorer l'interface graphique
+	\item Flèches de déplacement de la cellule, de mise à zéro pour le centrage de la cellule par rapport à la lampe
+	\item Limite sur les données entrées par l'utilisateur
+	\item Commentaires dans le code
+\end{itemize}
 Je fait des croquis de l'interface graphique et je regarde quelque sites web et logiciels pour m'inspirer.
 Je finis par regrouper certaines fonctionnalités ensemble en fonction de leur types, et je les places dans des onglets pour les délimiter.
 
@@ -444,20 +534,20 @@ Simulate DCE
 // on allume les signaux DSR CD et CTS pour dire que l'imprimante est prête
 Block 1  
 Set Lead DSR On  
-	and then  
+and then  
 Set Lead CD On  
-	and then  
+and then  
 Set Lead CTS On  
-	and then  
+and then  
 Send F,00\r  // instruction qu'envoi l'imprimante 
-  
+
 Block 2  
 When DTE \r  // quand le Lambda 9 envoi un retour chariot
-	then goto Block 3  // on va à l'étape suivante
-  
+then goto Block 3  // on va à l'étape suivante
+
 Block 3  
 Send 01\r  // on envoie l'instruction qui dit que ça c'est bien passé
-	and then  
+and then  
 Goto Block 2  // on revient à l'étape précédente pour attendre un retour chariot
 \end{lstlisting}  
 
@@ -554,8 +644,5 @@ J'ai du trouver un moyen de comparer les anciennes valeurs de configuration avec
 
 
 
-Le lien avec l'informatique n'est pas assez clair
-connaissances informatiques qui m'ont permit de débloquer la situation
-en plus qu'une personne en mesure physique
 
-\end{document}
+		\end{document}
