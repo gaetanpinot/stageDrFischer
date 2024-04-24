@@ -128,7 +128,7 @@ J'ai aussi remplacé l'imprimante d'un appareil de mesure par un ordinateur, afi
 %Programmation d'un logiciel de mesure d'irradiance(Flux Lumineux par unité de surface $W/m^2$) suite à une mise à jour matérielle.
 
 \newpage
-\section{Présentation de l'entreprise}
+\subsection{Présentation de l'entreprise}
 %	Présentation de l'entreprise: Présentation rapide de l'histoire de l'entreprise, puis de ce qu'ils fabriquent
 
 DR.FISCHER Europe est une société de développement et de fabrication de luminaire basée à Pont-à-Mousson.
@@ -139,7 +139,7 @@ Le département Qualité dans lequel j'ai effectué mon stage a, entre autres, p
 Dans ce cadre ils sont amenées à utiliser des appareils de mesure pour vérifier la conformité des lampes produites.
 \newpage
 
-\section{Environnement de travail}
+\subsection{Environnement de travail}
 %	L'environnement de travaille: Composition de l'équipe du service, role du service, présentation du poste de travail, des horaires de travail,
 
 Le service Qualité est composé de 7 personnes. Les deux à retenir sont Charles, mon maître de stage et chef du service, et Alain , entre autre responsable de l'étalonnage des équipements de l'usine et de certaines mesures.\\
@@ -151,13 +151,13 @@ Mais comme je travail avec des logiciels sous licence qui ne sont pas présent s
 Mes horaires de travails sont souples, je peux arriver entre 7h et 9h et repartir entre 15h 45 et 20h, tant que je fait 7h par jour.
 \newpage
 
-\section{Missions}
+\subsection{Missions}
 %	Missions: Presentation détaillé du problème, ainsi que de la mission, pour chaque problème.
 
 
 Dans le cadre de sa mission, le département Qualité fait des prélèvements de lampes en production et les teste sur différents aspects, notamment l'irradiance\footnote{Flux Lumineux par unité de surface ($W/m^2$)} de ces lampes.
 Ce qui est effectuée par le Banc de mesure XY.
-Voir figure \ref{fig:bancXY1}, page \pageref{fig:bancXY1}\\
+Voir figure \ref{fig:bancXY1}, page \pageref{fig:bancXY1}.\\
 Ce Banc mesure l'irradiance de la lampe sur un quadrillage, ou une croix de points.
 Il fait ça en déplaçant une cellule de mesure sur un axe X et un axe Y.
 Les deux axes sont contrôlés par des moteurs pas à pas, qui sont branchés à un contrôleur.
@@ -191,8 +191,26 @@ Ma mission est de trouver comment faire pour que les résultat arrive directemen
 
 \subsection{Banc XY}
 
+\subsubsection{Problème}
+
+Comme expliqué précédemment, après un changement de contrôleur d'axes pour cause de panne, le programme qui se charge d'envoyer les instructions au contrôleur pour faire la mesure n'est plus compatible.
+Les mesures sont donc faites à la main, l'opérateur:
+\begin{enumerate}
+		\label{etapesMesureBancXY}
+
+	\item Affiche la tension de la cellule de mesure en temps réel sur l'ordinateur
+	\item Centre la cellule de mesure sur le centre de la lampe
+	\item Allume la lampe
+	\item Entre les coordonnées dans le contrôleur pour qu'il déplace la cellule
+	\item Retient tension maximale qu'il voit à l'écran
+	\item La note, et recommence pour chaque point du quadrillage ou de la croix.
+\end{enumerate}
+Cela prend beaucoup de temps, peut introduire des erreurs et pousse les personnes demandant des mesures à réduire la taille de leur demande.
+
+\subsubsection{Mon travail}
+
 L'ancien programme LabVIEW, qui date de 2008, possède plusieurs fonctionnalités qui ne sont plus nécessaire.
-J'ai trouver plus cohérent de repartir de zéro.
+Je trouve plus cohérent de repartir de zéro.
 Le choix de LabVIEW découle du fait que c'est le seul language de programmation que quelqu'un dans l'usine maîtrise, et de ce fais peut maintenir et modifier les programmes.
 Ne connaissant pas LabVIEW, j'ai passé les premiers jours à apprendre les bases de ce language (conditions, boucles, structures de données, fonctions etc...).
 C'est un language graphique, qui fonctionne par l'intermédiaire de blocs (VIs). Chaque VI effectue une opération, et les VIs transmettent les données entre eux avec des fils.
@@ -230,13 +248,7 @@ Il permet d'établir une communication sans avoir quelque chose à programmer, c
 Ensuite j'essaie de faire la même chose depuis un programme LabVIEW.
 Après m'être rendu compte que les constantes de chaines de caractères en LabVIEW ne supporte pas par défaut les caractères échappées (\texttt{\textbackslash r}), j'ai réussi à envoyer des commandes au contrôleur.
 
-Entre temps Alain, la personne chargée de faire des mesures avec le Banc actuellement, ma montré une mesure d'irradiance, actuellement Alain:
-1. Affiche la tension de la cellule de mesure en temps réel sur l'ordinateur
-2. Centre la cellule de mesure sur le centre de la lampe
-3. Allume la lampe
-4. Entre les coordonnées dans le contrôleur pour qu'il déplace la cellule
-5. Retient tension maximale qu'il voit à l'écran
-6. La note, et recommence pour chaque point du quadrillage ou de la croix.
+Entre temps Alain, la personne chargée de faire des mesures avec le Banc actuellement, ma montré une mesure d'irradiance, \textit{Étapes notées plus haut \ref{etapesMesureBancXY} page \pageref{etapesMesureBancXY}}.
 J'en ai profité pour poser des questions sur le fonctionnement du banc, et sur les besoins pour le nouveau programme.
 Il m'a montré les résultats de mesure de l'ancien programme, pour que je puisse les reproduire dans le nouveau.
 
