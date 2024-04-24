@@ -1,3 +1,6 @@
+*.xdv 
+*.fls 
+*.fdb*
 *.pdf
 *.jpg
 *.png
@@ -12,3 +15,4 @@
 *test*
 *.doc*
 *.~lock*
+*.toc
