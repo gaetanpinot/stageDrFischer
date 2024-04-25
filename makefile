@@ -8,12 +8,15 @@ pdfUserDocXY:
 	pandoc DocUtilisateurBancXY.md -o pdf/DocUtilisateurBancXY.pdf -V geometry:margin=1in -V linestretch=1.25;
 	xreader pdf/DocUtilisateurBancXY.pdf;
 pdfLambda:
-	pdflatex -output-directory pdf ./latex/rapportLambda.tex ; xreader ./pdf/rapportLambda.pdf
+	pdflatex -output-directory pdf rapportLambda.tex ; xreader ./pdf/rapportLambda.pdf
 pdfUserDocLambda:
 	pandoc DocUtilisateurLambdaCapture.md -o pdf/DocUtilisateurLambdaCapture.pdf -V geometry:margin=1in -V linestretch=1.25;
 	xreader pdf/DocUtilisateurLambdaCapture.pdf;
 pdfRapportStage:
-	latexmk -xelatex latex/RapportDeStage.tex -outdir=pdf;xreader pdf/RapportDeStage.pdf
+	latexmk -xelatex RapportDeStage.tex -outdir=pdf;xreader pdf/RapportDeStage.pdf
 pdfTechDocLambda:
 	pandoc DocTechniqueLambdaCapture.md -o pdf/DocTechniqueLambdaCapture.pdf -V geometry:margin=1in -V linestretch=1.25;
 	xreader pdf/DocTechniqueLambdaCapture.pdf;
+clean:
+	/bin/rm -f *~ *.dvi *.log *.aux *.flg *.tmp *.ch *.bbl *.blg *.bat *.lof *.toc *.idx *.ind *.ilg *.out *.snm *.nav *.fls *.fdb_latexmk *.glg *.glo *.ist *.gls
+

@@ -1,11 +1,37 @@
 \documentclass[12pt]{article}
 \usepackage{graphicx,hyperref,float,comment,listings,amsmath,longtable,caption,ragged2e,svg,subcaption,xspace}
+\usepackage{algpseudocode}
+\usepackage{placeins}
+\usepackage{algorithm}
+\usepackage[utf8]{inputenc}
 \usepackage[a4paper]{geometry}
 \usepackage[french]{babel}
 \usepackage{setspace}
 
-
+\usepackage{pifont}
 \usepackage{fontspec,xltxtra}
+\usepackage{libertine}
+\usepackage{glossaries}
+
+\makeglossaries
+
+
+\newglossaryentry{irradiance}{
+	name={irradiance},
+	description={
+		L'irradiance est une puissance de rayonnement éléctromagnétique par unité de surface ($W/m^2$), la plupart du temps on l'utilise pour décrire la quantité d'énérgie reçue.
+	Par exemple, sur terre, à midi, le soleil à une irradiance d'à peu près $1000W/m^2$
+}
+}
+
+\newglossaryentry{formatspecifier}{
+	name={spécificateur de format},
+	description={
+		Un spécificateur de format est un caractère qui commence par un signe de pourcentage (\%) et qui est suivi par un ou plusieurs caractères qui définissent le format d'une valeur lors de sa conversion en texte ou de texte en valeur.
+	Par exemple la valeur 143 affiché avec le spécificateur de format \texttt{\%x} affichera 8F, car 143 en hexadécimal est 8F.\\
+	C'est utile aussi pour choisir l'affichage des nombres à virgules.
+}
+}
 
 \lstdefinestyle{mystyle}{
 	basicstyle=\small,
@@ -14,7 +40,6 @@
 	numberstyle=\tiny,
 	numbersep=5pt,
 }
-\usepackage{pifont}
 
 \lstset{style=mystyle}
 \graphicspath{{images/}}
@@ -25,7 +50,6 @@
 	urlcolor=cyan,
 }
 
-\usepackage{libertine}
 \newcommand{\fontsphil}{
 	\defaultfontfeatures{Mapping=tex-text}
 	\defaultfontfeatures{Ligatures=TeX}
@@ -155,7 +179,7 @@ Mes horaires de travails sont souples, je peux arriver entre 7h et 9h et reparti
 %	Missions: Presentation détaillé du problème, ainsi que de la mission, pour chaque problème.
 
 
-Dans le cadre de sa mission, le département Qualité fait des prélèvements de lampes en production et les teste sur différents aspects, notamment l'irradiance\footnote{Flux Lumineux par unité de surface ($W/m^2$)} de ces lampes.
+Dans le cadre de sa mission, le département Qualité fait des prélèvements de lampes en production et les teste sur différents aspects, notamment l'\gls{irradiance} de ces lampes.
 Ce qui est effectuée par le Banc de mesure XY.
 Voir figure \ref{fig:bancXY1}, page \pageref{fig:bancXY1}.\\
 Ce Banc mesure l'irradiance de la lampe sur un quadrillage, ou une croix de points.
@@ -211,10 +235,11 @@ Cela prend beaucoup de temps, peut introduire des erreurs et pousse les personne
 
 L'ancien programme LabVIEW, qui date de 2008, possède plusieurs fonctionnalités qui ne sont plus nécessaire.
 Je trouve plus cohérent de repartir de zéro.
-Le choix de LabVIEW découle du fait que c'est le seul language de programmation que quelqu'un dans l'usine maîtrise, et de ce fais peut maintenir et modifier les programmes.
+Le choix de LabVIEW découle du fait que c'est le seul language de programmation que quelqu'un dans l'usine maîtrise, et de ce fait peut maintenir et modifier les programmes.\\
 Ne connaissant pas LabVIEW, j'ai passé les premiers jours à apprendre les bases de ce language (conditions, boucles, structures de données, fonctions etc...).
-C'est un language graphique, qui fonctionne par l'intermédiaire de blocs (VIs). Chaque VI effectue une opération, et les VIs transmettent les données entre eux avec des fils.
-
+C'est un language graphique, qui fonctionne par l'intermédiaire de blocs (VIs).
+Chaque VI effectue une opération, et les VIs transmettent les données entre eux avec des fils.
+Ils agissent comme des fonctions.\\
 \begin{figure}[h]
 	\begin{subfigure}{0.5\textwidth}
 		\centering
@@ -232,25 +257,30 @@ C'est un language graphique, qui fonctionne par l'intermédiaire de blocs (VIs).
 	\caption{Exemple de programme LabVIEW}
 	\label{fig:exempleLabVIEW}
 \end{figure}
-
-
-
 Les programmes LabVIEW sont constitué d'un diagramme qui représente la partie programmation, et une face avant, qui représente l'interaction avec l'utilisateur, ou les VIs appelants.
 Voir figure~\ref{fig:exempleLabVIEW}, page~\pageref{fig:exempleLabVIEW}.\\
-Les entrés d'informations comme \verb|x| et \verb|y| sont appelées commandes, et les sortie comme \verb|x*y| sont appelées indicateurs.
+Les entrés d'informations comme \verb|x| et \verb|y| sont appelées commandes, et les sortie comme \verb|x*y| sont appelées indicateurs.\\
+On retrouve dans LabVIEW tout les concepts de base de la programmation, comme les conditions, les boucles, certaines structures de données, les fonctions etc...
+Il y à meme des concepts plus avancés, comme la programmation objet et les event listeners.\\
+En revanche il n'y à pas à proprement parler de variable.
+Elle sont remplacée par des fils qui transmette les données d'un endroit à l'autre.
+Cela est du au parallélisme innée de LabVIEW, qui exécute les morceau de code non dépendant en même temps.
+Les fils servent alors à determiner l'ordre d'exécution, et des variables comme on utiliserait dans un language séquencé, ne fonctionnerait pas car tout le code s'exécuterait en même temps, sans attendre d'avoir les bonnes valeurs.\\
+Cela, en plus de la programmation graphique qui nécessite de fouiller dans des menus pour trouver les bon VI, m'a pris un certain temps d'adaptation.
+Malgré tout, je pense que mes 2 années à l'IUT m'ont permis de m'adapter plus rapidement, que si je n'avais pas eu de connaissance en programmation.
 
 
 Une fois des connaissances de base acquises, je cherche comment communiquer avec le nouveau contrôleur.
 C'est un NewPort ESP302, il se branche en série sur l'ordinateur et communique avec le protocole RS232.
-Il reçoit des mots de commandes tels que \verb|1PA100| pour déplacer l'axe 1 de 100mm.
+Il reçoit des mots de commandes tels que \verb|1PA100| pour déplacer l'axe 1 de 100mm.\\
 En premier lieu je réussi à envoyer des commandes depuis NI MAX, un utilitaire de LabVIEW.
-Il permet d'établir une communication sans avoir quelque chose à programmer, c'est donc pratique pour verifier que des paramètres fonctionne réellement.
+Il permet d'établir une communication sans avoir quelque chose à programmer, c'est donc pratique pour verifier que des paramètres fonctionne réellement.\\
 Ensuite j'essaie de faire la même chose depuis un programme LabVIEW.
-Après m'être rendu compte que les constantes de chaines de caractères en LabVIEW ne supporte pas par défaut les caractères échappées (\texttt{\textbackslash r}), j'ai réussi à envoyer des commandes au contrôleur.
-
+Après m'être rendu compte que les constantes de chaines de caractères en LabVIEW ne supporte pas par défaut les caractères échappées (\texttt{\textbackslash r}), j'ai réussi à envoyer des commandes au contrôleur.\\
 Entre temps Alain, la personne chargée de faire des mesures avec le Banc actuellement, ma montré une mesure d'irradiance, \textit{Étapes notées plus haut \ref{etapesMesureBancXY} page \pageref{etapesMesureBancXY}}.
 J'en ai profité pour poser des questions sur le fonctionnement du banc, et sur les besoins pour le nouveau programme.
 Il m'a montré les résultats de mesure de l'ancien programme, pour que je puisse les reproduire dans le nouveau.
+
 
 Par la suite je commence à noter les choses basique que doivent faire mon programme et que je ne sais pas encore faire:
 \begin{itemize}
@@ -258,10 +288,8 @@ Par la suite je commence à noter les choses basique que doivent faire mon progr
 	\item Mesurer une tension de la cellule de mesure et la convertir en irradiance
 	\item Stocker les valeurs dans un fichier tableur
 \end{itemize}
-
 Je commence par faire un programme qui se déplace en zig zag sur un quadrillage de points, ou en croix.
-Le programme sort une liste d'instructions pour le contrôleur en fonction du mode de déplacement choisi.
-
+Le programme sort une liste d'instructions pour le contrôleur en fonction du mode de déplacement choisi.\\
 A ce moment je me rend compte que si je veux faire une mesure précise, je doit attendre que les moteurs se soit arrêtés avant de mesurer la tension.
 Je commence à essayer de trouver une solution pour savoir quand les moteurs sont arrêtés.
 Le contrôleur ne renvoie pas de message pour dire qu'il a fini de bouger.
@@ -274,85 +302,83 @@ La structure de l'instruction devient donc \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| ou
 	\item \verb|TS?| demande le status du contrôleur, le résultat n'est pas significatif car je m'en sert juste comme indicateur de fin de commande
 \end{itemize}
 Le voici le déroulement de l'instruction:
-1. L'ordinateur écrit \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| sur le port série
-2. L'ordinateur attend de recevoir une réponse du contrôleur sur le port série
-3. Le contrôleur reçoit la commande et commence le déplacement l'axe 1 au coordonnées -50mm
-4. Le contrôleur attend que l'axe 1 ne bouge plus
-5. Le contrôleur déplace l'axe 2 au coordonnées -40mm
-6. Le contrôleur attend que l'axe 2 ne bouge plus
-7. Le contrôleur renvoie son status
-8. L'ordinateur reçoit le status et continue le programme
-
+\begin{enumerate}
+	\item L'ordinateur écrit \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| sur le port série
+	\item L'ordinateur attend de recevoir une réponse du contrôleur sur le port série
+	\item Le contrôleur reçoit la commande et commence le déplacement l'axe 1 au coordonnées -50mm
+	\item Le contrôleur attend que l'axe 1 ne bouge plus
+	\item Le contrôleur déplace l'axe 2 au coordonnées -40mm
+	\item Le contrôleur attend que l'axe 2 ne bouge plus
+	\item Le contrôleur renvoie son status
+	\item L'ordinateur reçoit le status et continue le programme
+\end{enumerate}
 Récupérer la tension de la cellule est simple, car il suffit d'envoyer une instruction \verb|#01\r| sur un port série pour recevoir la tension.
 
+
 Il ne reste plus qu'à stocker des valeurs dans un fichier tableur.
-Encore une fois les fonctions de LabVIEW sont très pratiques, car il existe déjà une fonction qui permet de convertir un tableau en 2 dimensions en un fichier tableur.
-
+Encore une fois les fonctions de LabVIEW sont très pratiques, car il existe déjà une fonction qui permet de convertir un tableau en 2 dimensions en un fichier tableur.\\
 J'ai maintenant tout les éléments techniques nécessaires pour commencer le programme entier.
-Je fais donc une liste de toutes les fonctionnalités à implémenter et contraintes à respecter:
-
+Je fais une liste de toutes les fonctionnalités à implémenter et contraintes à respecter:
 \begin{itemize}
-	\item [ ] Choisir une dimension de mesure
-	\item [ ] Choisir une dimension de mesure  28/02
-	\item [ ] Choisir un pas de mesure  28/02
-	\item [ ] Il faut que la distance soit un nombre pair pour pouvoir le diviser pour avoir des coordonnées de depart entière  28/02
-	\item [ ] Les coordonnées min et max doivent être comprise entre les limites de déplacement du contrôleur (xxSL? Et xxSR?)  28/02
-	\item [ ] Choisir entre mesure d'irradiance en croix ou en cartographie 29/02
-	\item [ ] Bouton visualisation des informations de mesure calculé et ajusté (nombre de points, distance de mesure)  29/02
-	\item [ ] Il faut que distance soit multiple du pas correspondant obtenir un nombre de point de mesure entier  01/03
-	\item [ ] Il doit y avoir un passage par 0, donc il faut que distance/2 soit multiple du pas correspondant  01/03
-	\item [ ] Générer liste d'instruction, et afficher liste de coordonnées avant de lancer la mesure  01/03
-	\item [ ] Barre de progression  04/03
-	\item [ ] Opérateur  05/03
-	\item [ ] Nom de la source mesuré (nom de la lampe)  05/03
-	\item [ ] Ref de la source mesuré (ref de la lampe)  05/03
-	\item [ ] Tension fournie moyenne  05/03
-	\item [ ] Intensité fournie moyenne  05/03
-	\item [ ] N° SQ (indiqué en haut de la feuille de demande de mesure)  05/03
-	\item [ ] Designation de la cellule de mesure  05/03
-	\item [ ] Temperature de la cellule de mesure  05/03
-	\item [ ] Distance lampe cellule  05/03
-	\item [ ] Temps de pause pour mesure  5/03
-	\item [ ] Tension alim ±(commentaires sur ancienne mesures)  05/03
-	\item [ ] Puissance (commentaires sur ancienne mesures)  05/03
-	\item [ ] Intensité (commentaires sur ancienne mesures)  05/03
-	\item [ ] Bouton voir tension cellule de mesure en direct  05/03
-	\item [ ] Bouton aller au zero  05/03
-	\item [ ] Bouton mettre a zero a cette position  06/03
-	\item [ ] Boutons déplacer le chariot de 5mm  06/03
-	\item [ ] Date de mesure  06/03
-	\item [ ] Tableau d'irradiance calculé en fonction de la designation de la cellule de mesure  06/03
-	\item [ ] Handling des erreurs du boitier ESP302 07/03
+	\item  Choisir une dimension de mesure
+	\item  Choisir une dimension de mesure  28/02
+	\item  Choisir un pas de mesure  28/02
+	\item  Il faut que la distance soit un nombre pair pour pouvoir le diviser pour avoir des coordonnées de depart entière  28/02
+	\item  Les coordonnées min et max doivent être comprise entre les limites de déplacement du contrôleur (xxSL? Et xxSR?)  28/02
+	\item  Choisir entre mesure d'irradiance en croix ou en cartographie 29/02
+	\item  Bouton visualisation des informations de mesure calculé et ajusté (nombre de points, distance de mesure)  29/02
+	\item  Il faut que distance soit multiple du pas correspondant obtenir un nombre de point de mesure entier  01/03
+	\item  Il doit y avoir un passage par 0, donc il faut que distance/2 soit multiple du pas correspondant  01/03
+	\item  Générer liste d'instruction, et afficher liste de coordonnées avant de lancer la mesure  01/03
+	\item  Barre de progression  04/03
+	\item  Opérateur  05/03
+	\item  Nom de la source mesuré (nom de la lampe)  05/03
+	\item  Ref de la source mesuré (ref de la lampe)  05/03
+	\item  Tension fournie moyenne  05/03
+	\item  Intensité fournie moyenne  05/03
+	\item  N° SQ (indiqué en haut de la feuille de demande de mesure)  05/03
+	\item  Designation de la cellule de mesure  05/03
+	\item  Temperature de la cellule de mesure  05/03
+	\item  Distance lampe cellule  05/03
+	\item  Temps de pause pour mesure  5/03
+	\item  Tension alim ±(commentaires sur ancienne mesures)  05/03
+	\item  Puissance (commentaires sur ancienne mesures)  05/03
+	\item  Intensité (commentaires sur ancienne mesures)  05/03
+	\item  Bouton voir tension cellule de mesure en direct  05/03
+	\item  Bouton aller au zero  05/03
+	\item  Bouton mettre a zero a cette position  06/03
+	\item  Boutons déplacer le chariot de 5mm  06/03
+	\item  Date de mesure  06/03
+	\item  Tableau d'irradiance calculé en fonction de la designation de la cellule de mesure  06/03
+	\item  Handling des erreurs du boitier ESP302 07/03
 \end{itemize}
+
 
 Je commence par intégrer la possibilité de choisir les dimensions de la mesure ainsi que le pas de déplacement.
 C'est a dire qu'on peut choisir la distance sur laquelle la mesure sera effectuée sur les deux axes, ainsi que la distances entre chaque points de mesure.
 Comme on mesure l'irradiance d'une lampe, il est important de passer par le point le plus lumineux de la lampe, souvent au centre de la lampe, au 0.
 Il faut donc que le programme vérifie que la combinaison de dimensions et de pas de déplacement permettent de passer par le 0.
-Et d'ajuster si ce n'est pas le cas.
-Il faut que:
-\begin{itemize}
-	\item La distance soit un nombre pair, pour pouvoir la diviser par 2 et avoir des coordonnées négatives et positives entières
-	\item La distance divisée par 2 doit être multiple du pas pour que l'un des points de mesure soit le 0
-\end{itemize}
-
-
-J'ajuste donc les distances au supérieur si ce n'est pas le cas. Ex:
-Distance = 65, pas = 10
+Et d'ajuster si ce n'est pas le cas.\\
+Il faut que la distance soit un nombre pair, pour pouvoir la diviser par 2 et avoir des coordonnées négatives et positives entières, et que la distance divisée par 2 doit être multiple du pas pour que l'un des points de mesure soit le 0.\\
+J'ajuste donc les distances au supérieur si ce n'est pas le cas. Ex:\\
+Distance = 65, pas = 10\\
 On ajuste la distance à 80 car $80/2 = 40$ et 40 est multiple de 10.
 
-Une fois les dimensions ajustées, on les affiches à l'écran pour ,que l'utilisateur puisse vérifier que c'est bien ce qu'il veut.
-J'ai aussi affiché les coordonnées de tout les points de mesures, ainsi que le nombre de points après ajustement.
 
+Une fois les dimensions ajustées, on les affiches à l'écran pour, que l'utilisateur puisse vérifier que c'est bien ce qu'il veut.
+J'ai aussi affiché les coordonnées de tout les points de mesures, ainsi que le nombre de points après ajustement.\\
 A ce point le programme prend des dimensions et des pas, offre le choix de faire une cartographie ou une croix, affiche les coordonnées des points de mesures, et ajuste les dimensions si besoin.
 On peut lancer le déplacement, et la cellule bouge sur toute les coordonnées.
 
+
 Pour enregistrer les valeurs dans un tableau excel, il faut d'abord savoir ou les stocker dans le tableau.
-Avec le déplacement en zig zag et le déplacement en croix, je devrais avoir deux méthode de calcul de coordonnées à chaque fois que j'enregistre une valeur.
-J'ai résolu ce problème en enregistrant pour chaque instruction de mesure au moment de sa création les coordonnées d'enregistrement dans le tableau. A ce moment là du programme je sais exactement ou sera la cellule, il est donc logique de définir ou la stocker dans le tableau à ce moment là.
+Avec le déplacement en zig zag et le déplacement en croix, je dois avoir deux méthode de calcul de coordonnées à chaque fois que j'enregistre une valeur.\\
+J'ai résolu ce problème en enregistrant pour chaque instruction de mesure, au moment de sa création, les coordonnées d'enregistrement dans le tableau.
+A ce moment là du programme je sais exactement ou sera la cellule, il est donc logique de définir ou la stocker dans le tableau à ce moment là.
+
 
 J'ai les données d'irradiance, il ne me reste plus qu'à ajouter les informations relatives à la mesure, comme le nom de l'opérateur, la date de la mesure, le numéro de mesure spécial, infos sur la lampe etc...
-Je fait donc un menu pour entrer ces informations, et je trouve un moyen de les formater pour les stocker dans le fichier tableur, ce qui n'est pas facile car LabVIEW n'a pas de fonction intégré pour écrire des informations textuel dans un fichier tableur, je formate donc les informations avec des spécificateurs de format, un peu comme en C avec la fonction \verb|printf|.
+Je fait donc un menu pour entrer ces informations, et je trouve un moyen de les formater pour les stocker dans le fichier tableur, ce qui n'est pas facile car LabVIEW n'a pas de fonction intégré pour écrire des informations textuel dans un fichier tableur, je formate donc les informations avec des \glspl{formatspecifier} et je les écrits dans un fichier texte.
 Cela apporte l'avantage d'être facile à concevoir, mais l'inconvénient de ne pas produire un diagramme très lisible.
 Voir figure~\ref{fig:specifieurFormat} page~\pageref{fig:specifieurFormat}.
 
@@ -363,13 +389,11 @@ Voir figure~\ref{fig:specifieurFormat} page~\pageref{fig:specifieurFormat}.
 	\label{fig:specifieurFormat}
 \end{figure}
 
-Le seul élément manquant avant d'avoir une première version fonctionnelle est de pouvoir choisir la sonde de mesure utilisé pour que la conversion de la tension en irradiance soit correcte.
-
+Le seul élément manquant avant d'avoir une première version fonctionnelle est de pouvoir choisir la sonde de mesure utilisé pour que la conversion de la tension en irradiance soit correcte.\\
 Pour ça j'ai choisi d'utiliser un fichier de configuration qui contenait les informations des valeurs de conversion pour chaque cellule. Associé à un menu déroulant pour choisir la cellule, le logiciel peut maintenant convertir les tensions en irradiance.
 
 À partir de là, la version très rudimentaire (l'interface graphique n'est pas pratique à utilisé, aucune facilitation de l'expérience utilisateur) du programme est fonctionnelle.
-On peut choisir les dimensions, les pas, le type de mesure, rentrer les informations de la mesure, lancer la mesure, et enregistrer les données dans un fichier tableur.
-
+On peut choisir les dimensions, les pas, le type de mesure, rentrer les informations de la mesure, lancer la mesure, et enregistrer les données dans un fichier tableur.\\
 Avec les fonctionnalités de bases implémentées, je dresse une liste des choses à améliorer et à rajouter:
 \begin{itemize}
 	\item Améliorer l'interface graphique
@@ -378,27 +402,24 @@ Avec les fonctionnalités de bases implémentées, je dresse une liste des chose
 	\item Commentaires dans le code
 \end{itemize}
 Je fait des croquis de l'interface graphique et je regarde quelque sites web et logiciels pour m'inspirer.
-Je finis par regrouper certaines fonctionnalités ensemble en fonction de leur types, et je les places dans des onglets pour les délimiter.
-
-Le premier onglet sert à choisir les dimensions, les pas de déplacement et le type de mesure (cartographie ou croix) ainsi qu'a visualiser les coordonnées de mesure et le nombre de points.
-Le deuxième onglet sert à entrer les informations de la mesure qui n'influe pas sur le déroulement de la mesure, sauf le temps de pause pour mesure (temps pendant laquelle la cellule reste immobile et la tension est mesurée en continue pour avoir la valeur maximale).
+Je finis par regrouper certaines fonctionnalités ensemble en fonction de leur types, et je les places dans des onglets pour les délimiter.\\
+Le premier onglet sert à choisir les dimensions, les pas de déplacement et le type de mesure (cartographie ou croix) ainsi qu'a visualiser les coordonnées de mesure et le nombre de points.\\
+Le deuxième onglet sert à entrer les informations de la mesure qui n'influe pas sur le déroulement de la mesure, sauf le temps de pause pour mesure (temps pendant laquelle la cellule reste immobile et la tension est mesurée en continue pour avoir la valeur maximale).\\
 Le troisième onglet est l'onglet des contrôles, voir figure~\ref{fig:interfaceGraphique} page~\pageref{fig:interfaceGraphique}, il permet de voir la tension de la cellule en direct, de déplacer la cellule et de lancer la mesure.
-
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\textwidth]{interfaceGraphique}
 	\caption{Image de l'interface graphique}
 	\label{fig:interfaceGraphique}
 \end{figure}
-
 Je rajoute des boutons pour déplacer la cellule, et pour mettre le zéro à l'endroit ou la cellule est actuellement.
-Cela permet de pouvoir bouger la cellule sans avoir à utiliser l'interface peu pratique du contrôleur.
+Cela permet de pouvoir bouger la cellule sans avoir à utiliser l'interface peu pratique du contrôleur.\\
+Je rajoute des limites sur les données entrées par l'utilisateur qui influe sur la mesure, pour éviter les divisions par 0, les nombres négatifs pour des valeurs qui doivent être positives etc... Cela ne se fait pas dans le code mais dans les propriétés des commandes sur la face avant.\\
+Je commence aussi à mettre des commentaires dans le code, qui jusqu'à présent ne servait que de test pour les différentes fonctionnalités, et n'en avait aucun.
 
-Je rajoute des limites sur les données entrées par l'utilisateur qui influe sur la mesure, pour éviter les divisions par 0, les nombres négatifs pour des valeurs qui doivent être positives etc... Cela ne se fait pas dans le code mais dans les propriétés des commandes sur la face avant.
 
-Je commence aussi à mettre des commentaires dans le code qui jusqu'à présent ne servait que de test pour les différentes fonctionnalités.
-
-Le programme est maintenant dans une première version utilisable.  Charles, organise alors une démonstration du programme en faisant une mesure sur une lampe avec tout les gens concernés par le Banc XY.
+Le programme est maintenant dans une première version utilisable.
+Charles, organise alors une démonstration du programme en faisant une mesure sur une lampe avec tout les gens concernés par le Banc XY.
 Après la mesure, les gens présents ont fait des retours sur le programme, et j'ai noté les points à améliorer:
 \begin{itemize}
 	\item Pouvoir déplacer la cellule et afficher la tension en même temps
@@ -406,15 +427,15 @@ Après la mesure, les gens présents ont fait des retours sur le programme, et j
 	\item Afficher le graphe d'irradiance en temps réel
 	\item Réduire la taille du diagramme des VIs
 \end{itemize}
-
 Tout ces points sont intrinsèquement liés à la conception du programme.
 
 LabVIEW est un language graphique très loin des language plus classique comme Java, Python ou PHP avec lequel je suis familier.
-J'ai eu du mal à appliquer les principes de conception et de programmation que j'ai appris, car ce n'est pas de la programmation impérative et textuelle.
-Pour faire passer une information d'un endroit à un autre, on ne le met pas dans une variable qu'on référence à un autre endroit, on tire un fil entre les deux endroits.
-Cela rend le programme très illisible car on doit remonter la source du fil pour savoir d'où vient l'information.
-Si le VI dépasse la taille de l'écran il faut alors se déplacer sur le diagramme ce qui rend le debug age assez compliqué.
+Comme dis précédemment, il n'y a pas de variables, les données transite par des fils qui sont tirés d'un VI à un autre.
+Cela rend le programme très illisible car on doit remonter la source du fil pour savoir d'où vient l'information.\\
+Si le VI dépasse la taille de l'écran il faut alors se déplacer sur le diagramme ce qui rend le débogage et la modification assez compliqué.
 Comme les données commence toute dans des commandes, et que ces commandes sont situés sur une seul face avant, elle sont toutes présente dans le diagramme.
+Par exemple les données à enregistrer avec la mesure sont toutes présentes sur le diagramme, et comme il y en à beaucoup, ce n'est pas très lisible.
+Voir figure~\ref{fig:specifieurFormat} page~\pageref{fig:specifieurFormat}.\\
 La présence d'autant d'informations rend le diagramme illisible, voir figure~\ref{fig:diagrammeV1} page~\pageref{fig:diagrammeV1}, car on doit tirer un fil de chaque commande jusqu'à chaque VI qui va la traiter.
 
 \begin{figure}[p]
@@ -427,50 +448,81 @@ La présence d'autant d'informations rend le diagramme illisible, voir figure~\r
 
 Il faut donc trouver un autre moyen de faire transiter les données.
 Il faut aussi trouver un autre moyen de gérer les actions des boutons.
-Pour l'instant les actions sont gérés par des si dans une boucle tant que qui boucle par intervalle de temps. Si il y a un bouton pressé et qu'il exécute du code, alors tout les autres boutons sont bloqués.
-
-La première solution qui m'est venue en tête pour gérez les actions c'est les "Event listeners", il existe quelque chose de similaire dans LabVIEW, les structures d'évènements.
+Pour l'instant les actions sont gérés par des si dans une boucle tant que qui boucle par intervalle de temps. Si il y a un bouton pressé et qu'il exécute du code, alors tout les autres boutons sont bloqués.\\
+La première solution qui m'est venue en tête pour gérer les actions, c'est les "Event listeners", il existe quelque chose de similaire dans LabVIEW, les structures d'évènements.
 Elles permettent de définir l'exécution de code en fonction d'évènements configurés.
 Cela permet d'avoir plusieurs boutons clickable en même temps, ce qui résout le problème d'afficher la tension et de pouvoir bouger en meme temps.
 
+
 Le deuxième problème est le nombre de fil et leur longueur qui rende le tout illisible.
 Pour diminuer le nombre de fils allant de VI à VI je decide d'utiliser des clusters, ce sont des structures de données comme des objets mais on n'y stocke pas de fonctions ou de méthode.
-Cela permet de réduire le nombre de fil se baladant d'un vi à l'autre mais pas à l'intérieur meme d'un vi, en effet si on veut traiter les données, il faut inévitablement tirer fil qui va du dégroupement du cluster jusqu'au VI traitant les données.
+Ces clusters regroupe les entrées de données en un seul fil qu'on peut grouper et dégrouper.\\
+Cela permet de réduire le nombre de fil se baladant d'un VI à l'autre mais pas à l'intérieur meme d'un VI, en effet si on veut traiter les données, il faut inévitablement tirer fil qui va du dégroupement du cluster jusqu'au VI traitant les données.
 Cela sert donc simplement à réduire la taille des VI, pas vraiment leur complexité.
 Voir figure~\ref{fig:diagApresCluster} page~\pageref{fig:diagApresCluster}.
-
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\textwidth]{diagrammeApresCluster}
 	\caption{Exemple du diagramme du même VI que celui de la figure~\ref{fig:diagrammeV1}, en utilisant des cluster et en augmentant le nombre de sous-VIs}
 	\label{fig:diagApresCluster}
 \end{figure}
+Mais le fait de ne plus avoir à trop se déplacer pour voir d'où vienne les informations constitue déjà une grosse amélioration par rapport au VI qui faisait 5 écrans de large.
 
-Mais le fait de ne plus avoir à trop se déplacer pour voir d'où vienne les informations est déjà une grosse amélioration par rapport au VI qui faisait 5 écrans de large.
 
-Ces avancées, combinées au fait de diviser le programme en encore plus de sous-VIs font que la lisibilité à grandement augmenté
-
+Ces avancées, combinées au fait de diviser le programme en encore plus de sous-VIs font que la lisibilité à grandement augmenté.
 Une fois ces changements effectuées, la modification du programme est devenu plus simple, ce qui m'a permit de rapidement modifier le formatage des données des mesures en croix dans le tableur, et d'ajouter un graphe d'irradiance en direct lors de la mesure, qui permet de verifier visuellement que la mesure se déroule comme prévue (voir si il y à une chute inattendue d'irradiance lors de la mesure).
 
+
+\FloatBarrier
 A ce moment j'ai considéré les problèmes comme réglés, on a donc fait un autre test qui à révélé qu'il fallait aussi intégrer la courbe du multimètre en directe pour surveiller les potentiels chutes de tension faussant la mesure.
-
-Et après ça seulement un seul bug à été rapporté, il s'agissait du VI qui attendait d'avoir le status du contrôleur pour passer à la suite qui ne fonctionnait pas toujours.
-Les étapes de déroulement était:
-\begin{itemize}
-	\item On envoie une instruction au programme
-	\item Quand on détecte que le buffer de sortie n'est pas vide on s'arrête
-\end{itemize}
-
-Le problème était que le programme s'arrêtait juste après avoir envoyé l'instruction.
-Le plus bizarre étant que le problème ne subvenait plus si on mettait un temps d'attente entre la détection du buffer non vide et l'arrêt.
+Et après ça seulement un seul bug à été rapporté, il s'agissait du VI qui attendait d'avoir le status du contrôleur pour passer à la suite qui ne fonctionnait pas toujours.\\
+Les étapes de déroulement était, on envoie une instruction au programme et quand on détecte que le buffer de sortie n'est pas vide on s'arrête.
+Voir algorithme~\ref{alg:fonctionnePas}, page~\pageref{alg:fonctionnePas}.\\
+Le problème était que le programme s'arrêtait juste après avoir envoyé l'instruction, même si l'instruction méttait 5 secondes au contrôleur à completer.
+Le plus bizarre étant que le problème ne subvenait plus si on mettait un temps d'attente entre la détection du buffer non vide et l'arrêt, alors qu'une fois le buffer non vide detecté, 35 ms ne devrait pas se remarquer.
+Voir algorithme~\ref{alg:fonctionne}, page~\pageref{alg:fonctionne}, la seul différence avec l'autre est l'instruction soulignée.\\
 Alors que normalement une fois que le buffer non vide est détecté le programme devrait s'arrêter immédiatement, la seul différence et 35ms d'attente après avoir détecté que le buffer n'est pas vide.
+Je n'ai pas réussis à vraiment comprendre le pourquoi de ce comportement, j'ai juste réussi à le contourner de manière fiable.
+Je blamme LabVIEW et son parralélisme abusif.
+\begin{algorithm}
+	\caption{Programme s'arrétant immédiatement après l'envoie de l'instruction}
+	\centering
+	\label{alg:fonctionnePas}
+	\begin{algorithmic}
+		\State EnvoyerInstruction
+		\State $instructionFini \gets false$
+		\While{$instructionFini$ is $false$}
+		\If{$BufferEtreVide$ is $false$}
+		\State $resultatBuffer \gets$ LireBuffer
+		\State $instructionFini \gets true$
+		\EndIf
+		\EndWhile
+	\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+	\caption{Programme s'arrétant à la fin de l'éxecution de l'instruction par le contrôleur}
+	\centering
+	\label{alg:fonctionne}
+	\begin{algorithmic}
+		\State EnvoyerInstruction 
+		\State $instructionFini \gets false$
+		\While{$instructionFini$ is $false$}
+		\If{$BufferEtreVide$ is $false$}
+		\State $resultatBuffer \gets$ LireBuffer
+		\State \underline{Attendre $35ms$}
+		\State $instructionFini \gets true$
+		\EndIf
+		\EndWhile
+	\end{algorithmic}
+\end{algorithm}
+
 
 Après ce bug corrigé, le programme était considéré comme fini, et je rédige la documentation utilisateur pour étaler clairement le déroulement des étapes et quoi faire en cas de problème.
 J'écris la documentation technique qui décrit le système et ces particularités.
-J'ai finalement terminé d'écrire les commentaires du programme.
-
+J'ai finalement terminé d'écrire les commentaires du programme.\\
 A ce moment là, le Banc XY est fonctionnel.
 
+\newpage
 \subsection{Conversion des fichiers du goniomètre }
 
 \subsubsection{Problème}
@@ -524,6 +576,7 @@ Tout au long du développement j'utilise un fichier de mesure avant et après co
 Une fois terminé j'envoie le fichier converti avec mon programme à quelqu'un qui peut verifier sa validité avec le logiciel Dialux.
 Ce travail plutôt cours ne m'a pris que 3 jours.
 
+\newpage
 \subsection{ Lambda 9 }
 
 \subsubsection{ Problème }
@@ -573,6 +626,7 @@ J'ai d'abord réussi à simuler le Lambda 9 avec l'imprimante, et je réussissai
 J'ai mis plus de temps à comprendre comment simuler l'imprimante avec le Lambda 9, car je n'avais pas compris que le Lambda 9 attendait une répons à la fin de chaque chaine de caractères.
 En ayant observée la communication entre le Lambda 9 et l'imprimante, je configure donc le protocol analyzer pour simuler l'imprimante avec ce programme:
 
+\FloatBarrier
 \begin{lstlisting}
 Simulate DCE
 
@@ -584,11 +638,11 @@ Set Lead CD On
 and then
 Set Lead CTS On
 and then
-Send F,00\r  // instruction qu'envoi l'imprimante
+Send F,00\r  // instruction qu'envoie l'imprimante
 
 Block 2
 When DTE \r  // quand le Lambda 9 envoi un retour chariot
-then goto Block 3  // on va à l'étape suivante
+then Goto Block 3  // on va à l'étape suivante
 
 Block 3
 Send 01\r  // on envoie l'instruction qui dit que ça c'est bien passé
@@ -680,14 +734,20 @@ La réinstallation de LabVIEW sur un ordinateur plus récent la semaine d'après
 Il à fallu réinstaller Windows pour outrepasser l'antivirus qui bloquait le lecteur CD.
 
 Une fois l'ordinateur réparé, j'ai passé une journée entière à essayer de faire fonctionner la communication avec la cellule de mesure.
+
+\newpage
+
+
+
+
 Il s'est avéré que certains paramètres de communication série par défaut avait changé entre LabVIEW 8 et LabVIEW 15, ces paramètres était cachés, et ne pouvait plus être changé depuis l'utilitaire NI MAX, que j'utilisais pour tester le fonctionnement des appareils sans avoir à faire un programme.
 J'ai du trouver un moyen de comparer les anciennes valeurs de configuration avec les nouvelles pour les remettre à l'identique.
 
 
 
+\printglossaries
 
 
 
 
-
-		\end{document}
+\end{document}
