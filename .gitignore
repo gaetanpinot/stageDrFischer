@@ -15,4 +15,8 @@
 *test*
 *.doc*
 *.~lock*
+*.glg 
+*.glo 
+*.ist 
+*.gls
 *.toc
