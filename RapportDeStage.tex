@@ -88,10 +88,10 @@
 \begin{comment}
 	Notes
 
-	Intro: Service ou j'ai travaillé, nom de l'entreprise, quelle travaille à effectuer.
-	Présentation de l'entreprise: Présentation rapide de l'histoire de l'entreprise, puis de ce qu'ils fabriquent
-	L'environnement de travaille: Composition de l'équipe du service, role du service, présentation du poste de travail, des horaires de travail,
-	Missions: Presentation détaillé du problème, ainsi que de la mission, pour chaque problème.
+	Intro : Service ou j'ai travaillé, nom de l'entreprise, quelle travaille à effectuer.
+	Présentation de l'entreprise : Présentation rapide de l'histoire de l'entreprise, puis de ce qu'ils fabriquent
+	L'environnement de travaille : Composition de l'équipe du service, role du service, présentation du poste de travail, des horaires de travail,
+	Missions : Presentation détaillé du problème, ainsi que de la mission, pour chaque problème.
 
 	Le lien avec l'informatique n'est pas assez clair
 	connaissances informatiques qui m'ont permit de débloquer la situation
@@ -124,7 +124,7 @@ Département Informatique
 
 \begin{center}
 	{\huge
-	\textbf{Développement d'un logiciel de prise de mesure de cartographie d'irradiance et modernisation de l'acquisition de données sur Lambda 9}
+	\textbf{Développement d'un logiciel de prise de mesure de cartographie d'irradiance et modernisation de l'acquisition de données sur spectrophotomètre Lambda 9}
 	}
 \end{center}
 
@@ -149,9 +149,20 @@ Année universitaire 2023--2024
 
 \thispagestyle{empty}
 
-\newpage
-
 \restoregeometry
+\onehalfspacing
+\newpage
+\textbf{\Large{Remerciements}}\\
+
+Je tiens à remercier Charles RAMMAERT, mon maître de stage, pour m'avoir accueilli dans son service et m'avoir donné l'opportunité de travailler sur des projets intéressants et variés.\\
+Je remercie aussi les membres du service Qualité pour leur accueil et leur aide.\\
+Je remercie mes parents pour leur soutien, mon père pour m'avoir donné le contact de Charles.
+
+
+\thispagestyle{empty}
+
+\newpage
+\singlespacing
 \thispagestyle{empty}
 \tableofcontents
 \newpage
@@ -187,6 +198,7 @@ Cela est notamment assuré par des inspections et des mesures de certaines lampe
 J'ai un poste de travail fixe, dans le bureau de mon maître de stage avec un ordinateur.
 Mais comme je travail avec des logiciels sous licences qui ne sont pas présent sur tout les ordinateurs et sur des équipements dont je ne peut attester le fonctionnement que si je suis à coté, je suis amené à ne pas toujours travailler sur le même poste.\\
 Mes horaires de travails sont souples, je peux arriver entre 7h et 9h et repartir entre 15h 45 et 20h, tant que je fait 7h par jour.
+J'ai effectué ce stage dans le département Qualité et pas Informatique car le rôle du département Informatique est de s'occuper de l'infrastructure informatique de l'entreprise, en tant que développeur je n'aurai pas eu ma place dans ce département.
 \newpage
 
 \subsection{Missions}
@@ -217,6 +229,7 @@ Ma mission est de faire à nouveau fonctionner le Banc de mesure XY.
 
 Mon autre mission principale est lié au Lambda 9.
 Le Lambda 9, de Perkin-Elmer, est un spectrophotomètre qui permet de mesurer des valeurs de transmission, réflexion et absorption de différents matériaux dans le domaine de l'ultraviolet, du visible et de l'infrarouge.
+C'est utilisé, par exemple, par le département Développement pour verifier les longueur d'ondes que certains matériaux absorbe le mieux, afin de suggérer au client la lampe la plus approprié à l'application, ou alors quel matériaux est le meilleur réflecteur pour ces longueur d'ondes.
 C'est une machine datant des années 80, elle imprime la courbe de donnée par une imprimante thermique spécifique au Lambda 9.
 La pointe chauffante de l'imprimante est cassé, et il est impossible de trouver une pièce de rechange.\\
 La solution temporaire est d'attacher un stylo bic à la place de la pointe chauffante.
@@ -248,7 +261,7 @@ Ma mission est de faire un programme qui fait la conversion automatiquement.
 \subsubsection{Problème}
 
 Comme expliqué précédemment, après un changement de contrôleur d'axes pour cause de panne, le programme qui se charge d'envoyer les instructions au contrôleur pour faire la mesure n'est plus compatible.
-Les mesures sont donc faites à la main, l'opérateur:
+Les mesures sont donc faites à la main, l'opérateur :
 \begin{itemize}
 		\label{etapesMesureBancXY}
 
@@ -314,7 +327,7 @@ J'en ai profité pour poser des questions sur le fonctionnement du banc, et sur 
 Il m'a montré les résultats de mesure de l'ancien programme, pour que je puisse les reproduire dans le nouveau.
 
 
-Par la suite je note les choses basique que doivent faire mon programme et que je ne sais pas encore faire:
+Par la suite je note les choses basique que doivent faire mon programme et que je ne sais pas encore faire :
 \begin{itemize}
 	\item Se déplacer en quadrillage ou en croix
 	\item Mesurer une tension de la cellule de mesure et la convertir en irradiance\footnote{La cellule de mesure donne une tension qu'il faut convertir en irradiance avec une formule spécifique à chaque cellule}
@@ -333,7 +346,7 @@ La structure de l'instruction devient donc \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| ou
 	\item \verb|WS| demande d'attendre que l'axe dont le nombre est situé avant ait fini de bouger avant de passer à la commande suivante
 	\item \verb|TS?| demande le status du contrôleur, le résultat n'est pas significatif car je m'en sert juste comme indicateur de fin de commande
 \end{itemize}
-Voici le déroulement de l'instruction:
+Voici le déroulement de l'instruction :
 \begin{enumerate}
 	\item L'ordinateur écrit \verb|1PA-50;1WS;2PA-40;2WS;TS?\r| sur le port série
 	\item L'ordinateur attend de recevoir une réponse du contrôleur sur le port série
@@ -350,7 +363,7 @@ Récupérer la tension de la cellule est simple, car il suffit d'envoyer une ins
 Il ne reste plus qu'à stocker des valeurs dans un fichier tableur.
 Encore une fois les fonctions de LabVIEW sont très pratiques, car il existe déjà une fonction qui permet de convertir un tableau en 2 dimensions en un fichier tableur.\\
 J'ai maintenant tout les éléments techniques nécessaires pour commencer le programme entier.
-Je fais une liste de toutes les fonctionnalités à implémenter et contraintes à respecter:
+Je fais une liste de toutes les fonctionnalités à implémenter et contraintes à respecter :
 \begin{itemize}
 	\item  Choisir une dimension de mesure  28/02
 	\item  Choisir un pas de mesure  28/02
@@ -361,7 +374,7 @@ Je fais une liste de toutes les fonctionnalités à implémenter et contraintes 
 	\item  Il doit y avoir un passage par 0, donc il faut que la distance/2 soit multiple du pas correspondant  01/03
 	\item  Générer liste d'instruction, et afficher liste de coordonnées avant de lancer la mesure  01/03
 	\item  Barre de progression  04/03
-	\item  Informations à enregistrer dans le tableur de la mesure:
+	\item  Informations à enregistrer dans le tableur de la mesure :
 		\begin{itemize}
 	\item  Opérateur  05/03
 	\item  Nom de la source mesuré (nom de la lampe)  05/03
@@ -393,7 +406,7 @@ Comme on mesure l'irradiance d'une lampe, il est important de passer par le poin
 Il faut donc que le programme vérifie que la combinaison de dimensions et de pas de déplacement permettent de passer par le 0.
 Et d'ajuster si ce n'est pas le cas.\\
 Il faut que la distance soit un nombre pair, pour pouvoir la diviser par 2 et avoir des coordonnées négatives et positives entières, et que la distance divisée par 2 doit être multiple du pas pour que l'un des points de mesure soit le 0.\\
-J'ajuste donc les distances au supérieur si ce n'est pas le cas. Exemple:\\
+J'ajuste donc les distances au supérieur si ce n'est pas le cas. Exemple :\\
 Distance = 65, pas = 10\\
 On ajuste la distance à 80 car $80/2 = 40$ et 40 est multiple de 10.\\
 Une fois les dimensions ajustées, on les affiches à l'écran pour, que l'utilisateur puisse vérifier que c'est bien ce qu'il veut.
@@ -425,7 +438,7 @@ Pour ça j'ai choisi d'utiliser un fichier de configuration qui contenait les in
 
 À partir de là, la version très rudimentaire (l'interface graphique n'est pas pratique à utiliser, aucune facilitation de l'expérience utilisateur) du programme est fonctionnelle.
 On peut choisir les dimensions, les pas, le type de mesure, rentrer les informations de la mesure, lancer la mesure, et enregistrer les données dans un fichier tableur.\\
-Avec les fonctionnalités de bases implémentées, je dresse une liste des choses à améliorer et à rajouter:
+Avec les fonctionnalités de bases implémentées, je dresse une liste des choses à améliorer et à rajouter :
 \begin{itemize}
 	\item Améliorer l'interface graphique
 	\item Flèches de déplacement de la cellule, de mise à zéro pour le centrage de la cellule par rapport à la lampe
@@ -451,7 +464,7 @@ Je commence aussi à mettre des commentaires dans le code, qui jusqu'à présent
 
 Le programme est maintenant dans une première version utilisable.
 Charles, organise alors une démonstration du programme en faisant une mesure sur une lampe avec tout les gens concernés par le Banc XY.
-Après la mesure, les gens présents ont fait des retours sur le programme, et j'ai noté les points à améliorer:
+Après la mesure, les gens présents ont fait des retours sur le programme, et j'ai noté les points à améliorer :
 \begin{itemize}
 	\item Pouvoir déplacer la cellule et afficher la tension en même temps
 	\item Formatter les données de mesures d'irradiance en croix différemment dans le tableur
@@ -566,7 +579,7 @@ Ma tâche est de faire un programme qui convertisse le fichier tableur en fichie
 
 Je commence par lire la norme \verb|ANSI/IESNA LM-63-02| pour comprendre ce que je dois faire.
 Le document est long mais très détaillé, ce qui me facilitera la tâche car il ne laisse aucune place au doute.
-Je note les points importants pour la conversion:
+Je note les points importants pour la conversion :
 \begin{itemize}
 	\item L'en-tête du fichier doit contenir des informations sur le luminaire, la date de la mesure, le fabriquant etc...
 	\item Ensuite il y a des valeurs séparé par des virgules qui corresponde au nombre d'angles verticaux et horizontaux, informations diverse sur la mesure et le goniomètre etc...
@@ -575,7 +588,7 @@ Je note les points importants pour la conversion:
 \end{itemize}
 La manière dont est formaté les angles dans le fichier \verb|.ies| est assez différente du fichier d'origine, selon les angles de départ et d'arrivé choisi sur la mesure il faut manipuler le tableau différemment.
 Les valeurs d'angles de départ et d'arrivées autorisé par la norme pour les angles verticaux et horizontaux sont 0;90 et 90;90.\\
-Cela laisse 6 combinaisons d'angles de départ et d'arrivés possibles, ainsi que les opérations qu'il faut faire sur le tableau des valeurs et des angles, sur les deux axes, pour qu'il respecte la norme:
+Cela laisse 6 combinaisons d'angles de départ et d'arrivés possibles, ainsi que les opérations qu'il faut faire sur le tableau des valeurs et des angles, sur les deux axes, pour qu'il respecte la norme :
 \begin{itemize}
 	\item 0;90 On ne fait rien
 	\item 0;-90 On converti les valeurs d'angles en valeur absolue
@@ -639,7 +652,7 @@ Dans le manuel du protocol analyzer il est marqué qu'il peut simuler un DCE ou 
 Cela correspond exactement à ce qu'on veut faire, simuler une imprimante.\\
 Je réussi d'abord à simuler le Lambda 9 avec l'imprimante, et je réussissait à la faire imprimer des données.
 Je mets plus de temps à comprendre comment simuler l'imprimante avec le Lambda 9, car je n'avais pas compris que le Lambda 9 attendait une réponse à la fin de chaque chaine de caractères.
-J'observe la communication entre le Lambda 9 et l'imprimante, et des trames de données envoyées de l'imprimante au Lambda 9 et inversement, je déduis les bases du protocole et je configure donc le protocol analyzer pour simuler l'imprimante avec ce programme:
+J'observe la communication entre le Lambda 9 et l'imprimante, et des trames de données envoyées de l'imprimante au Lambda 9 et inversement, je déduis les bases du protocole et je configure donc le protocol analyzer pour simuler l'imprimante avec ce programme :
 \FloatBarrier
 \begin{lstlisting}
 Simulate DCE
@@ -708,7 +721,7 @@ J'ai maintenant un ordinateur qui reçoit les données du Lambda 9.
 Avant de commencer à écrire un programme convertit les données en tableur, je doit analyser les données reçues pour comprendre comment elles sont formatées.\\
 Ce sont des chaines de caractères ASCII qui disent à l'imprimante quoi imprimer et comment.
 Ces chaines ne correspondent pas à un language d'imprimante standard, c'est spécifique au Lambda 9.
-En voici un court extrait:
+En voici un court extrait :
 \begin{lstlisting}
 Z0
 IT,Z0,F15936,416,0,200,D0128,1280,A1,X2100,-100,5,S2090.0,D1,1,Y110.0,-22.000,4,Z0,D0128,1280,L1
@@ -748,18 +761,27 @@ J'ai du trouver un moyen de comparer les anciennes valeurs de configuration avec
 
 
 \newpage
-\subsection{ Conclusion }
+\section{ Conclusion }
 
-À faire.
+%ce que j'ai fait, ce que ça m'a apporté, pourquoi j'ai été mieux que une personne en mesure physique
 
-
+Lors de ce stage j'ai créé un programme qui contrôle un outil de mesure pour effectuer des cartographie d'irradiance, j'ai aussi remplacé l'imprimante d'un spectrophotomètre par un ordinateur.
+Grâce à ce stage j'ai découvert le monde de l'industrie, ainsi que les besoins d'une tel entreprise.
+\\
+Ce stage était à l'origine destinée à un étudiant en BUT Mesure Physique, cependant le sujet original du stage, le Banc XY, relevait bien plus de l'informatique que de la mesure physique.
+En effet, il s'agissait d'un problème logiciel, des connaissances de mesure physique ne m'ont pas été nécessaire pour compléter cette tâche.
+Je pense même que j'ai été plus efficace qu'un étudiant en mesure physique n'aurait été, car j'ai probablement des connaissances plus avancé en programmation/conception, ce qui était le principale objet du problème.
+De plus, les deux autres projets, le logiciel de conversion de fichier du goniomètre et le remplacement de l'imprimante du Lambda 9 ne sont que de l'informatique pur et dur.
+Particulièrement le projet du Lambda 9 était assez urgent, la solution précédente d'acquisitions des données via l'imprimante puis un scan devenait de moins en moins fiable, cet outil étant essentiel pour le Développement.
+Pour ce projet, je ne pense pas qu'un étudiant en mesure physique aurait réussi à faire ce que j'ai fait.
+Il demandait des connaissances dans le domaine de l'informatique ainsi qu'un certain état d'esprit pour résoudre ses problèmes et avancer.
+\\
+Grâce à ce stage j'ai découvert LabVIEW, un language de programmation graphique très différent des autres languages que je connaissais, qui à changer ma façon d'aborder certain problèmes.
+J'ai aussi perfectionné mes compétences de recherche sur internet pour trouver des documentations difficile d'accès ainsi que des informations très spécifique.
+\\
+Pour conclure je dirais que j'ai bien aimé ce stage, il est assez différent d'un stage en informatique classique, mais j'ai appris beaucoup de chose et j'ai pu mettre en pratique mes compétences en programmation.
+Il me semble que l'entreprise est plutôt satisfaite de mon travail, surtout Alain, qui faisait les mesures du Banc XY à la main et qui scannait les résultats du Lambda 9.
 
 \newpage
-
 \printglossaries
-
-
-
-
-
 \end{document}
